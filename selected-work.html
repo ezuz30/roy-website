@@ -40,8 +40,7 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   SYNCHRONIZED FADE-IN (THE FIX)
-   כאן אנחנו מסתירים גם את הקנבס (תמונה) וגם את הטקסט
+   SYNCHRONIZED FADE-IN (SUPER FAST: 0.6s)
    ═══════════════════════════════════════════ */
 #webgl-canvas, 
 #text-sync-container {
@@ -50,11 +49,10 @@ body {
   width: 100vw; height: 100vh;
   z-index: 5;
   pointer-events: none;
-  opacity: 0; /* מתחיל שקוף לגמרי */
-  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); /* הופעה רכה ביחד */
+  opacity: 0; /* מתחיל שקוף */
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1); /* זמן מקוצר לחצי */
 }
 
-/* כשהדף והתמונות מוכנים, המחלקה הזו מתווספת לשניהם */
 #webgl-canvas.loaded, 
 #text-sync-container.loaded {
   opacity: 1;
@@ -353,7 +351,7 @@ function loadColorManagedTexture(src) {
   });
 }
 
-// מחכים שכל הטקסטורות ייטענו ואז חושפים את הקנבס ואת הטקסט יחד
+// מחכים שכל הטקסטורות ייטענו
 Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(textures => {
   textures.forEach(texture => {
     const material = new THREE.ShaderMaterial({
@@ -374,11 +372,11 @@ Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(tex
     meshes.push(mesh);
   });
 
-  /* ═══ הסנכרון המושלם ═══ */
+  /* ═══ הסנכרון המושלם (זמן ההמתנה קוצץ בחצי) ═══ */
   setTimeout(() => {
     canvas.classList.add('loaded');
     textSyncContainer.classList.add('loaded');
-  }, 100); // נותנים 0.1 שניות לכרטיס המסך להתייצב, ואז מדליקים את שניהם יחד
+  }, 50); 
 });
 
 /* ═══ MOUSE PARALLAX TRACKING ═══ */
