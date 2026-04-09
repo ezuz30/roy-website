@@ -40,20 +40,23 @@ body {
 }
 
 /* ═══════════════════════════════════════════
-   FADE-IN EFFECT FOR WEBGL (THE FIX)
+   SYNCHRONIZED FADE-IN (THE FIX)
+   כאן אנחנו מסתירים גם את הקנבס (תמונה) וגם את הטקסט
    ═══════════════════════════════════════════ */
-#webgl-canvas {
+#webgl-canvas, 
+#text-sync-container {
   position: fixed;
   top: 0; left: 0;
   width: 100vw; height: 100vh;
   z-index: 5;
   pointer-events: none;
-  opacity: 0; /* מתחיל שקוף */
-  transition: opacity 1.5s cubic-bezier(0.2, 0, 0.2, 1); /* מעבר חלק ויוקרתי */
+  opacity: 0; /* מתחיל שקוף לגמרי */
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1); /* הופעה רכה ביחד */
 }
 
-/* המחלקה שנוסיף כשהדף מוכן */
-#webgl-canvas.loaded {
+/* כשהדף והתמונות מוכנים, המחלקה הזו מתווספת לשניהם */
+#webgl-canvas.loaded, 
+#text-sync-container.loaded {
   opacity: 1;
 }
 
@@ -137,11 +140,7 @@ body {
    HUGE TEXT OVERLAY
    ═══════════════════════════════════════════ */
 #text-sync-container {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
   z-index: 10;
-  pointer-events: none;
   will-change: transform;
 }
 
@@ -354,7 +353,7 @@ function loadColorManagedTexture(src) {
   });
 }
 
-// מחכים שכל הטקסטורות ייטענו ואז חושפים את הקנבס
+// מחכים שכל הטקסטורות ייטענו ואז חושפים את הקנבס ואת הטקסט יחד
 Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(textures => {
   textures.forEach(texture => {
     const material = new THREE.ShaderMaterial({
@@ -375,10 +374,11 @@ Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(tex
     meshes.push(mesh);
   });
 
-  /* ═══ חשיפת הקנבס רק כשהכל מוכן ═══ */
+  /* ═══ הסנכרון המושלם ═══ */
   setTimeout(() => {
     canvas.classList.add('loaded');
-  }, 100); // השהייה קטנה למען החלקות
+    textSyncContainer.classList.add('loaded');
+  }, 100); // נותנים 0.1 שניות לכרטיס המסך להתייצב, ואז מדליקים את שניהם יחד
 });
 
 /* ═══ MOUSE PARALLAX TRACKING ═══ */
