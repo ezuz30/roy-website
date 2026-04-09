@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ROY EZUZ — Fine Art Street Photography</title>
+
+<link rel="preload" as="image" href="images/Roy-Ezuz_white_low-res.png">
+<link rel="preload" as="image" href="images/portraits/L1004839.JPG">
+
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600&family=Raleway:wght@100;200;300;400;500&display=swap" rel="stylesheet">
 <script src="layout.js" defer></script>
 <style>
@@ -68,7 +72,7 @@ site-footer { display: block; flex-shrink: 0; }
   max-height: calc(100dvh - 100px);
   opacity: 0;
   transform: scale(0.98);
-  animation: imageIn 1.8s var(--ease-out-expo) 0.6s forwards;
+  animation: imageIn 1.5s var(--ease-out-expo) 0.3s forwards;
 }
 
 .carousel img {
@@ -121,7 +125,6 @@ site-footer { display: block; flex-shrink: 0; }
   width: 100%;
 }
 
-/* Base card — Gallery Frame style */
 .card {
   background: #161618;
   border: 1px solid rgba(255,255,255,0.04);
@@ -133,7 +136,6 @@ site-footer { display: block; flex-shrink: 0; }
   transition: opacity 0.8s ease, transform 0.8s var(--ease-out-expo), box-shadow 0.5s ease;
 }
 
-/* Inner matted frame */
 .card::before {
   content: '';
   position: absolute;
@@ -154,14 +156,12 @@ site-footer { display: block; flex-shrink: 0; }
   box-shadow: 0 14px 45px rgba(0,0,0,0.5);
 }
 
-/* Staggered entrance */
 .card:nth-child(1) { transition-delay: 0.1s; }
 .card:nth-child(2) { transition-delay: 0.2s; }
 .card:nth-child(3) { transition-delay: 0.3s; }
 .card:nth-child(4) { transition-delay: 0.4s; }
 .card:nth-child(5) { transition-delay: 0.5s; }
 
-/* Card: Bio — col 1, spans 2 rows */
 .card--bio {
   grid-row: 1 / -1;
   padding: 2.5rem 2.8rem;
@@ -219,7 +219,6 @@ site-footer { display: block; flex-shrink: 0; }
   background: rgba(227, 33, 25, 0.08);
 }
 
-/* Card: Portrait — col 2, row 1 */
 .card--portrait {
   grid-column: 2;
   grid-row: 1;
@@ -243,11 +242,9 @@ site-footer { display: block; flex-shrink: 0; }
   transform: scale(1.03);
 }
 
-/* No inner frame on image cards */
 .card--portrait::before,
 .card--image::before { display: none; }
 
-/* Card: Selected Work carousel — col 3, spans all rows */
 .card--image {
   grid-column: 3;
   grid-row: 1 / -1;
@@ -305,7 +302,6 @@ site-footer { display: block; flex-shrink: 0; }
   color: var(--text-primary);
 }
 
-/* Card: Contact — col 2, row 2 */
 .card--contact {
   grid-column: 2;
   grid-row: 2;
@@ -317,7 +313,6 @@ site-footer { display: block; flex-shrink: 0; }
   gap: 1rem;
 }
 
-/* Card: CTA — col 2, row 3 (below Connect) */
 .card--cta {
   grid-column: 2;
   grid-row: 3;
@@ -329,7 +324,6 @@ site-footer { display: block; flex-shrink: 0; }
   gap: 0.8rem;
   transition: background 0.4s ease;
 }
-
 
 .card--cta .card__label {
   font-size: clamp(1rem, 1.5vw, 1.5rem);
@@ -366,7 +360,6 @@ site-footer { display: block; flex-shrink: 0; }
 
 .card__social-links a:hover { color: var(--text-primary); }
 
-/* Quote bar below cards */
 .manifesto-bar {
   text-align: center;
   padding: 2vh 4vw 0;
@@ -392,9 +385,6 @@ site-footer { display: block; flex-shrink: 0; }
   transform: translateY(0);
 }
 
-/* ═══════════════════════════════════════════
-   SCROLL INDICATOR
-   ═══════════════════════════════════════════ */
 .scroll-cue {
   position: fixed;
   bottom: 3.5vh;
@@ -448,9 +438,6 @@ site-footer { display: block; flex-shrink: 0; }
   color: rgba(255,255,255,0.95);
 }
 
-/* ═══════════════════════════════════════════
-   SPLASH SCREEN
-   ═══════════════════════════════════════════ */
 .splash {
   position: fixed;
   inset: 0;
@@ -460,15 +447,12 @@ site-footer { display: block; flex-shrink: 0; }
   align-items: center;
   justify-content: center;
   opacity: 1;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.5s ease;
   pointer-events: all;
 }
 .splash.fade-out { opacity: 0; pointer-events: none; }
 .splash img { max-width: 55vw; max-height: 50vh; object-fit: contain; }
 
-/* ═══════════════════════════════════════════
-   COLLABORATE MODAL
-   ═══════════════════════════════════════════ */
 .mo { position: fixed; inset: 0; z-index: 50000; background: rgba(0,0,0,.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .5s; }
 .mo.active { opacity: 1; pointer-events: all; }
 .mc { position: relative; border: 1px solid rgba(255,255,255,0.08); background: rgba(10,10,10,.92); padding: 4rem 3.5rem; max-width: 480px; width: 90vw; text-align: center; transform: translateY(20px); transition: transform .5s cubic-bezier(.25,1,.5,1); }
@@ -487,7 +471,6 @@ site-footer { display: block; flex-shrink: 0; }
 .fs { font-family: var(--sans); font-weight: 300; font-size: .75rem; text-align: center; color: var(--text-muted); min-height: 1.2em; margin-top: .5rem; }
 .fs.ok { color: #4caf50; } .fs.er { color: var(--accent-red); }
 
-/* Social icons in Connect card */
 .card__social-icons { display: flex; gap: 1.6rem; align-items: center; }
 .card__social-icons a {
   color: var(--text-muted);
@@ -506,9 +489,6 @@ site-footer { display: block; flex-shrink: 0; }
 }
 .card__social-icons svg { width: 25px; height: 25px; fill: currentColor; }
 
-/* ═══════════════════════════════════════════
-   RESPONSIVE (MOBILE FIXES)
-   ═══════════════════════════════════════════ */
 @media (max-width: 1024px) {
   .card-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; height: auto; }
   .card--bio { grid-row: auto; }
@@ -516,33 +496,17 @@ site-footer { display: block; flex-shrink: 0; }
 }
 
 @media (max-width: 768px) {
-  /* ביטול נעילת הגלילה (Scroll Snap) במובייל כדי לאפשר גלילה חופשית */
-  body {
-    scroll-snap-type: none;
-    cursor: auto; /* ביטול עכבר מותאם אישית למסכי מגע */
-  }
+  body { scroll-snap-type: none; cursor: auto; }
   html { cursor: auto; }
-  
-  /* סידור הבלוק העליון (Hero) */
   .section-hero { height: auto; min-height: 70vh; scroll-snap-align: none; }
   .carousel-wrapper { padding-top: 100px; }
   .carousel img { max-height: 60vh; }
-  
-  /* סידור כרטיסיות למובייל (שורה אחת, אחת מתחת לשנייה) */
   .card-grid { grid-template-columns: 1fr; height: auto; gap: 1.5rem; }
   .section-cards { padding: 5vh 5vw; min-height: auto; scroll-snap-align: none; }
-  
-  /* הפיכת תמונות הקרוסלה הקטנה למרובעות בערך כדי שלא יתפסו המון גובה */
   .mini-carousel { aspect-ratio: 1 / 1; }
-  
-  /* סידור הטקסטים והמרווחים */
   .card--bio { padding: 2rem 1.5rem; }
   .manifesto { font-size: clamp(1.2rem, 5vw, 1.8rem); max-width: 90vw; }
-  
-  /* הסתרת כפתור ה-Scroll Mouse במובייל כי תופסים אותו בטעות */
   .scroll-cue { display: none; }
-  
-  /* החזרת הסמן הרגיל בטפסים ובכפתורים */
   .cfw input, .cfw textarea, .sb, .mx { cursor: auto; }
   .card--cta { cursor: pointer !important; }
 }
@@ -560,9 +524,9 @@ site-footer { display: block; flex-shrink: 0; }
   <div class="carousel-wrapper">
     <div class="carousel">
       <img class="active" src="images/portraits/L1004839.JPG" alt="">
-      <img src="images/light_and_shadow/valencia.jpg" alt="">
-      <img src="images/urban_life/L1067694.jpg" alt="">
-      <img src="images/animals/H_0004_L1002572.jpg" alt="">
+      <img src="images/light_and_shadow/valencia.jpg" alt="" loading="lazy">
+      <img src="images/urban_life/L1067694.jpg" alt="" loading="lazy">
+      <img src="images/animals/H_0004_L1002572.jpg" alt="" loading="lazy">
     </div>
   </div>
   <div class="scroll-cue" id="scrollCue">
@@ -582,14 +546,14 @@ site-footer { display: block; flex-shrink: 0; }
     </div>
 
     <div class="card card--portrait">
-      <img src="images/profile_pictures/L1000758.jpg" alt="Roy Ezuz">
+      <img src="images/profile_pictures/L1000758.jpg" alt="Roy Ezuz" loading="lazy">
     </div>
 
     <a href="selected-work.html" class="card card--image" style="text-decoration:none;">
       <div class="mini-carousel">
-        <img class="active" src="images/urban_life/white_wall.jpg" alt="">
-        <img src="images/moments/V_0017_L1067793.jpg" alt="">
-        <img src="images/animals/woman + Bird.jpg" alt="">
+        <img class="active" src="images/urban_life/white_wall.jpg" alt="" loading="lazy">
+        <img src="images/moments/V_0017_L1067793.jpg" alt="" loading="lazy">
+        <img src="images/animals/woman + Bird.jpg" alt="" loading="lazy">
       </div>
       <span class="card__image-title">Selected Work</span>
     </a>
@@ -636,18 +600,17 @@ site-footer { display: block; flex-shrink: 0; }
 </div>
 
 <script>
-/* SPLASH */
+/* SPEED UP SPLASH SCREEN */
 (() => {
   const splash = document.getElementById('splash');
   if (splash) {
     setTimeout(() => {
       splash.classList.add('fade-out');
-      setTimeout(() => splash.remove(), 800);
-    }, 500);
+      setTimeout(() => splash.remove(), 500);
+    }, 100); // Reduced initial wait time
   }
 })();
 
-/* CAROUSEL */
 (() => {
   const imgs = document.querySelectorAll('.carousel img');
   if (imgs.length < 2) return;
@@ -659,7 +622,6 @@ site-footer { display: block; flex-shrink: 0; }
   }, 5000);
 })();
 
-/* HIDE SCROLL CUE ON SCROLL */
 (() => {
   const cue = document.getElementById('scrollCue');
   if (!cue) return;
@@ -669,7 +631,6 @@ site-footer { display: block; flex-shrink: 0; }
   }, { passive: true });
 })();
 
-/* MINI CAROUSEL (Card 4) */
 (() => {
   const imgs = document.querySelectorAll('.mini-carousel img');
   if (imgs.length < 2) return;
@@ -681,7 +642,6 @@ site-footer { display: block; flex-shrink: 0; }
   }, 3500);
 })();
 
-/* REVEAL CARDS + QUOTE ON SCROLL */
 (() => {
   const cards = document.querySelectorAll('.card');
   const quote = document.getElementById('manifesto');
@@ -694,7 +654,6 @@ site-footer { display: block; flex-shrink: 0; }
   if (quote) observer.observe(quote);
 })();
 
-/* COLLABORATE MODAL */
 (() => {
   const modal = document.getElementById('collaborateModal');
   const closeBtn = document.getElementById('modalClose');
@@ -703,10 +662,8 @@ site-footer { display: block; flex-shrink: 0; }
   function openModal(e) { e && e.preventDefault(); modal.classList.add('active'); }
   function closeModal() { modal.classList.remove('active'); }
 
-  // Open from card
   if (cardBtn) cardBtn.addEventListener('click', openModal);
 
-  // Open from nav link (openCollaborate — defined in layout.js nav)
   document.addEventListener('click', e => {
     const trigger = e.target.closest('#openCollaborate');
     if (trigger) { e.preventDefault(); openModal(); }
@@ -716,7 +673,6 @@ site-footer { display: block; flex-shrink: 0; }
   modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
 
-  // Form submit
   const submitBtn = document.getElementById('formSubmit');
   const status = document.getElementById('formStatus');
   submitBtn.addEventListener('click', function() {
