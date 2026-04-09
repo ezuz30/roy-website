@@ -100,6 +100,20 @@ class SiteFooter extends HTMLElement {
 customElements.define('site-footer', SiteFooter);
 
 // ==========================================
+// 2b. TOUCH DEVICE CURSOR FIX (global)
+// ==========================================
+(function fixTouchCursor() {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (hover: none) and (pointer: coarse) {
+      *, *::before, *::after { cursor: auto !important; }
+      a, button, [role="button"], input, textarea, select, label { cursor: pointer !important; }
+    }
+  `;
+  document.head.appendChild(style);
+})();
+
+// ==========================================
 // 3b. COLLABORATE MODAL (global, all pages)
 // ==========================================
 (function initCollaborateModal() {
