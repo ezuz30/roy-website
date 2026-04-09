@@ -5,7 +5,7 @@ class SiteNav extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <style>
-        .nav-header { flex-shrink: 0; height: 90px; display: flex; align-items: center; justify-content: space-between; padding: 0 6vw; border-bottom: 1px solid #2a2a2e; z-index: 1000; position: fixed; top: 0; left: 0; right: 0; background: #0a0a0a; }
+        .nav-header { flex-shrink: 0; height: 90px; display: flex; align-items: center; justify-content: space-between; padding: 0 6vw; border-bottom: 1px solid #2a2a2e; z-index: 10000; position: fixed; top: 0; left: 0; right: 0; background: #0a0a0a; }
         .nav-logo { font-family: 'Raleway', sans-serif; font-weight: 300; font-size: 1.4rem; letter-spacing: 0.12em; text-decoration: none; color: #f0f0f2; }
         .nav-logo .accent { color: #E32119; font-weight: 400; }
         .nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
@@ -13,7 +13,25 @@ class SiteNav extends HTMLElement {
         .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: #E32119; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .nav-links a:hover::after { width: 100%; }
         .nav-links a:hover { color: #f0f0f2; }
-        @media (max-width: 768px) { .nav-links { display: none; } }
+
+        /* Hamburger button */
+        .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; padding: 8px; cursor: pointer; z-index: 10002; }
+        .nav-hamburger span { display: block; width: 24px; height: 1px; background: #f0f0f2; transition: transform 0.4s cubic-bezier(0.16,1,0.3,1), opacity 0.3s; }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+        /* Mobile drawer */
+        .nav-mobile-drawer { display: none; position: fixed; inset: 0; background: #0a0a0a; z-index: 10001; flex-direction: column; align-items: center; justify-content: center; gap: 3rem; opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.16,1,0.3,1); }
+        .nav-mobile-drawer.open { opacity: 1; pointer-events: all; }
+        .nav-mobile-drawer a { font-family: 'Barlow Condensed', sans-serif; font-weight: 300; font-size: 1.6rem; letter-spacing: 0.2em; text-transform: uppercase; text-decoration: none; color: #b0b0b8; transition: color 0.3s; }
+        .nav-mobile-drawer a:active { color: #E32119; }
+
+        @media (max-width: 768px) {
+          .nav-links { display: none; }
+          .nav-hamburger { display: flex; }
+          .nav-mobile-drawer { display: flex; }
+        }
       </style>
       <header class="nav-header">
         <a href="index.html" class="nav-logo">R<span class="accent">O</span>Y EZUZ</a>
@@ -22,11 +40,42 @@ class SiteNav extends HTMLElement {
           <li><a href="profile.html">Profile</a></li>
           <li><a href="#" id="openCollaborate">Collaborate</a></li>
         </ul>
+        <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
       </header>
+      <nav class="nav-mobile-drawer" id="navMobileDrawer">
+        <a href="selected-work.html">Collection</a>
+        <a href="profile.html">Profile</a>
+        <a href="#" id="openCollaborateMobile">Collaborate</a>
+      </nav>
     `;
   }
 }
 customElements.define('site-nav', SiteNav);
+
+// ==========================================
+// 1b. HAMBURGER MENU LOGIC
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+  const hamburger = document.getElementById('navHamburger');
+  const drawer = document.getElementById('navMobileDrawer');
+  if (!hamburger || !drawer) return;
+
+  function openDrawer() { hamburger.classList.add('open'); drawer.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeDrawer() { hamburger.classList.remove('open'); drawer.classList.remove('open'); document.body.style.overflow = ''; }
+  function toggleDrawer() { drawer.classList.contains('open') ? closeDrawer() : openDrawer(); }
+
+  hamburger.addEventListener('click', toggleDrawer);
+
+  // Close when a link is tapped
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', closeDrawer));
+
+  // Open collaborate modal from mobile drawer
+  document.addEventListener('click', e => {
+    if (e.target.closest('#openCollaborateMobile')) { e.preventDefault(); closeDrawer(); setTimeout(() => { const modal = document.getElementById('globalCollaborateModal'); if (modal) modal.classList.add('active'); }, 350); }
+  });
+});
 
 // ==========================================
 // 2. FOOTER COMPONENT
