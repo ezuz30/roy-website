@@ -19,7 +19,6 @@ class SiteNav extends HTMLElement {
         <a href="index.html" class="nav-logo">R<span class="accent">O</span>Y EZUZ</a>
         <ul class="nav-links">
           <li><a href="selected-work.html">Collection</a></li>
-          <li><a href="projects.html">Projects</a></li>
           <li><a href="profile.html">Profile</a></li>
           <li><a href="#" id="openCollaborate">Collaborate</a></li>
         </ul>
