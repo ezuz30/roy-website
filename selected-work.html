@@ -40,6 +40,24 @@ body {
 }
 
 /* ═══════════════════════════════════════════
+   FADE-IN EFFECT FOR WEBGL (THE FIX)
+   ═══════════════════════════════════════════ */
+#webgl-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0; /* מתחיל שקוף */
+  transition: opacity 1.5s cubic-bezier(0.2, 0, 0.2, 1); /* מעבר חלק ויוקרתי */
+}
+
+/* המחלקה שנוסיף כשהדף מוכן */
+#webgl-canvas.loaded {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════
    TIMELINE (LEFT SIDE)
    ═══════════════════════════════════════════ */
 .timeline {
@@ -114,17 +132,6 @@ body {
   transition: color 0.4s;
 }
 .timeline-item.active .tl-year { color: var(--accent-red); }
-
-/* ═══════════════════════════════════════════
-   WEBGL CANVAS
-   ═══════════════════════════════════════════ */
-#webgl-canvas {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
-  z-index: 5;
-  pointer-events: none;
-}
 
 /* ═══════════════════════════════════════════
    HUGE TEXT OVERLAY
@@ -324,10 +331,7 @@ const geometry = new THREE.PlaneGeometry(PLANE_W, PLANE_H, 32, 32);
 const meshes = [];
 
 /*
-  Color-managed texture loading:
-  1. Load via <img> — browser decodes with full ICC profile support (ProPhoto RGB, P3, etc.)
-  2. Draw to a 2D canvas — browser converts to sRGB during this step
-  3. Create Three.js texture from that canvas — pixel data is now correct sRGB
+  Color-managed texture loading
 */
 function loadColorManagedTexture(src) {
   return new Promise(resolve => {
@@ -350,6 +354,7 @@ function loadColorManagedTexture(src) {
   });
 }
 
+// מחכים שכל הטקסטורות ייטענו ואז חושפים את הקנבס
 Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(textures => {
   textures.forEach(texture => {
     const material = new THREE.ShaderMaterial({
@@ -369,6 +374,11 @@ Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(tex
     scene.add(mesh);
     meshes.push(mesh);
   });
+
+  /* ═══ חשיפת הקנבס רק כשהכל מוכן ═══ */
+  setTimeout(() => {
+    canvas.classList.add('loaded');
+  }, 100); // השהייה קטנה למען החלקות
 });
 
 /* ═══ MOUSE PARALLAX TRACKING ═══ */
