@@ -402,10 +402,17 @@ site-footer { display: block; flex-shrink: 0; }
 }
 
 @media (max-width: 768px) {
-  .card-grid { grid-template-columns: 1fr; height: auto; }
-  .section-cards { padding: 4vh 5vw; }
-  .manifesto { font-size: clamp(0.9rem, 3.5vw, 1.15rem); }
-  .card--image { min-height: 50vh; }
+  .card-grid { grid-template-columns: 1fr; height: auto; gap: 0.6rem; }
+  .section-cards { padding: calc(90px + 2vh) 4vw 4vh; gap: 2vh; }
+  .manifesto { font-size: clamp(0.9rem, 3.5vw, 1.15rem); max-width: 95vw; }
+  .card--image { min-height: 50vw; }
+  .card--portrait { min-height: 45vw; }
+  .card--bio { padding: 1.6rem 1.4rem; gap: 1rem; }
+  .card__title { font-size: clamp(1.3rem, 5vw, 1.8rem); }
+  .card__text { font-size: 0.82rem; }
+  .card--bio { grid-row: auto; grid-column: auto; }
+  .card--portrait { grid-column: auto; grid-row: auto; }
+  .card--image { grid-column: auto; grid-row: auto; }
 }
 
 /* ═══════════════════════════════════════════

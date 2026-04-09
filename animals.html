@@ -41,7 +41,16 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 .rm-item:hover img { transform: scale(1.04); filter: brightness(1.08); }
 .rm-inset { padding: 0 12%; }
 @media (max-width: 1024px) { .refined-masonry { column-count: 2; column-gap: 4vw; } .rm-inset { padding: 0 6%; } }
-@media (max-width: 768px) { .refined-masonry { column-count: 1; column-gap: 0; } .rm-inset { padding: 0; } .gallery-header { padding: 100px 5vw 40px; } }
+
+@media (max-width: 768px) {
+  .story-hints { display: none; }
+  .scroll-cue { display: none; }
+  .story-close { top: 1rem; right: 1rem; font-size: 1.6rem; padding: 12px; }
+  .story-arrow { width: 56px; height: 56px; }
+  .story-arrow svg { width: 24px; height: 24px; }
+}
+
+@media (max-width: 768px) { .refined-masonry { column-count: 1; column-gap: 0; } .rm-inset { padding: 0; } .gallery-header { padding: 100px 5vw 40px; } .back-link { right: 1.2rem; top: 100px; font-size: 0.65rem; } .rm-item { margin-bottom: 6vw; } }
 
 /* --- STORY MODAL --- */
 .story-modal { position: fixed; inset: 0; z-index: 2000; background: #000; opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.6s ease, visibility 0s linear 0.6s; }
@@ -98,6 +107,15 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 .globe-svg .globe-pin { fill: #ff2d20; }
 .globe-svg .globe-pin-ring { fill: none; stroke: #ff2d20; stroke-width: 0.6; opacity: 0.4; }
 .story-text { font-family: 'Lora', serif; font-size: clamp(0.95rem, 1.3vw, 1.1rem); line-height: 2; color: rgba(255, 255, 255, 0.85); }
+
+@media (max-width: 768px) {
+  .story-hints { display: none; }
+  .scroll-cue { display: none; }
+  .story-close { top: 1rem; right: 1rem; font-size: 1.6rem; padding: 12px; }
+  .story-arrow { width: 56px; height: 56px; }
+  .story-arrow svg { width: 24px; height: 24px; }
+}
+
 @media (max-width: 768px) { .card-narrative { grid-template-columns: 1fr; gap: 3rem; } .card-right { border-left: none; padding-left: 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 2rem; } }
 
 /* --- PAGE ENTRANCE ANIMATIONS --- */
