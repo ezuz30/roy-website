@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Globe Comparison — Pick Your Style</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #0a0a0a; color: #f0f0f2; font-family: 'Helvetica Neue', sans-serif; }
+
+.header {
+  text-align: center;
+  padding: 4rem 2rem 2rem;
+}
+.header h1 {
+  font-size: 1.4rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+.header p {
+  font-size: 0.8rem;
+  color: #888;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+}
+
+.option {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+.option:hover { border-color: #E32119; }
+
+.option h2 {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #E32119;
+  margin-bottom: 0.5rem;
+  font-weight: 400;
+}
+.option h3 {
+  font-size: 1.1rem;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+  color: #ddd;
+}
+.option .desc {
+  font-size: 0.72rem;
+  color: #777;
+  line-height: 1.7;
+  margin-top: 1.5rem;
+  text-align: left;
+}
+
+.globe-container {
+  width: 240px;
+  height: 240px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Location selector */
+.loc-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.loc-btn {
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid #333;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+}
+.loc-btn:hover, .loc-btn.active {
+  border-color: #E32119;
+  color: #fff;
+  background: rgba(227, 33, 25, 0.1);
+}
+
+/* ═══ OPTION A: D3 Globe ═══ */
+#globeA { width: 240px; height: 240px; }
+#globeA .sphere { fill: none; stroke: rgba(255,255,255,0.08); }
+#globeA .graticule { fill: none; stroke: rgba(255,255,255,0.04); stroke-width: 0.5; }
+#globeA .land { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.12); stroke-width: 0.4; }
+#globeA .highlight { fill: rgba(227, 33, 25, 0.4); stroke: rgba(227, 33, 25, 0.7); stroke-width: 0.6; }
+#globeA .pin { fill: #E32119; }
+#globeA .pin-ring { fill: none; stroke: #E32119; stroke-width: 0.8; }
+
+/* ═══ OPTION B: Static image ═══ */
+.globe-static {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+  background: radial-gradient(circle at 40% 35%, rgba(255,255,255,0.04), rgba(0,0,0,0.3));
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.globe-static img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.25;
+  filter: grayscale(100%);
+  transition: opacity 0.5s;
+}
+.globe-static .pin-static {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #E32119;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 10px rgba(227,33,25,0.6);
+  transition: left 0.8s ease, top 0.8s ease;
+}
+.globe-static .pin-static::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 1px solid rgba(227,33,25,0.5);
+  border-radius: 50%;
+  animation: staticPulse 2s infinite;
+}
+@keyframes staticPulse {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* ═══ OPTION C: Simplified SVG ═══ */
+#globeC {
+  width: 240px;
+  height: 240px;
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; max-width: 500px; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Choose Your Globe Style</h1>
+  <p>Click the location buttons below each globe to see how they respond. Each option shows the same data differently.</p>
+</div>
+
+<div class="grid">
+
+  <!-- ═══ OPTION A: D3.js Interactive Globe ═══ -->
+  <div class="option">
+    <h2>Option A</h2>
+    <h3>D3.js Interactive Globe</h3>
+    <div class="globe-container">
+      <svg id="globeA"></svg>
+    </div>
+    <div class="loc-selector" data-globe="A">
+      <button class="loc-btn active" data-lat="52.52" data-lng="13.405" data-country="Germany">Berlin</button>
+      <button class="loc-btn" data-lat="45.44" data-lng="12.32" data-country="Italy">Venice</button>
+      <button class="loc-btn" data-lat="41.39" data-lng="2.17" data-country="Spain">Barcelona</button>
+      <button class="loc-btn" data-lat="38.72" data-lng="-9.14" data-country="Portugal">Lisbon</button>
+      <button class="loc-btn" data-lat="48.86" data-lng="2.35" data-country="France">Paris</button>
+    </div>
+    <div class="desc">
+      <strong>Pros:</strong> Fully accurate country borders. Smooth rotation. Real 3D orthographic projection. Country highlighting by name. Most impressive.<br>
+      <strong>Cons:</strong> Requires loading D3.js + TopoJSON data (~150KB). Slightly heavier.
+    </div>
+  </div>
+
+  <!-- ═══ OPTION B: Static Globe Image + Pin ═══ -->
+  <div class="option">
+    <h2>Option B</h2>
+    <h3>Pre-rendered Globe + Pin</h3>
+    <div class="globe-container">
+      <div class="globe-static" id="globeB">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/World_map_blank_without_borders.svg/1280px-World_map_blank_without_borders.svg.png" alt="World" id="globeBImg">
+        <div class="pin-static" id="pinB" style="left:55%;top:28%;"></div>
+      </div>
+    </div>
+    <div class="loc-selector" data-globe="B">
+      <button class="loc-btn active" data-x="55" data-y="28">Berlin</button>
+      <button class="loc-btn" data-x="53" data-y="33">Venice</button>
+      <button class="loc-btn" data-x="51" data-y="33">Barcelona</button>
+      <button class="loc-btn" data-x="48" data-y="32">Lisbon</button>
+      <button class="loc-btn" data-x="51.5" data-y="30">Paris</button>
+    </div>
+    <div class="desc">
+      <strong>Pros:</strong> Simple, lightweight. No external libraries. Clean look.<br>
+      <strong>Cons:</strong> Flat map in a circle, not a true 3D globe. Can't rotate. Country highlighting is hard. Less impressive. Requires an external image that may not load offline.
+    </div>
+  </div>
+
+  <!-- ═══ OPTION C: Simplified SVG Globe ═══ -->
+  <div class="option">
+    <h2>Option C</h2>
+    <h3>Handcrafted SVG Globe</h3>
+    <div class="globe-container">
+      <svg id="globeC" viewBox="0 0 240 240">
+        <!-- Globe circle -->
+        <circle cx="120" cy="120" r="115" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+        <!-- Grid lines -->
+        <ellipse cx="120" cy="120" rx="115" ry="40" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <ellipse cx="120" cy="120" rx="115" ry="80" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <ellipse cx="120" cy="120" rx="40" ry="115" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <ellipse cx="120" cy="120" rx="80" ry="115" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <line x1="5" y1="120" x2="235" y2="120" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <!-- Simplified Europe -->
+        <path d="M105,55 L110,50 L118,48 L126,50 L132,55 L130,62 L134,67 L130,72 L124,74 L118,76 L112,74 L108,70 L104,64 L102,58 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" class="svg-land" data-name="Europe"/>
+        <!-- Simplified Africa -->
+        <path d="M108,80 L115,78 L122,80 L128,85 L132,92 L136,102 L134,112 L130,122 L124,130 L118,134 L112,130 L108,122 L105,112 L104,102 L104,92 L106,85 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" class="svg-land" data-name="Africa"/>
+        <!-- Simplified Asia -->
+        <path d="M132,45 L142,40 L156,38 L170,42 L182,48 L188,55 L184,64 L176,68 L168,66 L158,70 L148,74 L140,72 L134,68 L130,62 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" class="svg-land" data-name="Asia"/>
+        <!-- Simplified North America (partial, on left edge) -->
+        <path d="M20,52 L30,48 L42,50 L52,56 L58,64 L56,72 L50,78 L42,76 L36,80 L30,76 L24,68 L18,60 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" class="svg-land" data-name="NorthAmerica"/>
+        <!-- Simplified South America (partial) -->
+        <path d="M42,88 L50,86 L56,90 L58,98 L56,108 L52,118 L46,124 L40,120 L38,112 L36,102 L38,94 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" class="svg-land" data-name="SouthAmerica"/>
+        <!-- India -->
+        <path d="M158,76 L164,80 L166,88 L162,94 L156,90 L154,82 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" class="svg-land" data-name="India"/>
+        <!-- Australia -->
+        <path d="M184,112 L194,108 L204,112 L208,120 L204,128 L194,130 L186,126 L182,118 Z" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="0.5" class="svg-land" data-name="Australia"/>
+        <!-- Highlighted country (dynamic) -->
+        <path id="highlightC" d="" fill="rgba(227,33,25,0.35)" stroke="rgba(227,33,25,0.7)" stroke-width="0.8"/>
+        <!-- Pin -->
+        <circle id="pinC" cx="118" cy="54" r="4" fill="#E32119"/>
+        <circle id="pinCPulse" cx="118" cy="54" r="4" fill="none" stroke="#E32119" stroke-width="0.8" opacity="0">
+          <animate attributeName="r" from="4" to="12" dur="2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+    <div class="loc-selector" data-globe="C">
+      <button class="loc-btn active" data-px="118" data-py="54" data-region="Europe">Berlin</button>
+      <button class="loc-btn" data-px="122" data-py="62" data-region="Europe">Venice</button>
+      <button class="loc-btn" data-px="110" data-py="64" data-region="Europe">Barcelona</button>
+      <button class="loc-btn" data-px="102" data-py="60" data-region="Europe">Lisbon</button>
+      <button class="loc-btn" data-px="114" data-py="58" data-region="Europe">Paris</button>
+    </div>
+    <div class="desc">
+      <strong>Pros:</strong> Zero dependencies. Pure SVG. Very lightweight. Works offline. Has the globe look with grid lines.<br>
+      <strong>Cons:</strong> Continents are simplified (not accurate borders). Can't truly rotate. Country highlighting is per-continent, not per-country.
+    </div>
+  </div>
+
+</div>
+
+<!-- D3.js + TopoJSON for Option A -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
+<script>
+/* ═══ OPTION A: D3 Globe ═══ */
+(() => {
+  const w = 240, h = 240;
+  const svg = d3.select('#globeA').attr('viewBox', `0 0 ${w} ${h}`);
+  const projection = d3.geoOrthographic().scale(115).translate([w/2, h/2]).clipAngle(90);
+  const path = d3.geoPath(projection);
+
+  // Sphere
+  svg.append('path').datum({type:'Sphere'}).attr('class','sphere').attr('d', path);
+  // Graticule
+  svg.append('path').datum(d3.geoGraticule()()).attr('class','graticule').attr('d', path);
+
+  const landGroup = svg.append('g');
+  const pinGroup = svg.append('g');
+
+  let worldData = null;
+  let currentCountry = 'Germany';
+  let currentCoords = [13.405, 52.52];
+
+  // Load world data
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(data => {
+    worldData = data;
+    const countries = topojson.feature(data, data.objects.countries);
+
+    landGroup.selectAll('path')
+      .data(countries.features)
+      .join('path')
+      .attr('class', d => 'land')
+      .attr('d', path);
+
+    rotateTo(currentCoords, currentCountry);
+  });
+
+  function rotateTo(coords, country) {
+    currentCoords = coords;
+    currentCountry = country;
+
+    // Smooth rotation
+    const r = d3.interpolate(projection.rotate(), [-coords[0], -coords[1]]);
+    d3.transition().duration(1200).tween('rotate', () => t => {
+      projection.rotate(r(t));
+      
+      // Redraw
+      svg.select('.sphere').attr('d', path);
+      svg.select('.graticule').attr('d', path);
+      
+      if (worldData) {
+        const countries = topojson.feature(worldData, worldData.objects.countries);
+        
+        // Get country name mapping (simplified)
+        const countryNames = {
+          'Germany': '276', 'Italy': '380', 'Spain': '724', 
+          'Portugal': '620', 'France': '250'
+        };
+        const targetId = countryNames[country];
+
+        landGroup.selectAll('path')
+          .data(countries.features)
+          .join('path')
+          .attr('class', d => d.id === targetId ? 'highlight' : 'land')
+          .attr('d', path);
+      }
+
+      // Pin
+      pinGroup.selectAll('*').remove();
+      const p = projection(coords);
+      if (p && d3.geoDistance(coords.map(d=>d*Math.PI/180), projection.rotate().map(d=>-d*Math.PI/180)) < Math.PI/2) {
+        pinGroup.append('circle').attr('class','pin-ring').attr('cx',p[0]).attr('cy',p[1]).attr('r',8).style('opacity',0.4);
+        pinGroup.append('circle').attr('class','pin').attr('cx',p[0]).attr('cy',p[1]).attr('r',4);
+      }
+    });
+  }
+
+  // Button clicks
+  document.querySelectorAll('[data-globe="A"] .loc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-globe="A"] .loc-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      rotateTo([parseFloat(btn.dataset.lng), parseFloat(btn.dataset.lat)], btn.dataset.country);
+    });
+  });
+})();
+
+/* ═══ OPTION B: Static Pin ═══ */
+(() => {
+  const pin = document.getElementById('pinB');
+  document.querySelectorAll('[data-globe="B"] .loc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-globe="B"] .loc-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      pin.style.left = btn.dataset.x + '%';
+      pin.style.top = btn.dataset.y + '%';
+    });
+  });
+})();
+
+/* ═══ OPTION C: SVG Pin ═══ */
+(() => {
+  const pin = document.getElementById('pinC');
+  const pulse = document.getElementById('pinCPulse');
+  const highlight = document.getElementById('highlightC');
+
+  // Region paths for highlighting
+  const regionPaths = {};
+  document.querySelectorAll('#globeC .svg-land').forEach(el => {
+    regionPaths[el.dataset.name] = el.getAttribute('d');
+  });
+
+  document.querySelectorAll('[data-globe="C"] .loc-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-globe="C"] .loc-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const x = btn.dataset.px, y = btn.dataset.py;
+      pin.setAttribute('cx', x);
+      pin.setAttribute('cy', y);
+      pulse.setAttribute('cx', x);
+      pulse.setAttribute('cy', y);
+      
+      const region = btn.dataset.region;
+      highlight.setAttribute('d', regionPaths[region] || '');
+    });
+  });
+
+  // Initialize highlight
+  highlight.setAttribute('d', regionPaths['Europe'] || '');
+})();
+</script>
+
+</body>
+</html>

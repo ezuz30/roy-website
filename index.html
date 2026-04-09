@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROY EZUZ — Fine Art Street Photography</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600&family=Raleway:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+<script src="layout.js" defer></script>
+<style>
+:root {
+  --bg-primary: #0a0a0a;
+  --text-primary: #f0f0f2;
+  --text-secondary: #b0b0b8;
+  --text-muted: #8a8a92;
+  --border-color: #2a2a2e;
+  --accent-red: #E32119;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Barlow', Helvetica Neue, sans-serif;
+  --condensed: 'Barlow Condensed', Helvetica Neue, sans-serif;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html {
+  -webkit-font-smoothing: antialiased;
+  cursor: none;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  margin: 0;
+  cursor: none;
+  height: 100dvh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+}
+
+site-nav { display: block; height: 90px; flex-shrink: 0; }
+site-footer { display: block; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════
+   BLOCK 1 — FULL VIEWPORT CAROUSEL
+   ═══════════════════════════════════════════ */
+.section-hero {
+  height: 100dvh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1vh 2vw;
+  min-height: 0;
+}
+
+.carousel {
+  position: relative;
+  width: 96vw;
+  max-height: calc(100dvh - 100px);
+  opacity: 0;
+  transform: scale(0.98);
+  animation: imageIn 1.8s var(--ease-out-expo) 0.6s forwards;
+}
+
+.carousel img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(100dvh - 100px);
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.carousel img:first-child {
+  position: relative;
+}
+
+.carousel img.active {
+  opacity: 1;
+}
+
+@keyframes imageIn {
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ═══════════════════════════════════════════
+   BLOCK 2 — CARD GRID (GALLERY FRAME)
+   ═══════════════════════════════════════════ */
+.section-cards {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  background: #111113;
+  padding: calc(90px + 4vh) 4vw 4vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3vh;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 0.6fr 0.83fr;
+  grid-template-rows: 1fr 0.38fr 0.38fr;
+  gap: 0.8rem;
+  max-width: 1400px;
+  height: 65vh;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Base card — Gallery Frame style */
+.card {
+  background: #161618;
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s var(--ease-out-expo), box-shadow 0.5s ease;
+}
+
+/* Inner matted frame */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 45px rgba(0,0,0,0.5);
+}
+
+/* Staggered entrance */
+.card:nth-child(1) { transition-delay: 0.1s; }
+.card:nth-child(2) { transition-delay: 0.2s; }
+.card:nth-child(3) { transition-delay: 0.3s; }
+.card:nth-child(4) { transition-delay: 0.4s; }
+.card:nth-child(5) { transition-delay: 0.5s; }
+
+/* Card: Bio — col 1, spans 2 rows */
+.card--bio {
+  grid-row: 1 / -1;
+  padding: 2.5rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.3rem;
+}
+
+.card__label {
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.card__title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.5rem, 2vw, 2.2rem);
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.card__text {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+}
+
+.card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.65rem 1.4rem;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 3px;
+  transition: border-color 0.4s ease, background 0.4s ease;
+  width: fit-content;
+}
+
+.card__cta:hover {
+  border-color: var(--accent-red);
+  background: rgba(227, 33, 25, 0.08);
+}
+
+/* Card: Portrait — col 2, row 1 */
+.card--portrait {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem;
+}
+
+.card--portrait img {
+  aspect-ratio: 4 / 5;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+  transition: transform 1s var(--ease-out-expo);
+}
+
+.card--portrait:hover img {
+  transform: scale(1.03);
+}
+
+/* No inner frame on image cards */
+.card--portrait::before,
+.card--image::before { display: none; }
+
+/* Card: Selected Work carousel — col 3, spans all rows */
+.card--image {
+  grid-column: 3;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.4rem;
+  gap: 0.8rem;
+}
+
+.mini-carousel {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.mini-carousel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.mini-carousel img:first-child {
+  position: relative;
+}
+
+.mini-carousel img.active {
+  opacity: 1;
+}
+
+.card__image-title {
+  display: block;
+  padding: 0.8rem 1.2rem;
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  background: #161618;
+  border-top: 1px solid rgba(255,255,255,0.04);
+  transition: color 0.3s ease;
+  flex-shrink: 0;
+}
+
+.card--image:hover .card__image-title {
+  color: var(--text-primary);
+}
+
+/* Card: Contact — col 2, row 2 */
+.card--contact {
+  grid-column: 2;
+  grid-row: 2;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Card: CTA — col 2, row 3 (below Connect) */
+.card--cta {
+  grid-column: 2;
+  grid-row: 3;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  transition: background 0.4s ease;
+}
+
+
+.card--cta .card__label {
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+  letter-spacing: 0.3em;
+  color: var(--text-primary);
+}
+
+.card__cta-arrow {
+  font-size: 1.1rem;
+  color: var(--accent-red);
+  transition: transform 0.4s var(--ease-out-expo);
+  display: block;
+}
+
+.card--cta:hover .card__cta-arrow {
+  transform: translateY(4px);
+}
+
+.card__social-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.card__social-links a {
+  font-family: var(--condensed);
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.card__social-links a:hover { color: var(--text-primary); }
+
+/* Quote bar below cards */
+.manifesto-bar {
+  text-align: center;
+  padding: 2vh 4vw 0;
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.manifesto {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: normal;
+  font-size: clamp(1.05rem, 1.5vw, 1.45rem);
+  color: #ffffff;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease 0.6s, transform 1s var(--ease-out-expo) 0.6s;
+}
+
+.manifesto.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — CARDS
+   ═══════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .card-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; height: auto; }
+  .card--bio { grid-row: auto; }
+  .card--image { grid-row: auto; }
+}
+
+@media (max-width: 768px) {
+  .card-grid { grid-template-columns: 1fr; height: auto; }
+  .section-cards { padding: 4vh 5vw; }
+  .manifesto { font-size: clamp(0.9rem, 3.5vw, 1.15rem); }
+  .card--image { min-height: 50vh; }
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL INDICATOR
+   ═══════════════════════════════════════════ */
+.scroll-cue {
+  position: fixed;
+  bottom: 3.5vh;
+  left: 2.2rem;
+  z-index: 98000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0.8;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+.scroll-cue.hidden { opacity: 0; }
+
+.scroll-mouse {
+  width: 31px;
+  height: 50px;
+  border: 2px solid rgba(255,255,255,0.95);
+  border-radius: 17px;
+  position: relative;
+}
+
+.scroll-mouse::after {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 10px;
+  background: var(--accent-red);
+  border-radius: 2px;
+  animation: mouseWheel 2s ease-in-out infinite;
+}
+
+@keyframes mouseWheel {
+  0% { opacity: 1; top: 8px; }
+  50% { opacity: 1; top: 28px; }
+  80% { opacity: 0; top: 34px; }
+  100% { opacity: 0; top: 8px; }
+}
+
+.scroll-cue-text {
+  font-family: var(--condensed);
+  font-weight: 300;
+  font-size: 0.625rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.95);
+}
+
+/* ═══════════════════════════════════════════
+   SPLASH SCREEN
+   ═══════════════════════════════════════════ */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+  pointer-events: all;
+}
+.splash.fade-out { opacity: 0; pointer-events: none; }
+.splash img { max-width: 55vw; max-height: 50vh; object-fit: contain; }
+
+/* ═══════════════════════════════════════════
+   COLLABORATE MODAL
+   ═══════════════════════════════════════════ */
+.mo { position: fixed; inset: 0; z-index: 50000; background: rgba(0,0,0,.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .5s; }
+.mo.active { opacity: 1; pointer-events: all; }
+.mc { position: relative; border: 1px solid rgba(255,255,255,0.08); background: rgba(10,10,10,.92); padding: 4rem 3.5rem; max-width: 480px; width: 90vw; text-align: center; transform: translateY(20px); transition: transform .5s cubic-bezier(.25,1,.5,1); }
+.mo.active .mc { transform: translateY(0); }
+.mx { position: absolute; top: 1.2rem; right: 1.5rem; background: none; border: none; font-family: var(--sans); font-weight: 200; font-size: 1.4rem; color: var(--text-muted); cursor: none; transition: color .3s; line-height: 1; padding: 4px; }
+.mx:hover { color: var(--accent-red); }
+.ms { font-family: var(--condensed); font-weight: 300; font-size: .6rem; letter-spacing: .35em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.5rem; }
+.mh { font-family: var(--serif); font-weight: 300; font-style: italic; font-size: clamp(1.3rem, 2.5vw, 1.8rem); line-height: 1.4; color: var(--text-primary); margin-bottom: 2.5rem; }
+.md { width: 30px; height: 1px; background: var(--accent-red); margin: 0 auto 2rem; }
+.cfw { display: flex; flex-direction: column; gap: 1rem; }
+.cfw input, .cfw textarea { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.1); padding: .85rem 1rem; font-family: var(--sans); font-weight: 300; font-size: .82rem; color: var(--text-primary); letter-spacing: .03em; transition: border-color .3s; outline: none; resize: vertical; cursor: none; }
+.cfw input::placeholder, .cfw textarea::placeholder { color: var(--text-muted); }
+.cfw input:focus, .cfw textarea:focus { border-color: var(--accent-red); }
+.sb { width: 100%; padding: .9rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); font-family: var(--condensed); font-weight: 400; font-size: .72rem; letter-spacing: .25em; text-transform: uppercase; color: var(--text-primary); cursor: none; transition: all .4s; margin-top: .5rem; }
+.sb:hover { border-color: var(--accent-red); background: var(--accent-red); color: #fff; }
+.fs { font-family: var(--sans); font-weight: 300; font-size: .75rem; text-align: center; color: var(--text-muted); min-height: 1.2em; margin-top: .5rem; }
+.fs.ok { color: #4caf50; } .fs.er { color: var(--accent-red); }
+
+/* Social icons in Connect card */
+.card__social-icons { display: flex; gap: 1.6rem; align-items: center; }
+.card__social-icons a {
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease, transform 0.3s var(--ease-out-expo);
+}
+.card__social-icons a:hover {
+  color: var(--text-primary);
+  border-color: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  transform: translateY(-2px);
+}
+.card__social-icons svg { width: 25px; height: 25px; fill: currentColor; }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .manifesto { font-size: clamp(1.2rem, 5vw, 1.8rem); max-width: 90vw; }
+}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <img src="images/Roy-Ezuz_white_low-res.png" alt="Roy Ezuz — Perpetual Frame">
+</div>
+
+<site-nav></site-nav>
+
+<!-- BLOCK 1: Carousel -->
+<section class="section-hero" style="position: relative;">
+  <div class="carousel-wrapper">
+    <div class="carousel">
+      <img class="active" src="images/portraits/L1004839.JPG" alt="">
+      <img src="images/light_and_shadow/valencia.jpg" alt="">
+      <img src="images/urban_life/L1067694.jpg" alt="">
+      <img src="images/animals/H_0004_L1002572.jpg" alt="">
+    </div>
+  </div>
+  <div class="scroll-cue" id="scrollCue">
+    <div class="scroll-mouse"></div>
+    <span class="scroll-cue-text">Scroll</span>
+  </div>
+</section>
+
+<!-- BLOCK 2: Card Grid -->
+<section class="section-cards">
+  <div class="card-grid">
+
+    <!-- Card 1: Bio (square) -->
+    <div class="card card--bio">
+      <span class="card__label">Photographer</span>
+      <h2 class="card__title">Roy Ezuz</h2>
+      <p class="card__text">I grew up on the edges — watching, not from disinterest, but because the margins were where the truth was. Today, that instinct drives everything I photograph. Based in Israel, working across continents, I document the human condition wherever it reveals itself — street, portrait, light, shadow. The quiet moments no one else notices.</p>
+      <a href="profile.html" class="card__cta">Read Full Profile</a>
+    </div>
+
+    <!-- Card 2: Portrait (smaller) -->
+    <div class="card card--portrait">
+      <img src="images/profile_pictures/L1000758.jpg" alt="Roy Ezuz">
+    </div>
+
+    <!-- Card 3: Selected Photos mini carousel -->
+    <a href="selected-work.html" class="card card--image" style="text-decoration:none;">
+      <div class="mini-carousel">
+        <img class="active" src="images/urban_life/white_wall.jpg" alt="">
+        <img src="images/moments/V_0017_L1067793.jpg" alt="">
+        <img src="images/animals/woman + Bird.jpg" alt="">
+      </div>
+      <span class="card__image-title">Selected Work</span>
+    </a>
+
+    <!-- Card 4: Connect & Social Icons -->
+    <div class="card card--contact">
+      <div class="card__social-icons">
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/royezuz" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/royezuz" target="_blank" rel="noopener" aria-label="Facebook">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Card 5: Collaborate -->
+    <div class="card card--cta" id="openCollaborateCard" style="cursor:none;">
+      <span class="card__label">Collaborate</span>
+      <span class="card__cta-arrow">↓</span>
+    </div>
+
+  </div>
+
+  <!-- Quote underneath -->
+  <div class="manifesto-bar">
+    <p class="manifesto" id="manifesto">Photography is perhaps the only art form that allows you to completely detach<br>from the outside world, only to make you feel more connected than ever before.</p>
+  </div>
+</section>
+
+<site-footer></site-footer>
+
+<!-- COLLABORATE MODAL -->
+<div class="mo" id="collaborateModal">
+  <div class="mc">
+    <button class="mx" id="modalClose">&times;</button>
+    <div class="ms">G E T &nbsp; I N &nbsp; T O U C H</div>
+    <h2 class="mh">Let's create something together.</h2>
+    <div class="md"></div>
+    <div class="cfw">
+      <input type="text" id="formName" placeholder="Your Name" required>
+      <input type="email" id="formEmail" placeholder="Your Email" required>
+      <textarea id="formMessage" placeholder="Your Message" rows="3" required></textarea>
+      <button type="button" class="sb" id="formSubmit">Send Message</button>
+      <div class="fs" id="formStatus"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* SPLASH */
+(() => {
+  const splash = document.getElementById('splash');
+  if (splash) {
+    setTimeout(() => {
+      splash.classList.add('fade-out');
+      setTimeout(() => splash.remove(), 800);
+    }, 500);
+  }
+})();
+
+/* CAROUSEL */
+(() => {
+  const imgs = document.querySelectorAll('.carousel img');
+  if (imgs.length < 2) return;
+  let current = 0;
+  setInterval(() => {
+    imgs[current].classList.remove('active');
+    current = (current + 1) % imgs.length;
+    imgs[current].classList.add('active');
+  }, 5000);
+})();
+
+/* HIDE SCROLL CUE ON SCROLL */
+(() => {
+  const cue = document.getElementById('scrollCue');
+  if (!cue) return;
+  document.body.addEventListener('scroll', () => {
+    if (document.body.scrollTop > window.innerHeight * 0.5) cue.classList.add('hidden');
+    else cue.classList.remove('hidden');
+  }, { passive: true });
+})();
+
+/* MINI CAROUSEL (Card 4) */
+(() => {
+  const imgs = document.querySelectorAll('.mini-carousel img');
+  if (imgs.length < 2) return;
+  let current = 0;
+  setInterval(() => {
+    imgs[current].classList.remove('active');
+    current = (current + 1) % imgs.length;
+    imgs[current].classList.add('active');
+  }, 3500);
+})();
+
+/* REVEAL CARDS + QUOTE ON SCROLL */
+(() => {
+  const cards = document.querySelectorAll('.card');
+  const quote = document.getElementById('manifesto');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.15, root: null });
+  cards.forEach(c => observer.observe(c));
+  if (quote) observer.observe(quote);
+})();
+
+/* COLLABORATE MODAL */
+(() => {
+  const modal = document.getElementById('collaborateModal');
+  const closeBtn = document.getElementById('modalClose');
+  const cardBtn = document.getElementById('openCollaborateCard');
+
+  function openModal(e) { e && e.preventDefault(); modal.classList.add('active'); }
+  function closeModal() { modal.classList.remove('active'); }
+
+  // Open from card
+  if (cardBtn) cardBtn.addEventListener('click', openModal);
+
+  // Open from nav link (openCollaborate — defined in layout.js nav)
+  document.addEventListener('click', e => {
+    const trigger = e.target.closest('#openCollaborate');
+    if (trigger) { e.preventDefault(); openModal(); }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+
+  // Form submit
+  const submitBtn = document.getElementById('formSubmit');
+  const status = document.getElementById('formStatus');
+  submitBtn.addEventListener('click', function() {
+    const n = document.getElementById('formName');
+    const em = document.getElementById('formEmail');
+    const m = document.getElementById('formMessage');
+    if (!n.value || !em.value || !m.value) {
+      status.textContent = 'Please fill in all fields.';
+      status.className = 'fs er';
+      return;
+    }
+    status.textContent = 'Message sent. Thank you.';
+    status.className = 'fs ok';
+    setTimeout(() => { closeModal(); n.value = ''; em.value = ''; m.value = ''; status.textContent = ''; status.className = 'fs'; }, 2000);
+  });
+})();
+</script>
+</body>
+</html>

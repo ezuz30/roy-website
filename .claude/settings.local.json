@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \":*)",
+      "Bash(python3 -:*)",
+      "Bash(python3 /Users/royezuz/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/7de1feba-3f15-4c10-ae4f-9b98f8bf3daf/f8b4ad04-2371-401d-87bb-9bcfaba863a1/skills/xlsx/scripts/setup_pandas.py)",
+      "Bash(pip3 install:*)",
+      "Bash(python3:*)",
+      "Bash(ls /Users/royezuz/Desktop/roy-website/assets/*.xlsx)",
+      "Bash(find /Users/royezuz/Desktop/roy-website/images -iname *church* -o -iname *כנסייה* -o -iname *9*)",
+      "Bash(grep -o \"\"text\"\":\"\"[^\"\"]*gear[^\"\"]*\"\" /Users/royezuz/.claude/projects/-Users-royezuz-Desktop-roy-website/511dcd01-bd9b-497e-b263-1f41c0b0a190.jsonl)",
+      "Bash(ls /Users/royezuz/Desktop/roy-website/*.html)",
+      "Bash(for file:*)",
+      "Bash(do echo:*)",
+      "Read(//Users/royezuz/Desktop/roy-website/**)",
+      "Bash(done)"
+    ]
+  }
+}

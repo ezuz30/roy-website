@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — ROY EZUZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Barlow:wght@100;300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM & BASE
+   ═══════════════════════════════════════════ */
+:root {
+  --bg-primary: #0a0a0a;
+  --text-primary: #f0f0f2;
+  --text-muted: #8a8a92;
+  --accent-red: #E32119;
+  --serif: 'Cormorant Garamond', serif;
+  --sans: 'Barlow', sans-serif;
+}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; cursor:none; }
+body { font-family: var(--sans); background: var(--bg-primary); color: var(--text-primary); cursor: none; overflow-x: hidden; }
+
+/* ═══ CURSOR & NAV ═══ */
+.cursor-dot { position:fixed; top:0; left:0; width:4px; height:4px; background:var(--accent-red); border-radius:50%; pointer-events:none; z-index:99999; transform:translate(-50%,-50%); }
+.cursor-ring { position:fixed; top:0; left:0; width:15px; height:15px; border:1px solid rgba(227,33,25,.35); border-radius:50%; pointer-events:none; z-index:99998; transform:translate(-50%,-50%); }
+a, button { cursor:none; }
+.nav { position: fixed; top:0; left:0; right:0; height:90px; display: flex; align-items:center; justify-content:space-between; padding: 0 6vw; z-index:1000; }
+.nav-logo { font-family:var(--sans); font-weight:300; font-size:1.1rem; letter-spacing:.3em; text-decoration:none; color:var(--text-primary); transition: opacity 0.3s; }
+.nav-logo span { color:var(--accent-red); }
+.nav-links { display:flex; gap:3rem; list-style:none; }
+.nav-links a { font-family:var(--sans); font-weight:300; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase; text-decoration:none; color:var(--text-primary); opacity:.6; transition:.3s; }
+.nav-links a:hover { opacity:1; }
+
+/* ═══ HERO & STATEMENT ═══ */
+.hero { height: 100vh; display: flex; align-items:center; justify-content:center; position: relative; overflow:hidden; }
+.hero-parallax-bg { position: absolute; inset:-20%; background-image: url('https://picsum.photos/seed/nyc1/1920/1080'); background-size: cover; background-position: center; opacity: 0.25; }
+.hero-title { font-family:var(--serif); font-size:clamp(4rem,12vw,10rem); letter-spacing:0.15em; text-transform:uppercase; color:var(--text-primary); z-index:2; }
+
+.statement-section { min-height: 40vh; display: flex; align-items: center; justify-content: center; padding: 10vh 6vw 5vh 6vw; position: relative; z-index: 10; }
+.statement-text { font-family: var(--serif); font-size: clamp(1.5rem, 2.5vw, 2.2rem); line-height: 1.6; text-align: center; opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+.statement-section.is-visible .statement-text { opacity: 1; transform: translateY(0); }
+
+/* ═══ BLOCK 3: CHOREOGRAPHY ═══ */
+.choreo { position: relative; height: 600vh; background: #000; margin-top: -10vh; z-index: 1; }
+.choreo-sticky { position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; }
+.choreo-float { position: absolute; will-change: transform, filter, opacity; box-shadow: 0 30px 100px rgba(0,0,0,0.8); top: 100vh; }
+.choreo-float img { width: 100%; height: 100%; object-fit: cover; }
+.f1 { width: 15vw; height: 21vw; left: 3%; z-index: 3; } .f2 { width: 12vw; height: 16vw; left: 72%; z-index: 2; } .f3 { width: 18vw; height: 24vw; left: 27%; z-index: 4; } .f4 { width: 11vw; height: 15vw; left: 56%; z-index: 2; } .f5 { width: 16vw; height: 22vw; left: 48%; z-index: 4; } .f6 { width: 11vw; height: 15vw; left: 88%; z-index: 2; } .f7 { width: 10vw; height: 14vw; left: 14%; z-index: 2; } .f8 { width: 13vw; height: 18vw; left: 80%; z-index: 3; } 
+.choreo-hero-wrap { position: absolute; top: 50%; left: 45%; transform: translate(-50%, -50%); width: 32vw; height: 46vw; min-width: 300px; opacity: 0; z-index: 5; will-change: transform, opacity; }
+.hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-color { opacity: 0; z-index: 6; }
+.choreo-story { position: absolute; top: 50%; right: 6vw; transform: translateY(-50%); z-index: 10; max-width: 340px; opacity: 0; }
+.story-heading { font-family: var(--serif); font-weight: 300; font-size: clamp(2rem, 3.2vw, 3.2rem); line-height: 1.15; color: var(--text-primary); margin-bottom: 1.5rem; }
+.story-body { font-family: var(--sans); font-weight: 300; font-size: clamp(0.8rem, 0.95vw, 0.92rem); color: var(--text-muted); max-width: 340px; line-height: 1.85; }
+
+/* ═══ BLOCK 4: PURE PARALLAX (CLEANED) ═══ */
+.pure-parallax { position: relative; height: 100vh; clip: rect(0, auto, auto, 0); -webkit-clip-path: inset(0); clip-path: inset(0); z-index: 2; }
+.parallax-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: url('https://picsum.photos/seed/nyc-breathing-room/1920/1280'); background-size: cover; background-position: center; will-change: transform; z-index: 0; }
+
+/* ═══ TEXT BLOCKS (PERSPECTIVE & SUMMARY) ═══ */
+.editorial-text-block {
+  min-height: 60vh; display: flex; align-items: center; justify-content: center;
+  padding: 15vh 6vw; background: var(--bg-primary); position: relative; z-index: 5;
+}
+.editorial-content {
+  max-width: 700px; text-align: center; opacity: 0; transform: translateY(40px); transition: 1.2s ease-out;
+}
+.editorial-kicker {
+  font-family: var(--sans); font-weight: 300; font-size: 0.65rem; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--accent-red); margin-bottom: 2rem;
+}
+.editorial-body {
+  font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.5rem); line-height: 1.4; color: var(--text-primary);
+}
+.editorial-body span { color: var(--text-muted); }
+.editorial-text-block.is-visible .editorial-content { opacity: 1; transform: translateY(0); }
+
+/* ═══ BLOCK 5: HORIZONTAL GALLERY (IMAGES ONLY) ═══ */
+.horizontal-section { position: relative; background: var(--bg-primary); overflow: hidden; z-index: 5; padding: 10vh 0; }
+.horizontal-container { height: 80vh; display: flex; align-items: center; overflow: hidden; }
+.horizontal-track { display: flex; align-items: center; gap: 4vw; padding: 0 10vw; width: max-content; will-change: transform; }
+.hz-item { position: relative; flex-shrink: 0; }
+.hz-item img { height: 60vh; width: auto; max-width: 80vw; object-fit: cover; }
+
+/* ═══ FOOTER & NEXT PROJECT ═══ */
+.site-footer {
+  background: #000; padding: 15vh 6vw 5vh 6vw; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 10;
+}
+.next-project {
+  text-decoration: none; text-align: center; margin-bottom: 15vh; display: block;
+}
+.next-label {
+  display: block; font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.4em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 1rem; transition: color 0.3s;
+}
+.next-title {
+  font-family: var(--serif); font-size: clamp(3rem, 10vw, 8rem); line-height: 1;
+  color: var(--text-primary); text-transform: uppercase; transition: color 0.4s, transform 0.4s; display: inline-block;
+}
+.next-project:hover .next-label { color: var(--accent-red); }
+.next-project:hover .next-title { color: var(--accent-red); transform: scale(1.02); }
+
+.footer-bottom {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border-color); padding-top: 3vh;
+}
+.footer-bottom p, .footer-links a {
+  font-family: var(--sans); font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); text-decoration: none;
+}
+.footer-links { display: flex; gap: 2rem; }
+.footer-links a:hover { color: var(--text-primary); }
+
+@media (max-width: 768px) {
+  .choreo-hero-wrap { width: 70vw; height: 100vw; min-width: unset; left: 50%; }
+  .choreo-story { top: auto; bottom: 5vh; right: auto; left: 50%; transform: translateX(-50%); max-width: 85vw; text-align: center; }
+  .hz-item img { height: 50vh; }
+  .footer-bottom { flex-direction: column; gap: 2rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">R<span>O</span>Y EZUZ</a>
+  <ul class="nav-links">
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Projects</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-parallax-bg" id="heroParallax"></div>
+  <h1 class="hero-title">PROJECTS</h1>
+</section>
+
+<section class="statement-section js-reveal">
+  <p class="statement-text">
+    New York is an endless collision of quiet moments in the loudest city on earth. <br>
+    <span style="color:var(--text-muted)">Here, light doesn't just fall — it fights its way through the concrete.</span>
+  </p>
+</section>
+
+<section class="choreo" id="choreoSection">
+  <div class="choreo-sticky">
+    <div class="choreo-float f1"><img src="https://picsum.photos/seed/n1/500/700"></div>
+    <div class="choreo-float f2"><img src="https://picsum.photos/seed/n2/400/500"></div>
+    <div class="choreo-float f3"><img src="https://picsum.photos/seed/n3/500/600"></div>
+    <div class="choreo-float f4"><img src="https://picsum.photos/seed/n4/600/800"></div>
+    <div class="choreo-float f5"><img src="https://picsum.photos/seed/n5/400/600"></div>
+    <div class="choreo-float f6"><img src="https://picsum.photos/seed/n6/500/700"></div>
+    <div class="choreo-float f7"><img src="https://picsum.photos/seed/n7/300/400"></div>
+    <div class="choreo-float f8"><img src="https://picsum.photos/seed/n8/400/600"></div>
+    
+    <div class="choreo-hero-wrap" id="heroWrap">
+      <img src="https://picsum.photos/seed/main/800/1200?grayscale" class="hero-img hero-bw">
+      <img src="https://picsum.photos/seed/main/800/1200" class="hero-img hero-color" id="heroColor">
+    </div>
+    
+    <div class="choreo-story" id="choreoStory">
+      <h2 class="story-heading">A Quiet Second<br>on Canal Street</h2>
+      <p class="story-body">The crowd parted for half a breath. Steam curled from a grate, catching the last amber light — and for a fraction of a second, everything held still.</p>
+    </div>
+  </div>
+</section>
+
+<section class="pure-parallax" id="parallaxQuote">
+  <div class="parallax-bg" id="parallaxBg"></div>
+</section>
+
+<section class="editorial-text-block js-reveal">
+  <div class="editorial-content">
+    <p class="editorial-kicker">The Urban Rhythm</p>
+    <h2 class="editorial-body">
+      I came to photograph the architecture, <span>but the city gave me its people instead.</span> Every stranger carried a story written in the way they walked through the grid.
+    </h2>
+  </div>
+</section>
+
+<section class="horizontal-section" id="horizontalSection">
+  <div class="horizontal-container">
+    <div class="horizontal-track" id="horizontalTrack">
+      <div class="hz-item"><img src="https://picsum.photos/seed/hz1/600/800" alt="NYC"></div>
+      <div class="hz-item"><img src="https://picsum.photos/seed/hz2/800/500" alt="NYC"></div>
+      <div class="hz-item"><img src="https://picsum.photos/seed/hz3/500/700" alt="NYC"></div>
+      <div class="hz-item"><img src="https://picsum.photos/seed/hz4/900/600" alt="NYC"></div>
+      <div class="hz-item"><img src="https://picsum.photos/seed/hz5/600/800" alt="NYC"></div>
+      <div class="hz-item"><img src="https://picsum.photos/seed/hz6/700/700" alt="NYC"></div>
+    </div>
+  </div>
+</section>
+
+<section class="editorial-text-block js-reveal" style="min-height: 50vh;">
+  <div class="editorial-content">
+    <p class="editorial-kicker">Epilogue</p>
+    <h2 class="editorial-body" style="font-size: clamp(1.4rem, 2vw, 2rem);">
+      In the end, New York isn't a place you visit. <span>It's a frequency you tune into.</span> Once you hear the rhythm, you never really stop listening.
+    </h2>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <a href="#" class="next-project">
+    <span class="next-label">Next Project</span>
+    <span class="next-title">Tokyo Drift</span>
+  </a>
+  
+  <div class="footer-bottom">
+    <p>ROY EZUZ © 2024</p>
+    <div class="footer-links">
+      <a href="#">Instagram</a>
+      <a href="#">Behance</a>
+      <a href="mailto:hello@royezuz.com">hello@royezuz.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* Cursor */
+const dot = document.getElementById('dot');
+const ring = document.getElementById('ring');
+const links = document.querySelectorAll('a');
+
+window.addEventListener('mousemove', e => {
+  gsap.to(dot, {x: e.clientX, y: e.clientY, duration: 0.1});
+  gsap.to(ring, {x: e.clientX, y: e.clientY, duration: 0.3});
+});
+
+/* Cursor hover effect for links */
+links.forEach(link => {
+  link.addEventListener('mouseenter', () => {
+    gsap.to(dot, { scale: 0, duration: 0.2 });
+    gsap.to(ring, { scale: 1.5, borderColor: 'var(--text-primary)', duration: 0.3 });
+  });
+  link.addEventListener('mouseleave', () => {
+    gsap.to(dot, { scale: 1, duration: 0.2 });
+    gsap.to(ring, { scale: 1, borderColor: 'rgba(227,33,25,.35)', duration: 0.3 });
+  });
+});
+
+/* General Text Reveals (Statement, Perspective, Summary) */
+const revealSections = document.querySelectorAll('.js-reveal');
+revealSections.forEach(section => {
+  ScrollTrigger.create({
+    trigger: section,
+    start: "top 80%",
+    onEnter: () => section.classList.add('is-visible')
+  });
+});
+
+/* Block 3 Choreography */
+const tl = gsap.timeline({ scrollTrigger: { trigger: "#choreoSection", start: "top bottom", end: "bottom bottom", scrub: 1 } });
+const floats = gsap.utils.toArray(".choreo-float");
+const moveDurations = [4.5, 3.2, 5.2, 3.8, 4.8, 3.5, 5.5, 4.0];
+const rotations = [8, -6, 5, -8, 7, -5, 4, -7];
+floats.forEach((f, i) => {
+  const startTime = i * 0.3;
+  const moveDuration = moveDurations[i];
+  tl.to(f, { y: "-160vh", rotation: rotations[i], duration: moveDuration, ease: "none" }, startTime);
+  const blurDuration = moveDuration / 2;
+  tl.to(f, { filter: "blur(7px)", opacity: 0, duration: blurDuration, ease: "power1.in" }, startTime + blurDuration);
+});
+tl.fromTo("#heroWrap", { y: "50vh", opacity: 0, scale: 0.9 }, { y: "0vh", opacity: 1, scale: 1, duration: 2.5, ease: "power2.out" }, 4.5);
+tl.fromTo("#choreoStory", { x: "5vw", opacity: 0 }, { x: "0vw", opacity: 1, duration: 2 }, 6);
+tl.to("#heroColor", { opacity: 1, duration: 3 }, 7.5);
+tl.to("#heroWrap", { y: "-5vh", opacity: 0, scale: 1.02, duration: 2, ease: "power1.in" }, 11.5);
+tl.to("#choreoStory", { opacity: 0, y: -15, duration: 1.8, ease: "power1.in" }, 11.5);
+
+/* Block 4 Parallax (Clean) */
+gsap.fromTo('#parallaxBg', 
+  { y: '-3%' }, 
+  { y: '3%', ease: 'none', scrollTrigger: { trigger: '#parallaxQuote', start: 'top bottom', end: 'bottom top', scrub: 0.8 } }
+);
+
+/* BLOCK 5: HORIZONTAL SCROLL LOGIC */
+const track = document.getElementById("horizontalTrack");
+if (track) {
+  function getScrollAmount() {
+    return -(track.scrollWidth - window.innerWidth);
+  }
+  
+  const tween = gsap.to(track, {
+    x: getScrollAmount,
+    ease: "none"
+  });
+
+  ScrollTrigger.create({
+    trigger: "#horizontalSection",
+    start: "top top",
+    end: () => `+=${getScrollAmount() * -1}`,
+    pin: true,
+    animation: tween,
+    scrub: 1,
+    invalidateOnRefresh: true
+  });
+}
+</script>
+</body>
+</html>

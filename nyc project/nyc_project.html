@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects — ROY EZUZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Barlow:wght@100;300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM
+   ═══════════════════════════════════════════ */
+:root {
+  --bg-primary: #0a0a0a;
+  --text-primary: #f0f0f2;
+  --text-muted: #8a8a92;
+  --accent-red: #E32119;
+  --border-color: #2a2a2e;
+  --serif: 'Cormorant Garamond', serif;
+  --sans: 'Barlow', sans-serif;
+}
+
+body.day-mode {
+  --bg-primary: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-muted: #999999;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; -webkit-font-smoothing:antialiased; cursor:none; }
+body {
+  font-family: var(--sans); background: var(--bg-primary); color: var(--text-primary); cursor: none; overflow-x: hidden;
+}
+
+/* ═══ CURSOR ═══ */
+.cursor-dot { position:fixed; top:0; left:0; width:4px; height:4px; background:var(--accent-red); border-radius:50%; pointer-events:none; z-index:99999; transform:translate(-50%,-50%); }
+.cursor-ring { position:fixed; top:0; left:0; width:15px; height:15px; border:1px solid rgba(227,33,25,.35); border-radius:50%; pointer-events:none; z-index:99998; transform:translate(-50%,-50%); }
+a, button { cursor:none; }
+
+/* ═══ NAV ═══ */
+.nav { position: fixed; top:0; left:0; right:0; height:90px; display: flex; align-items:center; justify-content:space-between; padding: 0 6vw; z-index:1000; }
+.nav-logo { font-family:var(--sans); font-weight:300; font-size:1.1rem; letter-spacing:.3em; text-decoration:none; color:var(--text-primary); }
+.nav-logo span { color:var(--accent-red); }
+
+/* ═══ HERO ═══ */
+.hero { height: 100vh; display: flex; align-items:center; justify-content:center; position: relative; overflow:hidden; }
+.hero-parallax-bg { position: absolute; inset:-20%; background-image: url('https://picsum.photos/seed/nyc1/1920/1080'); background-size: cover; background-position: center; opacity: 0.25; }
+.hero-title { font-family:var(--serif); font-size:clamp(4rem,12vw,10rem); letter-spacing:0.15em; text-transform:uppercase; color:var(--text-primary); z-index:2; }
+
+/* ═══ STATEMENT ═══ */
+.statement-section { 
+  min-height: 40vh; display: flex; align-items: center; justify-content: center; 
+  padding: 10vh 6vw 5vh 6vw; background: transparent; position: relative; z-index: 10;
+}
+.statement-text { font-family: var(--serif); font-size: clamp(1.5rem, 2.5vw, 2.2rem); line-height: 1.6; text-align: center; opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+.statement-section.is-visible .statement-text { opacity: 1; transform: translateY(0); }
+
+/* ═══════════════════════════════════════════
+   BLOCK 3: CHOREOGRAPHY 
+   ═══════════════════════════════════════════ */
+.choreo { 
+  position: relative; 
+  height: 600vh; 
+  background: #000; 
+  margin-top: -10vh; 
+  z-index: 1;
+}
+.choreo-sticky { 
+  position: sticky; top: 0; height: 100vh; width: 100%; overflow: hidden; 
+}
+
+/* Floating Images */
+.choreo-float { 
+  position: absolute; 
+  will-change: transform, filter, opacity; 
+  box-shadow: 0 30px 100px rgba(0,0,0,0.8);
+  top: 100vh;
+}
+.choreo-float img { width: 100%; height: 100%; object-fit: cover; }
+
+.f1 { width: 15vw; height: 21vw; left: 3%;  z-index: 3; } 
+.f2 { width: 12vw; height: 16vw; left: 72%; z-index: 2; } 
+.f3 { width: 18vw; height: 24vw; left: 27%; z-index: 4; } 
+.f4 { width: 11vw; height: 15vw; left: 56%; z-index: 2; } 
+.f5 { width: 16vw; height: 22vw; left: 48%; z-index: 4; } 
+.f6 { width: 11vw; height: 15vw; left: 88%; z-index: 2; } 
+.f7 { width: 10vw; height: 14vw; left: 14%; z-index: 2; } 
+.f8 { width: 13vw; height: 18vw; left: 80%; z-index: 3; } 
+
+/* Hero Wrap — portrait */
+.choreo-hero-wrap {
+  position: absolute; 
+  top: 50%; 
+  left: 45%; 
+  transform: translate(-50%, -50%);
+  width: 32vw; height: 46vw; min-width: 300px;
+  opacity: 0; z-index: 5; will-change: transform, opacity;
+}
+.hero-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-color { opacity: 0; z-index: 6; }
+
+/* Story Text — FIXED: contained right, no overlap */
+.choreo-story {
+  position: absolute; top: 50%; right: 6vw;
+  transform: translateY(-50%);
+  z-index: 10; max-width: 340px; opacity: 0;
+}
+.story-heading {
+  font-family: var(--serif); 
+  font-weight: 300;
+  font-size: clamp(2rem, 3.2vw, 3.2rem);
+  line-height: 1.15; 
+  color: var(--text-primary); 
+  margin-bottom: 1.5rem;
+  /* REMOVED: margin-left: -8vw — no more bleed into image */
+}
+.story-body { 
+  font-family: var(--sans); 
+  font-weight: 300;
+  font-size: clamp(0.8rem, 0.95vw, 0.92rem); 
+  color: var(--text-muted); 
+  max-width: 340px; 
+  line-height: 1.85; 
+}
+
+/* ═══════════════════════════════════════════
+   BLOCK 4: PARALLAX QUOTE
+   ═══════════════════════════════════════════ */
+.parallax-quote {
+  position: relative;
+  height: 100vh;
+  /* clip ensures the fixed bg is only visible within this section's bounds */
+  clip: rect(0, auto, auto, 0);
+  -webkit-clip-path: inset(0);
+  clip-path: inset(0);
+  z-index: 2;
+}
+
+/* Background image — fixed to viewport, clipped by parent.
+   The page scrolls past; this image stays put like a window. */
+.parallax-quote-bg {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-image: url('https://picsum.photos/seed/nyc-parallax-wide/1920/1280');
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+  z-index: 0;
+}
+
+/* Dark overlay — ~45% opacity */
+.parallax-quote-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1;
+}
+
+/* Subtle vignette for cinematic depth */
+.parallax-quote-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.35) 100%);
+  pointer-events: none;
+}
+
+/* Text container */
+.parallax-quote-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 8vw;
+  text-align: center;
+}
+
+.parallax-quote-text {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+  line-height: 1.55;
+  color: #f0f0f2;
+  max-width: 800px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.2s ease-out, transform 1.2s ease-out;
+}
+
+.parallax-quote-text em {
+  font-style: italic;
+  color: rgba(240, 240, 242, 0.6);
+}
+
+.parallax-quote-author {
+  font-family: var(--sans);
+  font-weight: 100;
+  font-size: 0.6rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--accent-red);
+  margin-top: 3rem;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1.2s ease-out 0.3s, transform 1.2s ease-out 0.3s;
+}
+
+/* Thin decorative line above the quote */
+.parallax-quote-line {
+  width: 40px;
+  height: 1px;
+  background: var(--accent-red);
+  opacity: 0.5;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  transform: scaleX(0);
+  transition: opacity 1s ease-out, transform 1s ease-out;
+  transform-origin: center;
+}
+
+.parallax-quote.is-visible .parallax-quote-text,
+.parallax-quote.is-visible .parallax-quote-author {
+  opacity: 1;
+  transform: translateY(0);
+}
+.parallax-quote.is-visible .parallax-quote-line {
+  opacity: 0.5;
+  transform: scaleX(1);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .parallax-quote-text {
+    font-size: clamp(1.3rem, 5vw, 1.8rem);
+  }
+  .parallax-quote-content {
+    padding: 0 6vw;
+  }
+  /* Block 3 mobile */
+  .choreo-hero-wrap { width: 70vw; height: 100vw; min-width: unset; left: 50%; }
+  .choreo-story {
+    top: auto; bottom: 5vh;
+    right: auto; left: 50%;
+    transform: translateX(-50%);
+    max-width: 85vw; text-align: center;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="dot"></div>
+<div class="cursor-ring" id="ring"></div>
+
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">R<span>O</span>Y EZUZ</a>
+</nav>
+
+<!-- ═══ BLOCK 1: HERO ═══ -->
+<section class="hero">
+  <div class="hero-parallax-bg" id="heroParallax"></div>
+  <h1 class="hero-title">PROJECTS</h1>
+</section>
+
+<!-- ═══ BLOCK 2: STATEMENT ═══ -->
+<section class="statement-section" id="statement">
+  <p class="statement-text">
+    New York is an endless collision of quiet moments in the loudest city on earth. <br>
+    <span style="color:var(--text-muted)">Here, light doesn't just fall — it fights its way through the concrete.</span>
+  </p>
+</section>
+
+<!-- ═══ BLOCK 3: CHOREOGRAPHY ═══ -->
+<section class="choreo" id="choreoSection">
+  <div class="choreo-sticky">
+    
+    <div class="choreo-float f1"><img src="https://picsum.photos/seed/n1/500/700"></div>
+    <div class="choreo-float f2"><img src="https://picsum.photos/seed/n2/400/500"></div>
+    <div class="choreo-float f3"><img src="https://picsum.photos/seed/n3/500/600"></div>
+    <div class="choreo-float f4"><img src="https://picsum.photos/seed/n4/600/800"></div>
+    <div class="choreo-float f5"><img src="https://picsum.photos/seed/n5/400/600"></div>
+    <div class="choreo-float f6"><img src="https://picsum.photos/seed/n6/500/700"></div>
+    <div class="choreo-float f7"><img src="https://picsum.photos/seed/n7/300/400"></div>
+    <div class="choreo-float f8"><img src="https://picsum.photos/seed/n8/400/600"></div>
+
+    <div class="choreo-hero-wrap" id="heroWrap">
+      <img src="https://picsum.photos/seed/main/800/1200?grayscale" class="hero-img hero-bw">
+      <img src="https://picsum.photos/seed/main/800/1200" class="hero-img hero-color" id="heroColor">
+    </div>
+
+    <div class="choreo-story" id="choreoStory">
+      <h2 class="story-heading">A Quiet Second<br>on Canal Street</h2>
+      <p class="story-body">The crowd parted for half a breath. Steam curled from a grate, catching the last amber light — and for a fraction of a second, everything held still.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══ BLOCK 4: PARALLAX QUOTE ═══ -->
+<section class="parallax-quote" id="parallaxQuote">
+  <div class="parallax-quote-bg" id="parallaxBg"></div>
+  <div class="parallax-quote-overlay"></div>
+  <div class="parallax-quote-content">
+    <div class="parallax-quote-line"></div>
+    <p class="parallax-quote-text">
+      I came to photograph buildings, <em>but the city gave me its people instead.</em>
+      Every stranger carried a story written in the way they walked through light.
+    </p>
+    <p class="parallax-quote-author">— Roy Ezuz, New York 2024</p>
+  </div>
+</section>
+
+<!-- ═══ FOOTER PLACEHOLDER ═══ -->
+<section style="height:60vh; display:flex; align-items:center; justify-content:center; background:var(--bg-primary); position:relative; z-index:2;">
+  <p style="font-family:var(--sans); font-weight:100; font-size:.65rem; letter-spacing:.4em; text-transform:uppercase; color:var(--text-muted);">
+    More sections below · ROY EZUZ © 2024
+  </p>
+</section>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+
+/* ═══ CURSOR ═══ */
+const dot = document.getElementById('dot');
+const ring = document.getElementById('ring');
+window.addEventListener('mousemove', e => {
+  gsap.to(dot, {x: e.clientX, y: e.clientY, duration: 0.1});
+  gsap.to(ring, {x: e.clientX, y: e.clientY, duration: 0.3});
+});
+
+/* ═══ STATEMENT REVEAL ═══ */
+ScrollTrigger.create({
+  trigger: "#statement",
+  start: "top 80%",
+  onEnter: () => document.getElementById('statement').classList.add('is-visible')
+});
+
+/* ═══════════════════════════════════════════
+   BLOCK 3 TIMELINE
+   ═══════════════════════════════════════════ */
+const tl = gsap.timeline({
+  scrollTrigger: {
+    trigger: "#choreoSection",
+    start: "top bottom", 
+    end: "bottom bottom",
+    scrub: 1 
+  }
+});
+
+// Phase 1: Floating photos
+const floats = gsap.utils.toArray(".choreo-float");
+const moveDurations = [4.5, 3.2, 5.2, 3.8, 4.8, 3.5, 5.5, 4.0];
+const rotations = [8, -6, 5, -8, 7, -5, 4, -7];
+
+floats.forEach((f, i) => {
+  const startTime = i * 0.3;
+  const moveDuration = moveDurations[i];
+  
+  tl.to(f, {
+    y: "-160vh", 
+    rotation: rotations[i],
+    duration: moveDuration, 
+    ease: "none"
+  }, startTime);
+
+  // FIX: Softer blur (7px instead of 20px) — motion blur, not dissolution
+  const blurDuration = moveDuration / 2;
+  tl.to(f, {
+    filter: "blur(7px)",
+    opacity: 0,
+    duration: blurDuration,
+    ease: "power1.in"
+  }, startTime + blurDuration);
+});
+
+// Phase 2: Hero rises
+tl.fromTo("#heroWrap", 
+  { y: "50vh", opacity: 0, scale: 0.9 }, 
+  { y: "0vh", opacity: 1, scale: 1, duration: 2.5, ease: "power2.out" }, 
+  4.5 
+);
+
+// Phase 3: Story text
+tl.fromTo("#choreoStory",
+  { x: "5vw", opacity: 0 },
+  { x: "0vw", opacity: 1, duration: 2 },
+  6
+);
+
+// Phase 4: Color reveal
+tl.to("#heroColor", {
+  opacity: 1,
+  duration: 3
+}, 7.5);
+
+// Phase 5: Release — FIX: fade content individually, not .choreo-sticky
+tl.to("#heroWrap", {
+  y: "-5vh", opacity: 0, scale: 1.02,
+  duration: 2, ease: "power1.in"
+}, 11.5);
+
+tl.to("#choreoStory", {
+  opacity: 0, y: -15,
+  duration: 1.8, ease: "power1.in"
+}, 11.5);
+
+
+/* ═══════════════════════════════════════════
+   BLOCK 4: PARALLAX QUOTE
+   ═══════════════════════════════════════════ */
+
+// Very subtle creep on the fixed bg — barely perceptible, just alive
+gsap.fromTo('#parallaxBg', 
+  { y: '-1.5%' },
+  { y: '1.5%',
+  ease: 'none',
+  scrollTrigger: {
+    trigger: '#parallaxQuote',
+    start: 'top bottom',
+    end: 'bottom top',
+    scrub: 0.8
+  }
+});
+
+// Text reveal on scroll
+ScrollTrigger.create({
+  trigger: '#parallaxQuote',
+  start: 'top 65%',
+  onEnter: () => document.getElementById('parallaxQuote').classList.add('is-visible')
+});
+
+</script>
+</body>
+</html>

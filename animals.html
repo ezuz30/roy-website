@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Animals — ROY EZUZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Barlow:wght@300;400;500;600&amp;family=Barlow+Condensed:wght@300;400;500;600&amp;family=Raleway:wght@100;200;300;400;500&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/>
+<script defer="" src="layout.js"></script>
+<style>
+:root {
+  --bg-primary: #0a0a0a; --bg-secondary: #1a1a1e; --text-primary: #f0f0f2;
+  --text-secondary: #b0b0b8; --text-muted: #8a8a92; --border-color: #2a2a2e;
+  --shadow-color: rgba(0, 0, 0, 0.6); --accent-red: #E32119;
+  --serif: 'Cormorant Garamond', Georgia, serif; --sans: 'Barlow', Helvetica Neue, sans-serif;
+  --condensed: 'Barlow Condensed', Helvetica Neue, sans-serif;
+  --ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+body.day-mode {
+  --bg-primary: #ffffff; --bg-secondary: #fafafa; --text-primary: #2a2a2a;
+  --text-secondary: #666666; --text-muted: #999999; --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.06);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--sans); font-weight: 300; line-height: 1.6; overflow-x: hidden; cursor: none; transition: background 0.4s ease, color 0.4s ease; }
+::selection { background: var(--accent-red); color: var(--bg-primary); }
+
+/* --- HEADER --- */
+.gallery-header { padding: 140px 5vw 60px; max-width: 800px; margin: 0 auto; text-align: center; position: relative; }
+.back-link { display: inline-flex; align-items: center; gap: 0.6rem; font-family: var(--condensed); font-weight: 300; font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); text-decoration: none; position: fixed; top: 140px; right: 4rem; transition: color 0.3s; }
+.back-link:hover { color: var(--accent-red); }
+.back-link svg { width: 14px; height: 14px; stroke: currentColor; stroke-width: 1.5; }
+.series-title { font-family: var(--condensed); font-weight: 600; font-size: clamp(2.4rem, 5vw, 4rem); letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-primary); margin-bottom: 1.5rem; }
+.series-description { font-family: 'Lora', serif; font-size: 1.1rem; line-height: 2; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+/* --- MASONRY --- */
+.refined-masonry { column-count: 3; column-gap: 3vw; max-width: 1450px; margin: 0 auto; padding: 40px 4vw 120px; }
+.rm-item { break-inside: avoid; margin-bottom: 4vw; cursor: none; position: relative; overflow: hidden; opacity: 0; transform: translateY(20px); transition: opacity 1.2s ease, transform 1.2s ease; }
+.rm-item.revealed { opacity: 1; transform: translateY(0); }
+.rm-item img { width: 100%; height: auto; display: block; transition: transform 0.8s ease, filter 0.6s ease; }
+.rm-item:hover img { transform: scale(1.04); filter: brightness(1.08); }
+.rm-inset { padding: 0 12%; }
+@media (max-width: 1024px) { .refined-masonry { column-count: 2; column-gap: 4vw; } .rm-inset { padding: 0 6%; } }
+@media (max-width: 768px) { .refined-masonry { column-count: 1; column-gap: 0; } .rm-inset { padding: 0; } .gallery-header { padding: 100px 5vw 40px; } }
+
+/* --- STORY MODAL --- */
+.story-modal { position: fixed; inset: 0; z-index: 2000; background: #000; opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.6s ease, visibility 0s linear 0.6s; }
+.story-modal.active { opacity: 1; pointer-events: all; visibility: visible; transition: opacity 0.6s ease, visibility 0s linear 0s; }
+.story-close { position: fixed; top: 1.5rem; right: 1.8rem; z-index: 2020; background: none; border: none; font-family: var(--sans); font-weight: 200; font-size: 2rem; color: rgba(255,255,255,0.5); cursor: none; transition: color 0.3s ease; padding: 8px; }
+.story-close:hover { color: #ff2d20; }
+.story-image-layer { position: fixed; inset: 0; z-index: 2001; display: flex; align-items: center; justify-content: center; background: #000; padding: 4vh 4vw; pointer-events: none; cursor: none; }
+.story-modal.active .story-image-layer { pointer-events: auto; }
+.story-image-layer img { max-width: 88vw; max-height: 86vh; width: auto; height: auto; object-fit: contain; display: block; opacity: 0; transform: scale(0.97); transition: opacity 0.8s ease 0.2s, transform 1s ease 0.2s; }
+.story-modal.active .story-image-layer img { opacity: 1; transform: scale(1); animation: kenBurns 20s ease-in-out forwards; }
+@keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.04); } }
+
+/* --- UI ELEMENTS --- */
+.scroll-cue { position: fixed; bottom: 3.5vh; left: 2.2rem; z-index: 2008; display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0; pointer-events: none; transition: opacity 0.6s ease; }
+.story-modal.active .scroll-cue { opacity: 0.8; } .scroll-cue.hidden { opacity: 0 !important; }
+.scroll-mouse { width: 31px; height: 50px; border: 2px solid rgba(255,255,255,0.95); border-radius: 17px; position: relative; }
+.scroll-mouse::after { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 4px; height: 10px; background: var(--accent-red); border-radius: 2px; animation: mouseWheel 2s ease-in-out infinite; }
+@keyframes mouseWheel { 0% {opacity:1; top:8px;} 50% {opacity:1; top:28px;} 80% {opacity:0; top:34px;} 100% {opacity:0; top:8px;} }
+.scroll-cue-text { font-family: var(--condensed); font-weight: 300; font-size: 0.625rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.95); }
+.story-exif { font-family: var(--condensed); font-weight: 300; font-size: 0.82rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ededed; margin-top: 1.5rem; text-align: center; opacity: 1; }
+.story-arrow { position: fixed; top: 50%; transform: translateY(-50%); z-index: 2008; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: none; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
+.story-modal.active .story-arrow { opacity: 1; pointer-events: auto; }
+.story-arrow svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.2); fill: none; stroke-width: 1.5; transition: stroke 0.3s ease; }
+.story-arrow:hover svg { stroke: #ff2d20; } .story-arrow-prev { left: 1.5rem; } .story-arrow-next { right: 1.5rem; }
+.story-hints { position: fixed; bottom: 6vh; left: 50%; transform: translateX(-50%); z-index: 2008; display: flex; gap: 2rem; opacity: 0; pointer-events: none; }
+.story-modal.active .story-hints { animation: hintAppear 4s ease 1s forwards; }
+@keyframes hintAppear { 0% {opacity:0;} 15% {opacity:1;} 75% {opacity:1;} 100% {opacity:0;} }
+.hint-item { display: flex; align-items: center; gap: 6px; }
+.hint-key { font-family: var(--condensed); font-size: 0.5rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.35); border: 1px solid rgba(255,255,255,0.12); padding: 2px 6px; border-radius: 2px; }
+.hint-label { font-family: var(--condensed); font-weight: 300; font-size: 0.45rem; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(255,255,255,0.25); }
+
+/* --- SCROLL TRACK & CARD --- */
+.story-scroll-track { position: relative; z-index: 2005; height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; -ms-overflow-style: none; scrollbar-width: none; }
+.story-scroll-track::-webkit-scrollbar { display: none; }
+.story-spacer { height: 100vh; scroll-snap-align: start; position: relative; pointer-events: none; cursor: none; }
+.story-modal.active .story-spacer { pointer-events: auto; }
+.story-card { scroll-snap-align: start; background: #0d0d0d; position: relative; border-radius: 16px 16px 0 0; box-shadow: 0 -10px 60px rgba(0,0,0,0.8); }
+.story-card::before { content: ''; display: block; width: 40px; height: 3px; background: rgba(255,255,255,0.15); border-radius: 2px; margin: 14px auto 0; }
+.card-section { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8vh 6vw; text-align: center; }
+.card-section + .card-section { border-top: 1px solid rgba(255,255,255,0.04); background: #080808; }
+.card-narrative { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; width: 100%; max-width: 1200px; padding: 0 4vw; align-items: start; }
+.card-left { padding-top: 2vh; display: flex; flex-direction: column; align-items: center; text-align: center; }
+.card-right { padding-top: 2vh; border-left: 1px solid rgba(255,255,255,0.06); padding-left: 4vw; }
+.story-title { font-family: var(--condensed); font-weight: 600; font-size: clamp(2.4rem, 5vw, 4rem); text-transform: uppercase; letter-spacing: 0.03em; color: #fff; margin-bottom: 1.8rem; }
+.loc-pin { display: flex; align-items: center; gap: 8px; }
+.loc-pin-icon { width: 18px; height: 18px; stroke: #ff2d20; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+.loc-pin-text { font-family: var(--condensed); font-weight: 300; font-size: 0.82rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ededed; }
+.loc-divider { width: 30px; height: 2px; background: #ff2d20; margin-top: 1.5rem; margin-bottom: 1.5rem; }
+.globe-wrap { width: 100%; max-width: 412px; margin: 0.5rem auto 0; }
+.globe-svg { width: 100%; height: auto; }
+.globe-svg .sphere { fill: none; stroke: #ededed; stroke-width: 0.8; opacity: 0.25; }
+.globe-svg .land { fill: rgba(237,237,237,0.06); stroke: #ededed; stroke-width: 0.3; opacity: 0.45; }
+.globe-svg .country-highlight { fill: rgba(227, 33, 25, 0.35); stroke: rgba(227, 33, 25, 0.6); stroke-width: 0.5; }
+.globe-svg .globe-pin { fill: #ff2d20; }
+.globe-svg .globe-pin-ring { fill: none; stroke: #ff2d20; stroke-width: 0.6; opacity: 0.4; }
+.story-text { font-family: 'Lora', serif; font-size: clamp(0.95rem, 1.3vw, 1.1rem); line-height: 2; color: rgba(255, 255, 255, 0.85); }
+@media (max-width: 768px) { .card-narrative { grid-template-columns: 1fr; gap: 3rem; } .card-right { border-left: none; padding-left: 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 2rem; } }
+
+/* --- PAGE ENTRANCE ANIMATIONS --- */
+.entrance { opacity: 0; transform: translateY(30px); animation: entranceFade 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.entrance-d1 { animation-delay: 0.15s; } .entrance-d2 { animation-delay: 0.35s; } .entrance-d3 { animation-delay: 0.6s; }
+@keyframes entranceFade { to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<site-nav></site-nav>
+<div class="gallery-header">
+<a class="back-link entrance entrance-d1" href="selected-work.html">
+<svg fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>
+    Back to Selected Work
+  </a>
+<h1 class="series-title entrance entrance-d2">A N I M A L S</h1>
+<p class="series-description entrance entrance-d3">
+    The unexpected wildlife of cities. Animals that share our urban spaces, observed in moments of quiet dignity, humor, and surreal beauty.
+  </p>
+</div>
+<div class="refined-masonry">
+<div class="rm-item">
+<img alt="The Crown" data-coords="41.3851° N, 2.1734° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Barcelona, Spain" data-story="" data-title="The Crown" src="images/animals/V_0006_woman + Bird.jpg"/>
+</div>
+<div class="rm-item rm-inset">
+<img alt="Regular Hours" data-coords="45.4408° N, 12.3155° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Venice, Italy" data-story="" data-title="Regular Hours" src="images/animals/L1067523.jpg"/>
+</div>
+<div class="rm-item">
+<img alt="Uninvited Guest" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Girona, Spain" data-story="" data-title="Uninvited Guest" src="images/animals/H_0004_L1002572.jpg"/>
+</div>
+<div class="rm-item">
+<img alt="The Keeper" data-coords="38.7139° N, 9.1394° W" data-country="Portugal" data-exif="[Update EXIF Later]" data-location="Lisbon, Portugal" data-story="" data-title="The Keeper" src="images/animals/ROY_7663.jpeg"/>
+</div>
+<div class="rm-item">
+<img alt="Dressed for the Street" data-coords="40.4168° N, 3.7038° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Madrid, Spain" data-story="" data-title="Dressed for the Street" src="images/animals/L1077709.jpg"/>
+</div>
+<div class="rm-item rm-inset">
+<img alt="Pure Light" data-coords="32.0853° N, 34.7818° E" data-country="Israel" data-exif="[Update EXIF Later]" data-location="Tel Aviv, Israel" data-story="" data-title="Pure Light" decoding="async" loading="lazy" src="images/animals/L1003619 copy.jpg"/>
+</div>
+<div class="rm-item">
+<img alt="Three's Company" data-coords="41.3851° N, 2.1734° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Barcelona, Spain" data-story="" data-title="Three's Company" decoding="async" loading="lazy" src="images/animals/L1003402.jpg"/>
+</div>
+<div class="rm-item rm-inset">
+<img alt="The Pack" data-coords="40.0704° N, 2.1374° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Cuenca, Spain" data-story="" data-title="The Pack" decoding="async" loading="lazy" src="images/animals/L1009969.jpg"/>
+</div>
+<div class="rm-item">
+<img alt="City Wolves" data-coords="40.6782° N, 73.9442° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="Brooklyn, New York City, USA" data-story="" data-title="City Wolves" decoding="async" loading="lazy" src="images/animals/L1004205.jpg"/>
+</div>
+<div class="rm-item">
+<img alt="Red Light" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Girona, Spain" data-story="" data-title="Red Light" decoding="async" loading="lazy" src="images/animals/L1002809-Edit.jpg"/>
+</div>
+<div class="rm-item rm-inset">
+<img alt="Side by Side" data-coords="45.7619° N, 8.5583° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Arona, Italy" data-story="" data-title="Side by Side" decoding="async" loading="lazy" src="images/animals/L1010191_1.jpg"/>
+</div>
+<div class="rm-item"><img alt="Her Kingdom" data-coords="45.4654° N, 9.1859° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Milan, Italy" data-story="" data-title="Her Kingdom" src="images/animals/ROY_5005.JPG"/></div><div class="rm-item"><img alt="Queen of the Square" data-coords="45.4408° N, 12.3155° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Venice, Italy" data-story="" data-title="Queen of the Square" src="images/animals/L1067604.jpg"/></div></div>
+<div class="story-modal" id="storyModal">
+<button class="story-close" id="storyClose">×</button>
+<button class="story-arrow story-arrow-prev" id="storyPrev"><svg viewbox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+<button class="story-arrow story-arrow-next" id="storyNext"><svg viewbox="0 0 24 24"><polyline points="9 6 15 12 9 18"></polyline></svg></button>
+<div class="story-hints" id="storyHints">
+<div class="hint-item"><span class="hint-key">← →</span><span class="hint-label">Navigate</span></div>
+<div class="hint-item"><span class="hint-key">ESC</span><span class="hint-label">Close</span></div>
+<div class="hint-item"><span class="hint-key">↓</span><span class="hint-label">Story</span></div>
+</div>
+<div class="story-image-layer"><img alt="" id="storyImage" src=""/></div>
+<div class="story-scroll-track" id="storyTrack">
+<div class="story-spacer" data-snap-section="0"></div>
+<div class="scroll-cue" id="scrollCue"><div class="scroll-mouse"></div><span class="scroll-cue-text">Scroll</span></div>
+<div class="story-card">
+<div class="card-section" data-snap-section="1">
+<div class="card-narrative">
+<div class="card-left">
+<h2 class="story-title" id="storyTitle"></h2>
+<div class="loc-pin">
+<svg class="loc-pin-icon" viewbox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+<span class="loc-pin-text" id="storyPinLoc"></span>
+</div>
+<div class="loc-divider"></div>
+<div class="globe-wrap"><svg class="globe-svg" id="d3Globe" viewbox="0 0 220 220"></svg></div>
+<div class="story-exif" id="storyExif"></div>
+</div>
+<div class="card-right"><p class="story-text" id="storyText"></p></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+<script>
+const Globe = (() => {
+  const W = 220, H = 220;
+  const svg = d3.select('#d3Globe');
+  const projection = d3.geoOrthographic().scale(105).translate([W/2, H/2]).clipAngle(90);
+  const path = d3.geoPath(projection);
+  const countryIds = {'Germany': '276', 'Italy': '380', 'Spain': '724', 'Portugal': '620', 'France': '250', 'Israel': '376', 'United States of America': '840'};
+  svg.append('path').datum({type:'Sphere'}).attr('class','sphere').attr('d', path);
+  const landGroup = svg.append('g'); const pinGroup = svg.append('g');
+  let worldData = null; let ready = false;
+  d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(data => {
+    worldData = data; const countries = topojson.feature(data, data.objects.countries);
+    landGroup.selectAll('path').data(countries.features).join('path').attr('class','land').attr('d', path); ready = true;
+  }).catch(() => { document.querySelector('.globe-wrap').style.display = 'none'; });
+  function rotateTo(lng, lat, country) {
+    if (!ready) return;
+    const targetRotation = [-lng, -lat];
+    const r = d3.interpolate(projection.rotate(), targetRotation);
+    const targetId = countryIds[country] || '';
+    d3.transition().duration(1200).ease(d3.easeCubicInOut).tween('rotate', () => t => {
+      projection.rotate(r(t)); svg.select('.sphere').attr('d', path);
+      const countries = topojson.feature(worldData, worldData.objects.countries);
+      landGroup.selectAll('path').data(countries.features).join('path').attr('class', d => d.id === targetId ? 'country-highlight' : 'land').attr('d', path);
+      pinGroup.selectAll('*').remove();
+      const coords = [lng, lat]; const p = projection(coords); const rot = projection.rotate();
+      const dist = d3.geoDistance([coords[0]*Math.PI/180, coords[1]*Math.PI/180], [-rot[0]*Math.PI/180, -rot[1]*Math.PI/180]);
+      if (p && dist < Math.PI / 2) {
+        pinGroup.append('circle').attr('class','globe-pin-ring').attr('cx',p[0]).attr('cy',p[1]).attr('r',6);
+        pinGroup.append('circle').attr('class','globe-pin').attr('cx',p[0]).attr('cy',p[1]).attr('r',2.5);
+      }
+    });
+  }
+  return { rotateTo };
+})();
+
+(() => {
+  const modal = document.getElementById('storyModal'); const track = document.getElementById('storyTrack');
+  const closeBtn = document.getElementById('storyClose'); const storyImg = document.getElementById('storyImage');
+  const storyTitle = document.getElementById('storyTitle'); const storyText = document.getElementById('storyText');
+  const locPinText = document.getElementById('storyPinLoc'); const exifEl = document.getElementById('storyExif');
+  const prevBtn = document.getElementById('storyPrev'); const nextBtn = document.getElementById('storyNext');
+  const hints = document.getElementById('storyHints'); const galleryImages = document.querySelectorAll('.rm-item img');
+  const imageArr = Array.from(galleryImages); let currentIndex = 0; let hintsShown = false;
+
+  function parseCoords(str) {
+    if (!str) return { lat: 40, lng: -74 };
+    const m = str.match(/([\d.]+)°\s*([NS]),\s*([\d.]+)°\s*([EW])/);
+    if (!m) return { lat: 40, lng: -74 };
+    let lat = parseFloat(m[1]); if (m[2] === 'S') lat = -lat;
+    let lng = parseFloat(m[3]); if (m[4] === 'W') lng = -lng;
+    return { lat, lng };
+  }
+
+  function loadImage(idx) {
+    const img = imageArr[idx];
+    const loc = img.dataset.location || ''; const year = img.dataset.year || '';
+    const coords = img.dataset.coords || ''; const country = img.dataset.country || '';
+    storyImg.style.animation = 'none'; storyImg.offsetHeight; storyImg.style.animation = '';
+    storyImg.src = img.src; storyTitle.textContent = img.dataset.title || 'Untitled';
+    storyText.textContent = img.dataset.story || ''; locPinText.textContent = loc + (year ? ' — ' + year : '');
+    exifEl.textContent = img.dataset.exif || '';
+    const { lat, lng } = parseCoords(coords); Globe.rotateTo(lng, lat, country);
+    track.scrollTop = 0;
+    const cue = document.getElementById('scrollCue'); if (cue) cue.classList.remove('hidden');
+  }
+
+  imageArr.forEach((img, i) => {
+    img.addEventListener('click', () => {
+      currentIndex = i; loadImage(i); modal.classList.add('active'); document.body.style.overflow = 'hidden';
+      if (!hintsShown) { hintsShown = true; } else { hints.style.display = 'none'; }
+    });
+  });
+
+  function closeModal() { modal.classList.remove('active'); document.body.style.overflow = ''; }
+  closeBtn.addEventListener('click', closeModal);
+  const imageLayer = document.querySelector('.story-image-layer'); const spacer = document.querySelector('.story-spacer');
+  imageLayer.addEventListener('click', (e) => { if (e.target === imageLayer) closeModal(); });
+  spacer.addEventListener('click', () => { closeModal(); });
+  document.getElementById('storyImage').addEventListener('click', (e) => { e.stopPropagation(); });
+
+  function goNext() { currentIndex = (currentIndex + 1) % imageArr.length; loadImage(currentIndex); }
+  function goPrev() { currentIndex = (currentIndex - 1 + imageArr.length) % imageArr.length; loadImage(currentIndex); }
+  nextBtn.addEventListener('click', goNext); prevBtn.addEventListener('click', goPrev);
+  document.addEventListener('keydown', (e) => {
+    if (!modal.classList.contains('active')) return;
+    if (e.key === 'Escape') closeModal(); else if (e.key === 'ArrowRight') goNext(); else if (e.key === 'ArrowLeft') goPrev();
+  });
+  const scrollCue = document.getElementById('scrollCue');
+  track.addEventListener('scroll', () => { if (track.scrollTop > 20) { scrollCue.classList.add('hidden'); } }, { passive: true });
+})();
+
+const initReveal = () => {
+  const items = document.querySelectorAll('.rm-item');
+  const viewportHeight = window.innerHeight;
+  let initialVisible = []; let belowFold = [];
+  items.forEach(item => {
+    const rect = item.getBoundingClientRect();
+    if (rect.top < viewportHeight + 100) { initialVisible.push({ element: item, top: rect.top, left: rect.left }); } else { belowFold.push(item); }
+  });
+  initialVisible.sort((a, b) => {
+    const rowTolerance = 150;
+    if (Math.abs(a.top - b.top) < rowTolerance) { return a.left - b.left; }
+    return a.top - b.top;
+  });
+  let delay = 0;
+  initialVisible.forEach(itemObj => { setTimeout(() => { itemObj.element.classList.add('revealed'); }, delay); delay += 180; });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { setTimeout(() => { entry.target.classList.add('revealed'); }, 100); observer.unobserve(entry.target); }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+  belowFold.forEach(item => observer.observe(item));
+};
+
+if (document.readyState === 'complete') { initReveal(); } else { window.addEventListener('load', initReveal); }
+</script>
+<site-footer></site-footer>
+</body>
+</html>

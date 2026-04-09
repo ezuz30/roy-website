@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROY EZUZ — The Silence of Berlin</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600&family=Raleway:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0a0a;
+  --text: #f0f0f2;
+  --text-2: #b0b0b8;
+  --text-m: #8a8a92;
+  --border: #2a2a2e;
+  --red: #E32119;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Barlow', Helvetica Neue, sans-serif;
+  --cond: 'Barlow Condensed', Helvetica Neue, sans-serif;
+}
+body.day-mode {
+  --bg:#fff;--text:#1a1a1a;--text-2:#555;--text-m:#999;--border:#e0e0e0;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-font-smoothing:antialiased;cursor:none;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);cursor:none;overflow-x:hidden;transition:background .4s ease;}
+img{display:block;}
+
+/* ═══ CURSOR ═══ */
+.cd{position:fixed;top:0;left:0;width:4px;height:4px;background:var(--red);border-radius:50%;pointer-events:none;z-index:99998;transform:translate(-50%,-50%);transition:width .4s cubic-bezier(.25,1,.5,1),height .4s cubic-bezier(.25,1,.5,1),background .4s ease;will-change:transform;}
+.cr{position:fixed;top:0;left:0;width:15px;height:15px;border:1px solid rgba(227,33,25,.35);border-radius:50%;pointer-events:none;z-index:99997;transform:translate(-50%,-50%);transition:width .5s cubic-bezier(.25,1,.5,1),height .5s cubic-bezier(.25,1,.5,1),border-color .4s ease;will-change:transform;}
+.cd.on{width:3px;height:3px;background:var(--text);}.cr.on{width:12px;height:12px;border-color:var(--text-2);}
+a,button{cursor:none;}
+@media(hover:none)and(pointer:coarse){html,body,a,button{cursor:auto;}.cd,.cr{display:none;}}
+
+/* ═══ NAV ═══ */
+.nav{position:fixed;top:0;left:0;right:0;height:90px;background:transparent;display:flex;align-items:center;justify-content:space-between;padding:0 6vw;z-index:1000;transition:background .5s,border-color .5s;border-bottom:1px solid transparent;}
+.nav.s{background:var(--bg);border-bottom-color:var(--border);}
+.nav-logo{font-family:'Raleway',sans-serif;font-weight:300;font-size:1.4rem;letter-spacing:.12em;text-decoration:none;color:#fff;transition:color .5s;}
+.nav.s .nav-logo{color:var(--text);}
+.nav-logo .a{color:var(--red);}
+.nl{display:flex;gap:3rem;list-style:none;}
+.nl a{font-family:var(--cond);font-weight:300;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;text-decoration:none;color:rgba(255,255,255,.6);transition:color .5s;}
+.nav.s .nl a{color:var(--text-2);}
+.nl a:hover{color:#fff;}.nav.s .nl a:hover{color:var(--text);}
+
+/* ═══ TOGGLE ═══ */
+.mt{position:fixed;bottom:30px;right:30px;width:44px;height:44px;border-radius:50%;background:rgba(26,26,30,.5);border:1px solid var(--border);cursor:none;display:flex;align-items:center;justify-content:center;z-index:1000;transition:all .3s;backdrop-filter:blur(8px);}
+body.day-mode .mt{background:rgba(250,250,250,.5);}
+.mt:hover{transform:scale(1.1);border-color:var(--red);}
+.mt svg{width:18px;height:18px;color:var(--text);}
+.moon{display:block;}.sun{display:none;}
+body.day-mode .moon{display:none;}body.day-mode .sun{display:block;}
+
+/* ═══════════════════════════════════════════
+   HERO — 100vh text-only title card
+   ═══════════════════════════════════════════ */
+.hero{height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;}
+.hero-lab{font-family:var(--cond);font-weight:300;font-size:.5rem;letter-spacing:.5em;text-transform:uppercase;color:var(--text-m);margin-bottom:3rem;opacity:0;animation:fu 1.4s ease .3s forwards;}
+.hero-t{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,7vw,6rem);line-height:1.05;color:var(--text);opacity:0;animation:fu 1.6s ease .6s forwards;}
+.hero-t em{font-style:italic;color:var(--red);}
+.hero-y{font-family:var(--cond);font-weight:300;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--text-m);margin-top:2.5rem;opacity:0;animation:fu 1.2s ease 1s forwards;}
+.hero-scroll{position:absolute;bottom:3vh;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:fu 1s ease 1.5s forwards;}
+.hero-scroll span{font-family:var(--cond);font-weight:300;font-size:.4rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-m);}
+.hero-scroll-bar{width:1px;height:30px;position:relative;overflow:hidden;}
+.hero-scroll-bar::after{content:'';position:absolute;top:-100%;width:1px;height:100%;background:var(--red);animation:lp 2.2s ease infinite 2s;}
+@keyframes fu{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes lp{0%{top:-100%}50%{top:0}100%{top:100%}}
+
+/* ═══════════════════════════════════════════
+   FULL-BLEED PARALLAX SECTION
+   A 100vh section where the image stays fixed
+   and text/captions scroll over it
+   ═══════════════════════════════════════════ */
+.fb{position:relative;height:140vh;overflow:hidden;}
+.fb-img{position:sticky;top:0;height:100vh;overflow:hidden;}
+.fb-img img{width:100%;height:100%;object-fit:cover;will-change:transform;}
+.fb-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,rgba(0,0,0,.02) 40%,rgba(0,0,0,.35) 85%,rgba(0,0,0,.65) 100%);pointer-events:none;}
+.fb-cap{position:absolute;bottom:12vh;left:6vw;z-index:2;}
+.fb-cap-title{font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(1rem,1.5vw,1.3rem);color:#fff;margin-bottom:.3rem;}
+.fb-cap-sub{font-family:var(--cond);font-weight:300;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);}
+
+/* ═══════════════════════════════════════════
+   STICKY PARALLAX — image stays, text floats
+   ═══════════════════════════════════════════ */
+.sp{display:grid;grid-template-columns:repeat(12,1fr);column-gap:2vw;min-height:160vh;position:relative;padding:0 4vw;max-width:1500px;margin:0 auto;}
+.sp-img{grid-column:1/8;position:sticky;top:12vh;height:76vh;overflow:hidden;align-self:start;}
+.sp-img img{width:100%;height:100%;object-fit:contain;}
+.sp-img-cap{font-family:var(--cond);font-weight:300;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-m);margin-top:.6rem;}
+.sp-text{grid-column:9/13;padding-top:35vh;padding-bottom:20vh;}
+.sp-text.left{grid-column:1/5;padding-top:35vh;}
+.sp-img.right{grid-column:6/13;}
+
+/* ═══════════════════════════════════════════
+   CHAPTER MARKERS
+   ═══════════════════════════════════════════ */
+.chapter{text-align:center;padding:18vh 6vw 12vh;}
+.chapter-num{font-family:var(--cond);font-weight:600;font-size:clamp(4rem,9vw,8rem);color:var(--text);opacity:.04;line-height:.9;margin-bottom:1.5rem;will-change:transform;}
+.chapter-title{font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(1.2rem,2.2vw,1.8rem);color:var(--text-2);}
+
+/* ═══════════════════════════════════════════
+   EDITORIAL TEXT BLOCKS
+   ═══════════════════════════════════════════ */
+.ed-text{max-width:1500px;margin:0 auto;padding:0 4vw;display:grid;grid-template-columns:repeat(12,1fr);column-gap:2vw;}
+.diary{font-family:var(--sans);font-weight:300;font-size:.88rem;line-height:1.95;color:var(--text-2);}
+.diary-sig{font-family:var(--cond);font-weight:300;font-size:.45rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-m);margin-top:1.2rem;display:block;}
+.quote{font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(1.5rem,2.8vw,2.4rem);line-height:1.5;color:var(--text);text-align:center;}
+.quote em{font-style:normal;color:var(--red);}
+
+/* ═══════════════════════════════════════════
+   CENTERED IMAGE (editorial grid)
+   ═══════════════════════════════════════════ */
+.ed-img{max-width:1500px;margin:0 auto;padding:0 4vw;display:grid;grid-template-columns:repeat(12,1fr);column-gap:2vw;}
+.ed-img img{width:100%;max-height:85vh;object-fit:contain;}
+.ed-img .img-cap{font-family:var(--cond);font-weight:300;font-size:.48rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-m);margin-top:.6rem;}
+
+/* ═══ Spacers ═══ */
+.gap-s{height:6vw;}.gap-m{height:10vw;}.gap-l{height:16vw;}
+
+/* ═══ Reveal ═══ */
+.rv{opacity:0;transform:translateY(20px);transition:opacity 1.2s ease,transform 1.2s cubic-bezier(.2,0,.2,1);}
+.rv.v{opacity:1;transform:translateY(0);}
+
+/* ═══ CLOSING ═══ */
+.close-s{text-align:center;padding:6vh 6vw 3vh;border-top:1px solid var(--border);margin-top:8vw;}
+.iq{font-family:var(--cond);font-weight:300;font-size:.58rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-m);padding:.8rem 2.4rem;border:1px solid var(--border);background:transparent;cursor:none;transition:all .4s;margin-bottom:2rem;display:inline-block;}
+.iq:hover{border-color:var(--red);color:#fff;background:var(--red);}
+.bk{display:inline-flex;align-items:center;gap:8px;font-family:var(--cond);font-weight:300;font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;color:var(--text-m);transition:color .3s;}
+.bk:hover{color:var(--red);}
+.bk svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;}
+.foot{text-align:center;padding:2vh 0 4vh;}
+.foot p{font-family:var(--cond);font-weight:300;font-size:.5rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-m);opacity:.3;}
+
+/* ═══ MODAL ═══ */
+.mo{position:fixed;inset:0;z-index:50000;background:rgba(0,0,0,.75);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .5s;}
+.mo.active{opacity:1;pointer-events:all;}
+.mc{position:relative;border:1px solid var(--border);background:rgba(10,10,10,.85);padding:4rem 3.5rem;max-width:480px;width:90vw;text-align:center;transform:translateY(20px);transition:transform .5s cubic-bezier(.25,1,.5,1);}
+body.day-mode .mc{background:rgba(255,255,255,.92);}
+.mo.active .mc{transform:translateY(0);}
+.mx{position:absolute;top:1.2rem;right:1.5rem;background:none;border:none;font-family:var(--sans);font-weight:200;font-size:1.4rem;color:var(--text-m);cursor:none;transition:color .3s;line-height:1;padding:4px;}
+.mx:hover{color:var(--red);}
+.ms{font-family:var(--cond);font-weight:300;font-size:.6rem;letter-spacing:.35em;text-transform:uppercase;color:var(--text-m);margin-bottom:1.5rem;}
+.mh{font-family:var(--serif);font-weight:300;font-style:italic;font-size:clamp(1.3rem,2.5vw,1.8rem);line-height:1.4;color:var(--text);margin-bottom:2.5rem;}
+.md{width:30px;height:1px;background:var(--red);margin:0 auto 2rem;}
+.cfw{display:flex;flex-direction:column;gap:1rem;}
+.cfw input,.cfw textarea{width:100%;background:transparent;border:1px solid var(--border);padding:.85rem 1rem;font-family:var(--sans);font-weight:300;font-size:.82rem;color:var(--text);letter-spacing:.03em;transition:border-color .3s;outline:none;resize:vertical;cursor:none;}
+.cfw input::placeholder,.cfw textarea::placeholder{color:var(--text-m);}
+.cfw input:focus,.cfw textarea:focus{border-color:var(--red);}
+.sb{width:100%;padding:.9rem;background:transparent;border:1px solid var(--text-m);font-family:var(--cond);font-weight:400;font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text);cursor:none;transition:all .4s;margin-top:.5rem;}
+.sb:hover{border-color:var(--red);background:var(--red);color:#fff;}
+.fs{font-family:var(--sans);font-weight:300;font-size:.75rem;text-align:center;color:var(--text-m);min-height:1.2em;margin-top:.5rem;}
+.fs.ok{color:#4caf50;}.fs.er{color:var(--red);}
+
+@media(max-width:768px){
+  .nl{display:none;}
+  .sp{display:block;min-height:auto;padding:0 5vw;}
+  .sp-img{position:relative;top:auto;height:auto;margin-bottom:3rem;}
+  .sp-text,.sp-text.left{padding:0 0 4rem;}
+  .ed-text>*,.ed-img>*{grid-column:1/-1!important;}
+  .chapter-num{font-size:4rem;}
+  .fb{height:100vh;}
+  .fb-img{position:relative;}
+}
+</style>
+</head>
+<body>
+
+<div class="cd" id="cd"></div>
+<div class="cr" id="cr"></div>
+
+<nav class="nav" id="nav">
+  <a href="index.html" class="nav-logo">R<span class="a">O</span>Y EZUZ</a>
+  <ul class="nl">
+    <li><a href="selected-work.html">Selected Work</a></li>
+    <li><a href="prints.html">Prints</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="#" id="openCollaborate">Collaborate</a></li>
+  </ul>
+</nav>
+
+<button class="mt" id="modeToggle" aria-label="Toggle mode">
+  <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+  <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+</button>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="hero-lab">Online Viewing Room</div>
+  <h1 class="hero-t">The Silence<br>of <em>Berlin</em></h1>
+  <div class="hero-y">Autumn — Winter 2023</div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-bar"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CHAPTER I ═══════════════════ -->
+<div class="chapter rv">
+  <div class="chapter-num" data-speed="0.15">I.</div>
+  <div class="chapter-title">Arrival</div>
+</div>
+
+<!-- FULL-BLEED PARALLAX: Berlin Wall -->
+<section class="fb">
+  <div class="fb-img">
+    <img src="images/H_0010_L1000336.jpg" alt="New Year's Eve, Berlin" data-speed="0.12">
+  </div>
+  <div class="fb-cap">
+    <div class="fb-cap-title">New Year's Eve</div>
+    <div class="fb-cap-sub">Berlin, Germany — 2023</div>
+  </div>
+</section>
+
+<!-- Diary -->
+<div class="gap-l"></div>
+<div class="ed-text">
+  <div class="diary rv" style="grid-column:2/7;">
+    I arrived on a Tuesday in late October. The city was quieter than I remembered — fewer tourists, longer shadows. I didn't press the shutter for three days. Just walked. Just watched. Berlin doesn't give you its photographs. You have to earn them.
+    <span class="diary-sig">— October 22, 2023</span>
+  </div>
+</div>
+<div class="gap-l"></div>
+
+<!-- STICKY PARALLAX: Sunflower Kiss (image stays, text scrolls) -->
+<div class="sp">
+  <div class="sp-img">
+    <img src="images/V_0016_L1000245.jpg" alt="Sunflower Kiss" data-speed="0.08">
+    <div class="sp-img-cap">Sunflower Kiss — Berlin, 2023</div>
+  </div>
+  <div class="sp-text">
+    <div class="diary rv">
+      They were standing at the corner of Torstraße, completely unaware of anyone else. She was holding sunflowers. He leaned in. I had exactly half a second.
+      <span class="diary-sig">— October 24, 2023</span>
+    </div>
+    <div style="height:20vh;"></div>
+    <div class="diary rv">
+      This is the frame that defined the entire trip. Everything before it was warm-up. Everything after was trying to match it.
+      <span class="diary-sig">— Looking back, January 2024</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHAPTER II ═══════════════════ -->
+<div class="chapter rv">
+  <div class="chapter-num" data-speed="0.15">II.</div>
+  <div class="chapter-title">The Stranger</div>
+</div>
+
+<!-- FULL-BLEED PARALLAX: Blue Suit -->
+<section class="fb">
+  <div class="fb-img">
+    <img src="images/V_0005_L1009113-Edit.jpg" alt="The Blue Suit" data-speed="0.1">
+  </div>
+  <div class="fb-cap">
+    <div class="fb-cap-title">The Blue Suit</div>
+    <div class="fb-cap-sub">Berlin, Germany — 2023</div>
+  </div>
+</section>
+
+<div class="gap-l"></div>
+
+<!-- Quote -->
+<div class="ed-text">
+  <div class="quote rv" style="grid-column:3/11;">
+    "He walked like someone who had nowhere to be and <em>everywhere</em> to go."
+  </div>
+</div>
+
+<div class="gap-l"></div>
+
+<!-- STICKY PARALLAX: Bridge (reversed — text left, image right) -->
+<div class="sp">
+  <div class="sp-text left">
+    <div class="diary rv">
+      I found him at Alexanderplatz. The blue suit caught every shift of afternoon light. He never looked at the camera. He didn't need to. Some subjects give you everything just by existing in their own world.
+      <span class="diary-sig">— November 8, 2023</span>
+    </div>
+    <div style="height:20vh;"></div>
+    <div class="diary rv">
+      The bridge near Kreuzberg became my anchor point. Every evening at 4:30 the light cut through the arches. I returned seven times. Only one frame survived.
+      <span class="diary-sig">— November 3, 2023</span>
+    </div>
+  </div>
+  <div class="sp-img right">
+    <img src="images/H_0002_L1002464.jpg" alt="The Bridge" data-speed="0.06">
+    <div class="sp-img-cap">The Bridge — Girona, 2023</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHAPTER III ═══════════════════ -->
+<div class="chapter rv">
+  <div class="chapter-num" data-speed="0.15">III.</div>
+  <div class="chapter-title">Light & Architecture</div>
+</div>
+
+<!-- FULL-BLEED: Geometry of Light -->
+<section class="fb">
+  <div class="fb-img">
+    <img src="images/H_0008_L1008589.jpg" alt="Geometry of Light" data-speed="0.1">
+  </div>
+  <div class="fb-cap">
+    <div class="fb-cap-title">Geometry of Light</div>
+    <div class="fb-cap-sub">Valencia, Spain — 2023</div>
+  </div>
+</section>
+
+<div class="gap-l"></div>
+
+<!-- Centered editorial image -->
+<div class="ed-img">
+  <div class="rv" style="grid-column:3/11;">
+    <img src="images/H_0003_L1002441_1.jpg" alt="The Watchman" data-speed="0.05">
+    <div class="img-cap">The Watchman — Girona, 2023</div>
+  </div>
+</div>
+
+<div class="gap-m"></div>
+
+<div class="ed-text">
+  <div class="diary rv" style="grid-column:7/12;">
+    The man on the bench was the last photograph of the trip. He sat in a pool of light so precise it looked staged. It wasn't. That's the thing about street photography — the world composes itself. You just have to be patient enough to notice.
+    <span class="diary-sig">— November 15, 2023</span>
+  </div>
+</div>
+
+<div class="gap-l"></div>
+
+<!-- Final quote -->
+<div class="ed-text">
+  <div class="quote rv" style="grid-column:2/12;">
+    "Sometimes the best frames come from the moments<br>you didn't <em>choose</em>."
+  </div>
+</div>
+
+<div class="gap-l"></div>
+
+<!-- FULL-BLEED: Closing image -->
+<section class="fb">
+  <div class="fb-img">
+    <img src="images/V_0018_L1008359.jpg" alt="Steam" data-speed="0.12">
+  </div>
+  <div class="fb-cap">
+    <div class="fb-cap-title">Steam</div>
+    <div class="fb-cap-sub">New York City — 2023</div>
+  </div>
+</section>
+
+<div class="gap-m"></div>
+
+<!-- ═══ CLOSING ═══ -->
+<div class="close-s">
+  <div><button class="iq" data-inquire>Inquire About Prints From This Series</button></div>
+  <a href="prints.html" class="bk"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Return to Print Archive</a>
+</div>
+<footer class="foot"><p>&copy; 2026 Roy Ezuz — All Rights Reserved</p></footer>
+
+<!-- ═══ MODAL ═══ -->
+<div class="mo" id="collaborateModal">
+  <div class="mc">
+    <button class="mx" id="modalClose">&times;</button>
+    <div class="ms">G E T &nbsp; I N &nbsp; T O U C H</div>
+    <h2 class="mh">Let's create something together.</h2>
+    <div class="md"></div>
+    <div class="cfw">
+      <input type="text" id="formName" placeholder="Your Name" required>
+      <input type="email" id="formEmail" placeholder="Your Email" required>
+      <textarea id="formMessage" placeholder="Your Message" rows="3" required></textarea>
+      <button type="button" class="sb" id="formSubmit">Send Message</button>
+      <div class="fs" id="formStatus"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ═══ PARALLAX ENGINE — rAF smooth ═══ */
+(() => {
+  const els = document.querySelectorAll('[data-speed]');
+  if (!els.length) return;
+  let ticking = false;
+
+  const update = () => {
+    const sy = window.scrollY;
+    const wh = window.innerHeight;
+    els.forEach(el => {
+      const speed = parseFloat(el.dataset.speed);
+      const rect = el.getBoundingClientRect();
+      const elCenter = rect.top + rect.height / 2;
+      const offset = (elCenter - wh / 2) * speed * -1;
+      el.style.transform = `translateY(${offset}px)`;
+    });
+    ticking = false;
+  };
+
+  const onScroll = () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  update();
+})();
+
+/* ═══ NAV SOLID ═══ */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('s', window.scrollY > 100);
+}, { passive: true });
+
+/* ═══ REVEAL ═══ */
+(() => {
+  const items = document.querySelectorAll('.rv');
+  let q = [], p = false;
+  const go = () => { if (!q.length) { p = false; return; } p = true; q.shift().classList.add('v'); setTimeout(go, 120); };
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { q.push(e.target); obs.unobserve(e.target); if (!p) go(); }});
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  items.forEach(i => obs.observe(i));
+})();
+
+/* ═══ CURSOR ═══ */
+(() => {
+  const d = document.getElementById('cd'), r = document.getElementById('cr');
+  let mx=-100,my=-100,dx=-100,dy=-100,rx=-100,ry=-100;
+  const lerp=(a,b,t)=>a+(b-a)*t;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  document.querySelectorAll('.nl a,.nav-logo,.mt,.iq,.bk').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{d.classList.add('on');r.classList.add('on');});
+    el.addEventListener('mouseleave',()=>{d.classList.remove('on');r.classList.remove('on');});
+  });
+  (function anim(){dx=lerp(dx,mx,.45);dy=lerp(dy,my,.45);rx=lerp(rx,mx,.25);ry=lerp(ry,my,.25);
+    d.style.transform=`translate(${dx}px,${dy}px) translate(-50%,-50%)`;
+    r.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(anim);})();
+})();
+
+/* ═══ DAY/NIGHT ═══ */
+if(localStorage.getItem('displayMode')==='day') document.body.classList.add('day-mode');
+document.getElementById('modeToggle').addEventListener('click',()=>{
+  document.body.classList.toggle('day-mode');
+  localStorage.setItem('displayMode',document.body.classList.contains('day-mode')?'day':'night');
+});
+
+/* ═══ INQUIRE ═══ */
+document.querySelectorAll('[data-inquire]').forEach(b=>{
+  b.addEventListener('click',()=>document.getElementById('collaborateModal').classList.add('active'));
+});
+
+/* ═══ MODAL ═══ */
+(function(){
+  var o=document.getElementById('collaborateModal'),op=document.getElementById('openCollaborate'),cl=document.getElementById('modalClose');
+  if(!o||!op||!cl)return;
+  op.addEventListener('click',function(e){e.preventDefault();o.classList.add('active');});
+  cl.addEventListener('click',function(){o.classList.remove('active');});
+  o.addEventListener('click',function(e){if(e.target===o)o.classList.remove('active');});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&o.classList.contains('active'))o.classList.remove('active');});
+  var sb=document.getElementById('formSubmit'),st=document.getElementById('formStatus');
+  sb.addEventListener('click',async function(){
+    var n=document.getElementById('formName'),em=document.getElementById('formEmail'),m=document.getElementById('formMessage');
+    if(!n.value||!em.value||!m.value){st.textContent='Please fill in all fields.';st.className='fs er';return;}
+    sb.textContent='Sending...';sb.disabled=true;
+    try{var r=await fetch('https://formspree.io/f/placeholder',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:n.value,email:em.value,message:m.value})});
+    if(r.ok){st.textContent='Message sent. Thank you.';st.className='fs ok';n.value='';em.value='';m.value='';}
+    else{st.textContent='Something went wrong.';st.className='fs er';}}
+    catch(e){st.textContent='Connection error.';st.className='fs er';}
+    sb.textContent='Send Message';sb.disabled=false;
+  });
+})();
+</script>
+</body>
+</html>

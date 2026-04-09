@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects Timeline — ROY EZUZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Barlow:wght@100;300;400;600&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="layout.js" defer></script>
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM & GLOBALS
+   ═══════════════════════════════════════════ */
+:root {
+  --bg-primary: #0a0a0a;
+  --text-primary: #f0f0f2;
+  --text-muted: #8a8a92;
+  --accent-red: #E32119;
+  --border-color: #2a2a2e;
+  --serif: 'Cormorant Garamond', serif;
+  --sans: 'Barlow', sans-serif;
+  --condensed: 'Barlow Condensed', sans-serif;
+}
+
+body.day-mode {
+  --bg-primary: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-muted: #999999;
+  --border-color: #e0e0e0;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { -webkit-font-smoothing:antialiased; cursor:none; }
+body {
+  font-family: var(--sans);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: none;
+  overflow-x: hidden;
+  transition: background .4s ease, color .4s ease;
+}
+
+/* ═══════════════════════════════════════════
+   TIMELINE (LEFT SIDE)
+   ═══════════════════════════════════════════ */
+.timeline {
+  position: fixed;
+  left: 0; top: 0; bottom: 0;
+  width: 220px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 0 0 50px;
+  pointer-events: auto;
+}
+.timeline-items {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 2;
+}
+
+/* הפיכת הפריטים לכפתורים שקופים כדי שהעכבר של layout.js יזהה אותם */
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 18px 0;
+  cursor: none;
+  position: relative;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.25;
+  background: none;
+  border: none;
+  text-align: left;
+  outline: none;
+  width: 100%;
+}
+.timeline-item:hover { opacity: 0.6; }
+.timeline-item.active { opacity: 1; }
+.tl-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 5px;
+  transition: background 0.5s, box-shadow 0.5s, transform 0.5s;
+  position: relative;
+}
+.timeline-item.active .tl-dot {
+  background: var(--accent-red);
+  box-shadow: 0 0 18px rgba(227,33,25,0.6), 0 0 40px rgba(227,33,25,0.15);
+  transform: scale(1.4);
+}
+.timeline-item.active .tl-dot::after {
+  content: '';
+  position: absolute; inset: -6px;
+  border-radius: 50%;
+  border: 1px solid rgba(227,33,25,0.3);
+  animation: dotPulse 2s ease-out infinite;
+}
+@keyframes dotPulse {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.tl-text { display: flex; flex-direction: column; gap: 4px; }
+.tl-year {
+  font-family: var(--condensed);
+  font-weight: 500; font-size: 1.4rem;
+  letter-spacing: 0.08em;
+  color: var(--text-primary);
+  line-height: 1;
+  transition: color 0.4s;
+}
+.timeline-item.active .tl-year { color: var(--accent-red); }
+.tl-title {
+  font-family: var(--serif);
+  font-style: italic; font-weight: 400;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+  transition: color 0.5s, transform 0.5s;
+}
+.timeline-item.active .tl-title {
+  color: var(--text-primary);
+  transform: translateX(3px);
+}
+
+/* ═══════════════════════════════════════════
+   WEBGL CANVAS
+   ═══════════════════════════════════════════ */
+#webgl-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════
+   HUGE TEXT OVERLAY
+   ═══════════════════════════════════════════ */
+#text-sync-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 10;
+  pointer-events: none; 
+  will-change: transform;
+}
+
+.text-section {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.huge-title {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 7vw, 9rem);
+  font-weight: 400;
+  line-height: 0.9;
+  color: #fff;
+  text-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  margin-bottom: -10px;
+}
+
+.project-meta-overlay {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  background: rgba(0,0,0,0.2);
+  padding: 5px 15px;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+}
+
+/* ═══════════════════════════════════════════
+   SCROLL HINT
+   ═══════════════════════════════════════════ */
+.scroll-hint {
+  position: fixed; bottom: 3.5vh; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  z-index: 100; transition: opacity 0.6s;
+}
+.scroll-hint.hidden { opacity: 0; pointer-events: none; }
+.scroll-hint span { font-family: var(--condensed); font-weight: 300; font-size: 0.5rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text-muted); }
+.scroll-mouse { width: 22px; height: 34px; border: 1px solid var(--text-muted); border-radius: 11px; position: relative; }
+.scroll-mouse::after { content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 2px; height: 6px; background: var(--accent-red); border-radius: 1px; animation: wheel 2s ease-in-out infinite; }
+@keyframes wheel { 0% {opacity:1; top:6px;} 50% {opacity:1; top:18px;} 80% {opacity:0; top:22px;} 100% {opacity:0; top:6px;} }
+
+</style>
+</head>
+<body>
+
+<canvas id="webgl-canvas"></canvas>
+
+<site-nav id="nav"></site-nav>
+
+<div class="timeline" id="timeline">
+  <div class="timeline-items" id="timelineItems"></div>
+</div>
+
+<div id="text-sync-container"></div>
+
+<div class="scroll-hint" id="scrollHint">
+  <div class="scroll-mouse"></div>
+  <span>Scroll to Explore</span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════
+   PROJECT DATA
+   ═══════════════════════════════════════════ */
+const PROJECTS = [
+  {
+    year: '2022',
+    title: 'Laguna Square',
+    meta: 'Venice, Italy',
+    image: 'https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=1200&auto=format&fit=cover',
+    url: '#'
+  },
+  {
+    year: '2024',
+    title: 'The Narrative Arc',
+    meta: 'New York City',
+    image: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?q=80&w=1200&auto=format&fit=cover',
+    url: 'nyc_project.html'
+  },
+  {
+    year: '2024',
+    title: 'Edge of the World',
+    meta: 'Nazaré, Portugal',
+    image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?q=80&w=1200&auto=format&fit=cover',
+    url: '#'
+  }
+];
+
+document.body.style.height = `${PROJECTS.length * 100}vh`;
+
+/* ═══ DOM ELEMENTS BUILDER ═══ */
+const timelineItemsEl = document.getElementById('timelineItems');
+const textSyncContainer = document.getElementById('text-sync-container');
+
+PROJECTS.forEach((proj, i) => {
+  // שימוש ב-button במקום ב-div כדי שהעכבר הגלובלי יזהה אותו כלחיץ
+  const item = document.createElement('button');
+  item.className = 'timeline-item';
+  item.innerHTML = `
+    <div class="tl-dot"></div>
+    <div class="tl-text">
+      <div class="tl-year">${proj.year}</div>
+      <div class="tl-title">${proj.title}</div>
+    </div>
+  `;
+  item.addEventListener('click', () => {
+    window.scrollTo({ top: i * window.innerHeight, behavior: 'smooth' });
+  });
+  timelineItemsEl.appendChild(item);
+
+  const textSect = document.createElement('div');
+  textSect.className = 'text-section';
+  textSect.style.top = `${i * 100}vh`; 
+  textSect.innerHTML = `
+    <div class="project-meta-overlay">${proj.meta}</div>
+    <h2 class="huge-title">${proj.title}</h2>
+    <a href="${proj.url}" style="pointer-events: auto; margin-top: 25px; font-family: var(--condensed); font-size: 0.85rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--text-primary); text-decoration: none; border-bottom: 1px solid var(--accent-red); padding-bottom: 5px; transition: color 0.3s;">Explore Project</a>
+  `;
+  textSyncContainer.appendChild(textSect);
+});
+
+const tlItems = document.querySelectorAll('.timeline-item');
+
+/* ═══ WEBGL SHADERS ═══ */
+const vertexShader = `
+  uniform float uScrollVelocity;
+  varying vec2 vUv;
+  
+  void main() {
+    vUv = uv;
+    vec3 pos = position;
+
+    float distFromCenterY = abs(pos.y);
+    pos.z += cos(vUv.x * 3.1415 - 1.57) * 0.3; 
+    pos.z += sin(vUv.y * 3.1415) * uScrollVelocity * 0.05;
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+  }
+`;
+
+const fragmentShader = `
+  uniform sampler2D uTexture;
+  uniform float uOpacity;
+  varying vec2 vUv;
+
+  void main() {
+    vec4 texColor = texture2D(uTexture, vUv);
+    float vig = 1.0 - smoothstep(0.5, 1.5, length(vUv - 0.5) * 1.5);
+    texColor.rgb *= mix(0.8, 1.0, vig);
+    gl_FragColor = vec4(texColor.rgb, uOpacity);
+  }
+`;
+
+/* ═══ THREE.JS SETUP ═══ */
+const canvas = document.getElementById('webgl-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 6;
+
+const PLANE_W = 5.53; 
+const PLANE_H = 3.4;
+const PLANE_GAP = 5.5; 
+
+const geometry = new THREE.PlaneGeometry(PLANE_W, PLANE_H, 32, 32);
+
+const textureLoader = new THREE.TextureLoader();
+textureLoader.setCrossOrigin('anonymous');
+
+const meshes = [];
+
+PROJECTS.forEach((proj) => {
+  const texture = textureLoader.load(proj.image);
+  texture.generateMipmaps = false;
+  texture.minFilter = THREE.LinearFilter;
+
+  const material = new THREE.ShaderMaterial({
+    vertexShader,
+    fragmentShader,
+    uniforms: {
+      uTexture: { value: texture },
+      uScrollVelocity: { value: 0.0 },
+      uOpacity: { value: 1.0 }
+    },
+    transparent: true,
+    side: THREE.DoubleSide
+  });
+
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.rotation.z = -0.04; 
+  scene.add(mesh);
+  meshes.push(mesh);
+});
+
+/* ═══ MOUSE PARALLAX TRACKING ═══ */
+let targetMouseX = 0;
+let targetMouseY = 0;
+let currentMouseX = 0;
+let currentMouseY = 0;
+
+window.addEventListener('mousemove', (e) => {
+  targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+  targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+});
+
+/* ═══ SCROLL & ANIMATION LOGIC ═══ */
+let currentScroll = 0;
+let targetScroll = 0;
+const scrollHint = document.getElementById('scrollHint');
+const nav = document.getElementById('nav');
+
+window.addEventListener('scroll', () => {
+  targetScroll = window.scrollY / window.innerHeight;
+  
+  if (window.scrollY > 50) {
+    scrollHint.classList.add('hidden');
+    if(nav) nav.classList.add('solid');
+  } else {
+    scrollHint.classList.remove('hidden');
+    if(nav) nav.classList.remove('solid');
+  }
+});
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  const velocity = targetScroll - currentScroll;
+  currentScroll += velocity * 0.08; 
+
+  currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+  currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+
+  const textTranslateY = (currentScroll * -100) + (currentMouseY * -2);
+  const textTranslateX = currentMouseX * -20;
+  textSyncContainer.style.transform = `translateY(${textTranslateY}vh) translateX(${textTranslateX}px)`;
+
+  const activeIndex = Math.round(currentScroll);
+  tlItems.forEach((item, idx) => {
+    item.classList.toggle('active', idx === activeIndex);
+  });
+
+  meshes.forEach((mesh, i) => {
+    mesh.position.y = (currentScroll - i) * PLANE_GAP + (currentMouseY * 0.15);
+    mesh.position.x = currentMouseX * 0.15;
+    mesh.rotation.y = currentMouseX * 0.05;
+    mesh.rotation.x = -currentMouseY * 0.05;
+    mesh.material.uniforms.uScrollVelocity.value = velocity * 15.0;
+
+    const distance = Math.abs(currentScroll - i);
+    mesh.material.uniforms.uOpacity.value = Math.max(0, 1.0 - (distance * 0.6));
+  });
+
+  renderer.render(scene, camera);
+}
+
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// הערה: קוד העכבר הוסר מכאן לחלוטין מכיוון שהוא מנוהל כעת על ידי layout.js
+</script>
+
+<site-footer></site-footer>
+
+</body>
+</html>

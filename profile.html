@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile — ROY EZUZ</title>
+  <script src="layout.js" defer></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  <style>
+    /* ══════════════════════════════════════════
+       ROOT VARIABLES & RESET (DARK MODE ONLY)
+    ══════════════════════════════════════════ */
+    :root {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #1a1a1e;
+      --text-primary: #f0f0f2;
+      --text-secondary: #b0b0b8;
+      --accent-red: #E32119;
+      --font-sans: 'Barlow', sans-serif;
+      --font-serif: 'Cormorant Garamond', serif;
+      --font-condensed: 'Barlow Condensed', sans-serif;
+      --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --content-max: 1400px;
+      --gutter: 6vw;
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    body { background: var(--bg-primary); color: var(--text-primary); font-family: var(--font-sans); overflow-x: hidden; cursor: none; padding-top: 90px; }
+    ::selection { background: var(--accent-red); color: #fff; }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── HERO (COMPACT & CLEAN) ── */
+    .hero { position: relative; height: 35vh; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; overflow: hidden; padding-top: 40px; }
+
+    .hero__title { font-family: var(--font-serif); font-weight: 300; font-size: clamp(2.5rem, 5vw, 5rem); letter-spacing: 0.35em; text-transform: uppercase; line-height: 1; overflow: hidden; }
+    .hero__title span { display: inline-block; opacity: 0; transform: translateY(110%); animation: letterIn 1.3s var(--ease-expo) forwards; }
+    @keyframes letterIn { to { opacity: 1; transform: translateY(0); } }
+
+    .hero__sub { font-family: var(--font-sans); font-weight: 200; font-size: 12px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--text-secondary); margin-top: 20px; opacity: 0; animation: fadeUp 1s var(--ease-expo) 1.8s forwards; }
+
+    .hero__scroll { position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; animation: fadeUp 1s var(--ease-expo) 2.2s forwards; }
+    .hero__scroll span { font-family: var(--font-condensed); font-weight: 400; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-secondary); }
+    .hero__scroll-bar { width: 1px; height: 20px; background: linear-gradient(to bottom, var(--accent-red), transparent); animation: pulse 2.2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{ opacity:0.2; transform:scaleY(0.5); } 50%{ opacity:1; transform:scaleY(1); } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── STICKY TAB NAV (FIXED EXACT RED LINE) ── */
+    .tab-nav { position: sticky; top: 90px; z-index: 100; background: rgba(10, 10, 10, 0.88); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-top: 1px solid rgba(240, 240, 242, 0.04); border-bottom: 1px solid rgba(240, 240, 242, 0.04); display: flex; align-items: center; justify-content: flex-start; padding: 0 var(--gutter); gap: 40px; height: 54px; transition: background 0.4s; }
+    
+    .tab-nav__item { position: relative; font-family: var(--font-condensed); font-weight: 400; font-size: 11px; letter-spacing: 3.5px; text-transform: uppercase; color: var(--text-secondary); background: none; border: none; padding: 6px 0; display: block; cursor: none; transition: color 0.4s; }
+    
+    .tab-nav__item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--accent-red); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease-expo); }
+    
+    .tab-nav__item:hover { color: var(--text-primary); }
+    .tab-nav__item:hover::after { transform: scaleX(1); }
+    .tab-nav__item.active { color: var(--text-primary); }
+    .tab-nav__item.active::after { transform: scaleX(1); }
+
+    /* ── TAB CONTENT ── */
+    .tab-content-wrapper { position: relative; min-height: 80vh; overflow: hidden; transition: height 0.6s var(--ease-expo); }
+    .tab-panel { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; visibility: hidden; transform: translateY(24px); transition: opacity 0.7s var(--ease-smooth), transform 0.7s var(--ease-expo), visibility 0s 0.7s; }
+    .tab-panel.active { position: relative; opacity: 1; visibility: visible; transform: translateY(0); transition: opacity 0.7s var(--ease-smooth) 0.12s, transform 0.7s var(--ease-expo) 0.12s, visibility 0s; }
+
+    /* ── QUOTES ── */
+    .mega-quote { 
+      font-family: var(--font-serif); 
+      font-weight: 300; 
+      font-style: normal; 
+      font-size: clamp(1.4rem, 2.5vw, 2.8rem); 
+      line-height: 1.55; 
+      letter-spacing: 0.02em;
+      color: #fff; 
+      padding: 60px var(--gutter); 
+      max-width: 1000px; 
+      margin: 0 auto; 
+      position: relative; 
+      text-align: left; 
+    }
+
+    .opening-quote {
+      font-family: var(--font-serif); 
+      font-weight: 500; 
+      font-style: normal; 
+      font-size: clamp(1.4rem, 2.5vw, 2.8rem); 
+      line-height: 1.55; 
+      letter-spacing: 0.02em;
+      color: #ffffff; 
+      padding: 80px var(--gutter) 60px; 
+      max-width: 860px; 
+      margin: 0 auto; 
+      text-align: left; 
+    }
+
+    .opening-quote cite {
+      display: block;
+      text-align: right;
+      margin-top: 8px; 
+      font-family: var(--font-condensed);
+      font-weight: 500; 
+      font-style: normal;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #ffffff; 
+    }
+
+    /* ── IMAGES ── */
+    .fullbleed-image { position: relative; width: 100%; overflow: hidden; }
+    .fullbleed-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 8s linear; }
+    .fullbleed-image:hover img { transform: scale(1.03); }
+    .fullbleed-image::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%; background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.5)); pointer-events: none; }
+    .fullbleed-image__caption { position: absolute; bottom: 28px; right: var(--gutter); font-family: var(--font-condensed); font-weight: 300; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(240,240,242,0.5); z-index: 2; }
+    
+    .fullbleed-image--medium { height: 50vh; min-height: 320px; }
+    .fullbleed-image--short { height: 40vh; min-height: 260px; }
+
+    /* ── TRUE CSS FIXED BACKGROUND (WINDOW EFFECT) ── */
+    .parallax-window {
+      position: relative;
+      width: 100%;
+      height: 75vh;
+      min-height: 400px;
+      background-image: url('images/profile_pictures/statement-panorama.jpg');
+      background-attachment: fixed; /* שומר את התמונה קבועה במקום */
+      background-position: 10% center; 
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+    .parallax-window::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 40%;
+      background: linear-gradient(to bottom, transparent, rgba(10,10,10,0.5));
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .section-label { font-family: var(--font-serif); font-weight: 400; font-style: normal; font-size: clamp(1.4rem, 2.5vw, 1.9rem); line-height: 1.4; color: var(--text-primary); margin-bottom: 28px; padding-left: 20px; border-left: 2px solid var(--accent-red); }
+
+    .section-dropcap { font-family: var(--font-sans); font-weight: 300; font-size: 16.5px; line-height: 1.9; color: #ffffff; }
+    .section-dropcap::first-letter { font-family: var(--font-serif); font-weight: 400; font-size: 4.2rem; float: left; line-height: 0.75; margin-right: 12px; margin-top: 8px; color: #ffffff; }
+
+    .body-text { font-family: var(--font-sans); font-weight: 300; font-size: 16.5px; line-height: 1.9; color: #ffffff; }
+
+    .reveal { opacity: 0; transform: translateY(32px); transition: opacity 0.9s var(--ease-smooth), transform 0.9s var(--ease-expo); }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── BIOGRAPHY EDITORIAL ── */
+    .bio-editorial {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 60px var(--gutter) 80px;
+    }
+
+    .bio-editorial__text {
+      padding: 0 70px 0 0;
+      border-right: 1px solid rgba(240, 240, 242, 0.07);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .bio-editorial__accent {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 300;
+      font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+      line-height: 1.75;
+      color: var(--text-primary);
+      margin-top: 32px;
+    }
+
+    .bio-editorial__image {
+      padding-left: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bio-editorial__image img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      transition: transform 1.2s var(--ease-expo);
+    }
+
+    .bio-editorial__image:hover img { transform: scale(1.02); }
+
+    @media (max-width: 1024px) {
+      .bio-editorial { grid-template-columns: 1fr; padding: 40px var(--gutter); }
+      .bio-editorial__text { padding: 0 0 48px 0; border-right: none; border-bottom: 1px solid rgba(240,240,242,0.07); }
+      .bio-editorial__image { padding: 48px 0 0 0; }
+    }
+
+    /* ── BIOGRAPHY ASYMMETRIC ── */
+    .bio-opening { padding: 80px var(--gutter) 0; max-width: var(--content-max); margin: 0 auto; }
+
+    .bio-asymmetric { display: grid; grid-template-columns: 1fr 1fr; gap: 0; max-width: var(--content-max); margin: 0 auto; padding: 0 var(--gutter); }
+    .bio-asymmetric__text { padding: 80px 60px 80px 0; }
+    .bio-asymmetric__image { position: relative; overflow: hidden; }
+    .bio-asymmetric__image img { width: 100%; height: 100%; object-fit: contain; object-position: center center; transition: transform 1.2s var(--ease-expo); }
+    .bio-asymmetric__image:hover img { transform: scale(1.04); }
+    .bio-asymmetric--reversed .bio-asymmetric__text { padding: 80px 0 80px 60px; order: 2; }
+    .bio-asymmetric--reversed .bio-asymmetric__image { order: 1; }
+
+    .recognition-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 80px; max-width: var(--content-max); margin: 0 auto; padding: 80px var(--gutter); }
+    .recognition-grid__intro { padding-right: 40px; }
+    .recognition-list { list-style: none; }
+    .recognition-list li { font-family: var(--font-sans); font-weight: 300; font-size: 14px; line-height: 1.6; color: var(--text-secondary); padding: 18px 0; border-bottom: 1px solid rgba(240,240,242, 0.04); display: flex; align-items: baseline; gap: 20px; }
+    .recognition-list .yr { font-family: var(--font-condensed); font-weight: 600; font-size: 11px; letter-spacing: 1px; color: var(--accent-red); min-width: 40px; }
+
+    /* ── ARTIST STATEMENT UNIFIED ARTICLE ── */
+    .statement-article {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px var(--gutter) 0;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      background-color: var(--bg-primary); /* מוודא שהרקע אטום כשהוא עולה על התמונה */
+      position: relative;
+      z-index: 2;
+    }
+
+    .statement-article p {
+      max-width: 600px;
+    }
+    
+    .statement-article p {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 16.5px;
+      line-height: 1.9;
+      color: #ffffff; 
+    }
+    
+    .statement-article .dropcap-para::first-letter {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: 4.8rem;
+      float: left;
+      line-height: 0.8;
+      margin-right: 16px;
+      margin-top: 4px;
+      color: #ffffff;
+    }
+
+    /* ── BIO TEXT SECTION (full-width left-aligned) ── */
+    .bio-text-section {
+      max-width: var(--content-max);
+      margin: 0 auto;
+      padding: 60px var(--gutter);
+    }
+
+    .bio-text-section .section-dropcap { max-width: 700px; }
+
+    /* ── BIO QUOTE IMAGE (parallax + overlay) ── */
+    .bio-quote-image {
+      position: relative;
+      width: 100%;
+      height: 75vh;
+      min-height: 400px;
+      background-attachment: scroll;
+      background-position: center 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bio-quote-image__overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 10, 0.52);
+    }
+
+    .bio-quote-image__quote {
+      position: relative;
+      z-index: 2;
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.4rem, 2.5vw, 2.8rem);
+      line-height: 1.55;
+      letter-spacing: 0.02em;
+      color: #fff;
+      text-align: center;
+      max-width: 860px;
+      padding: 0 var(--gutter);
+    }
+    .bio-quote-image__spec {
+      display: block;
+      padding: 14px var(--gutter) 0;
+      font-family: var(--font-sans);
+      font-style: normal;
+      font-weight: 300;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      color: rgba(255,255,255,0.4);
+    }
+    .bio-quote-image__cite {
+      display: block;
+      text-align: right;
+      margin-top: 20px;
+      font-family: var(--font-condensed);
+      font-weight: 500;
+      font-style: normal;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+
+    @media (max-width: 768px) {
+      .bio-quote-image { height: 50vh; background-attachment: scroll; }
+    }
+
+    /* ── STATEMENT PULL QUOTE ── */
+    .statement-pullquote {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px var(--gutter);
+    }
+
+    .statement-pullquote__inner {
+      border-left: 3px solid var(--accent-red);
+      padding-left: 24px;
+      max-width: 600px;
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+      line-height: 1.65;
+      color: #ffffff;
+    }
+
+    /* ── STATEMENT SPLIT (text left, portrait right) ── */
+    .statement-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--gutter) 80px;
+      align-items: start;
+    }
+
+    .statement-split__text {
+      padding-right: 70px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .statement-split__text p {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 16.5px;
+      line-height: 1.9;
+      color: #ffffff;
+    }
+
+    .statement-split__image {
+      position: sticky;
+      top: 160px;
+    }
+
+    .statement-split__image img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      transition: transform 1.2s var(--ease-expo);
+    }
+
+    .statement-split__image:hover img { transform: scale(1.02); }
+
+    .statement-closing {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 var(--gutter) 60px;
+    }
+
+    .statement-closing p {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: 16.5px;
+      line-height: 1.9;
+      color: #ffffff;
+    }
+
+    .statement-signature {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 var(--gutter) 100px;
+      border-top: 1px solid rgba(240, 240, 242, 0.07);
+      padding-top: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .statement-split { grid-template-columns: 1fr; padding-bottom: 48px; }
+      .statement-split__text { padding-right: 0; }
+      .statement-split__image { position: relative; top: 0; margin-top: 40px; }
+    }
+
+    /* ── GEAR Q&A ── */
+    .gear-qa { max-width: var(--content-max); margin: 0 auto; padding: 0 var(--gutter); }
+    .gear-qa-item { padding: 60px 0; }
+    .gear-qa-item + .gear-qa-item { border-top: 1px solid rgba(240,240,242,0.06); }
+    .gear-qa__question { font-family: var(--font-serif); font-weight: 400; font-style: normal; font-size: clamp(1.4rem, 2.5vw, 1.9rem); line-height: 1.4; color: var(--text-primary); margin-bottom: 32px; max-width: 700px; padding-left: 20px; border-left: 2px solid var(--accent-red); }
+    .gear-qa__answer { max-width: 700px; }
+    .gear-qa__answer p { font-family: var(--font-sans); font-weight: 300; font-size: 16.5px; line-height: 1.9; color: #ffffff; }
+    .gear-qa__answer p + p { margin-top: 24px; }
+    .gear-qa__answer .gear-closing-line { font-family: var(--font-serif); font-weight: 400; font-style: italic; font-size: clamp(1.1rem, 1.8vw, 1.35rem); line-height: 1.6; color: var(--text-secondary); margin-top: 40px; }
+    .gear-qa-split { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+    .gear-qa-split__image img { width: 100%; height: auto; display: block; }
+    .gear-qa-split__caption { font-family: var(--font-condensed); font-weight: 400; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--text-secondary); margin-top: 14px; line-height: 1.7; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .bio-asymmetric { grid-template-columns: 1fr; }
+      .bio-asymmetric__text { padding: 48px 0 !important; order: 2 !important; }
+      .bio-asymmetric__image { aspect-ratio: 16/10; order: 1 !important; }
+      .recognition-grid { grid-template-columns: 1fr; gap: 32px; }
+    }
+    @media (max-width: 768px) {
+      body { padding-top: 70px; }
+      .hero { height: 35vh; min-height: 250px; padding-top: 30px; justify-content: center; }
+      .hero__title { letter-spacing: 0.25em; font-size: 3rem; }
+      .tab-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 4vw; top: 70px; gap: 24px; }
+      .tab-nav::-webkit-scrollbar { display: none; }
+      .tab-nav__item { font-size: 10px; letter-spacing: 2.5px; white-space: nowrap; margin: 0; }
+      
+      .mega-quote, .opening-quote { font-size: clamp(1.2rem, 5vw, 1.8rem); padding: 40px var(--gutter); text-align: left; }
+      .opening-quote { margin: 0; } 
+      
+      /* ביטול fixed במובייל למניעת באגים של מערכות הפעלה */
+      .parallax-window { 
+        height: 50vh; 
+        background-attachment: scroll; 
+      }
+      
+      .statement-article { padding-top: 60px; }
+      
+      .fullbleed-image--medium { height: 40vh; }
+      .fullbleed-image--short { height: 30vh; }
+      .gear-qa-item { padding: 40px 0; }
+      .gear-qa-split { grid-template-columns: 1fr; gap: 40px; }
+      .statement-article .dropcap-para::first-letter { font-size: 3.5rem; }
+    }
+    @media (max-width: 480px) {
+      .hero__title { letter-spacing: 0.15em; font-size: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <site-nav></site-nav>
+
+  <section class="hero">
+    <h1 class="hero__title" id="heroTitle"></h1>
+    <p class="hero__sub">Street &nbsp;· &nbsp;Documentary &nbsp;· &nbsp;Fine Art</p>
+    <div class="hero__scroll"><span>Scroll</span><div class="hero__scroll-bar"></div></div>
+  </section>
+
+  <nav class="tab-nav" id="tabNav">
+    <button class="tab-nav__item active" data-tab="biography" data-hoverable>Biography</button>
+    <button class="tab-nav__item" data-tab="statement" data-hoverable>Artist Statement</button>
+    <button class="tab-nav__item" data-tab="gear" data-hoverable>Gear</button>
+  </nav>
+
+  <div class="tab-content-wrapper" id="tabContentWrapper">
+
+    <div class="tab-panel active" data-panel="biography">
+
+      <blockquote class="opening-quote reveal" style="max-width: 1000px; font-size: clamp(1.2rem, 2vw, 2.2rem);">
+        "My eyes were being trained long before I ever held a&nbsp;camera."
+        <cite>— Roy Ezuz</cite>
+      </blockquote>
+
+      <div class="bio-editorial reveal">
+        <div class="bio-editorial__text">
+          <div class="section-label">The Observer</div>
+          <p class="section-dropcap">
+            I grew up in Givatayim, a quiet suburb pressed against the edge of Tel Aviv. I was shy. Introverted. The kind of child who stood at the perimeter of every room and watched — not from disinterest, but because the edges were where the truth was. Being on the margins wasn't always comfortable, but it did something I only understood much later: it built an inner world. A habit of watching. Of reading people not by what they said, but by how they moved, where their eyes went when they thought no one was looking.
+          </p>
+          <p class="bio-editorial__accent">
+            Not therapy — something more active. A language I didn't know I had.
+          </p>
+          <p class="body-text" style="margin-top: 28px;">
+            The camera found me in 2020. The world had stopped. I was navigating a period of personal fracture — the kind that rearranges everything you thought you knew about your own life. I needed something to make sense of the disorder, and the camera became that instrument. I stepped outside, and for the first time, the act of looking became a form of understanding. Everything I know, I learned by doing — by walking, by failing, by pressing the shutter thousands of times until the images started to match what I was actually seeing.
+          </p>
+        </div>
+        <div class="bio-editorial__image" data-hoverable>
+          <img src="images/profile_pictures/about-portrait.jpg" alt="Roy Ezuz" loading="lazy">
+        </div>
+      </div>
+
+      <div class="bio-quote-image reveal" style="background-image: url('images/profile_pictures/%D7%9B%D7%A0%D7%A1%D7%99%D7%99%D7%94%209.JPG')">
+        <div class="bio-quote-image__overlay"></div>
+        <blockquote class="bio-quote-image__quote">
+          "The differences between cultures became less interesting to me than the similarities running beneath them."
+          <cite class="bio-quote-image__cite">— Roy Ezuz</cite>
+        </blockquote>
+      </div>
+
+      <div class="bio-text-section reveal">
+        <div class="section-label">The Focus</div>
+        <p class="section-dropcap">
+          Jerusalem is where my photography stopped being general and became specific. A city layered with cultures, tensions, and centuries of unresolved coexistence — it forced me to look past the surface. I stopped photographing places and started photographing people: their emotions, their rituals, their stillness under pressure. The differences between cultures became less interesting to me than the similarities running beneath them. Jerusalem gave me my subject. Everything I have shot since is, in some way, an extension of what that city taught me.
+        </p>
+      </div>
+
+      <div class="bio-text-section reveal">
+        <div class="section-label">The Evolution</div>
+        <p class="section-dropcap">
+          It took years and thousands of frames to distill that lesson into a voice. The cities came one after another — Mumbai, Beijing, Paris, New York — each one a different education. Mega-cities don't yield to passive observation. They are too dense, too fast, too layered. You have to walk them for hours, let their rhythm replace your own, until the city stops being a backdrop and becomes a collaborator. My photography matured through that process — from instinct into intention.
+        </p>
+        <p class="body-text" style="margin-top: 28px; max-width: 700px;">
+          Every city before it taught me how to see. Madrid taught me how to feel. What you find beautiful is not a matter of consensus. It is purely a matter of the emotional state you carry inside. That lesson attached itself to me. I will always carry it.
+        </p>
+        <p class="body-text" style="margin-top: 28px; max-width: 700px;">
+          Today I am based in Israel, but my work spans continents. The street is my primary domain for now, but I am not bound to it. My pursuit is broader: to document the human condition wherever it reveals itself — and to show that beneath the noise of our differences, we are far more alike than we dare to admit.
+        </p>
+      </div>
+
+      <div class="bio-text-section reveal">
+        <div class="section-label">The Physicality</div>
+        <p class="section-dropcap">
+          This pursuit is physical. This kind of photography cannot be done from a distance. There are nights I return to wherever I'm staying completely dismantled — legs heavy, feet wrecked, body spent from miles of unbroken walking. The longer I walk, the deeper I go: into the city, into its rhythm, into a state where thinking stops and seeing takes over. The viewfinder completes that process. When I look through it, everything else falls away. No judgment, no preconception, no noise. Just the world exactly as it is, framed in a small glass window. That is the closest thing I know to stillness.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="tab-panel" data-panel="statement">
+
+      <div class="opening-quote reveal">
+        "A genuine emotion on a stranger's face obliterates every artificial boundary between us."
+        <cite>— Roy Ezuz</cite>
+      </div>
+
+      <div class="parallax-window">
+      </div>
+
+      <div class="statement-article">
+        <p class="dropcap-para reveal">
+          I am not interested in the obvious. A perfectly composed shot of a famous landmark, pristine and static, is ultimately a postcard — a view that belongs to everyone and reveals nothing. My eyes go somewhere else entirely: to the margins, to the unscripted drama unfolding just beyond those monuments, to the moment nobody planned.
+        </p>
+
+        <p class="reveal">
+          Photography, at its core, is a practice of discovery. The world is not short of beauty. What it is short of is attention. People move through their days surrounded by small, genuine miracles — a shared glance of exhaustion, a sudden embrace at a crossroads, a child's expression of pure, uncalculated joy — and they walk right past them. My job is to stop walking and pay attention. When I catch one of those moments, the photograph does something extraordinary: it makes the ordinary permanent. It forces you to look at what you otherwise would not have seen.
+        </p>
+
+        <p class="reveal">
+          I shoot in color. This is deliberate, and worth being precise about. Black and white is not a lesser path — it is its own language, and in the right hands it does something remarkable: it distills emotion to its purest form, strips away the noise, and makes an image feel timeless in a way that is almost impossible to argue with. The masters who work in monochrome have earned every frame. But my pursuit is unfiltered truth, and the world I photograph is not monochrome. Color is not decoration. It carries weight, mood, and meaning — it is a layer of reality, not an addition to it. Removing it, for my purposes, would be its own form of editing. I want the full, unvarnished scene — because the more honestly a photograph represents reality, the more powerfully it can cut through the things that are not real at all.
+        </p>
+
+        <p class="reveal">
+          And so much of what surrounds us is not real — though we have agreed, collectively and quietly, to pretend otherwise. Money, status, ego, social hierarchies: these are not features of the universe. They are arrangements we have made, stories we repeat so consistently that we have forgotten they are just stories. The lens has no memory of those arrangements. It sees a face, a gesture, a body moving through space — and at that level, the agreements dissolve. A genuine emotion on a stranger's face obliterates every artificial boundary between us. My photography reaches past those constructed layers and anchors the viewer to what is actually real: the universal human thread that runs beneath the noise of our differences.
+        </p>
+
+        <p class="reveal">
+          To do that honestly, I do not stage. I do not manipulate. I present the situation as it unfolded in front of me. That discipline is not a limitation — it is the source of the work's power. An unmanipulated photograph of a real moment becomes an open space. The viewer walks into it and projects their own memories, their own emotions, onto someone else's fraction of a second. That is the connection I am after.
+        </p>
+      </div>
+
+      <div class="statement-pullquote reveal">
+        <div class="statement-pullquote__inner">
+          "That is what separates a photograph from every other art form: it is the only one that captures something that truly cannot be repeated."
+        </div>
+      </div>
+
+      <div class="statement-split reveal">
+        <div class="statement-split__text">
+          <p>
+            My process lives in two modes. Sometimes a moment catches my eye and the shutter fires on instinct — pure reflex, no deliberation. But more often, the work is slower. I walk for miles, reading the light, the geometry, the rhythm of a place, until a location stops me. A particular intersection of shadow, architecture, and atmosphere. A stage. Once I find it, the motion ends completely. I become static.
+          </p>
+          <p>
+            I wait — sometimes minutes, sometimes an hour — for the living element to enter the frame and complete it. That rule is non-negotiable: there must be life in the picture. A person, occasionally an animal. Without it, the image is just architecture, no matter how beautiful and impressive it may be. It is the living presence that transforms cold geometry into a story. It is the ingredient that brings time into the frame — and with it, a claim on eternity.
+          </p>
+          <p>
+            When that element arrives — when timing, light, and human presence align — the shutter fires, and that exact configuration of life is gone forever. It will never reassemble. That is what separates a photograph from every other art form: it is the only one that captures something that truly cannot be repeated. That is why I do this.
+          </p>
+        </div>
+        <div class="statement-split__image" data-hoverable>
+          <img src="images/profile_pictures/DSC_0132.JPG" alt="Roy Ezuz" loading="lazy">
+        </div>
+      </div>
+
+      <div class="statement-signature reveal">
+        <!-- Signature image will be placed here -->
+      </div>
+
+    </div>
+
+    <div class="tab-panel" data-panel="gear">
+
+      <blockquote class="opening-quote reveal">
+        "The eye builds the vision.<br>Gear gives it a signature."
+        <cite>— Roy Ezuz</cite>
+      </blockquote>
+
+      <div class="gear-qa">
+
+        <div class="gear-qa-item reveal">
+          <h3 class="gear-qa__question">Why does gear matter at all?</h3>
+          <div class="gear-qa__answer">
+            <p>There is a well-known saying: the best camera is the one you have in your hands. I agree with the spirit of it — the photographer's eye is what gets imprinted on the final image, not the serial number on the body. But I think that saying underestimates how much gear shapes the work. The eye builds the vision. Gear gives it a signature.</p>
+            <p>Put two photographers on the same corner. Give one a 50mm prime. Give the other a 70-200mm zoom. Come back in a year and look at their bodies of work. You will be looking at two entirely different aesthetic languages — different distances, different relationships with the subject, different ways of being in the world. Gear doesn't make the eye. But it shapes what the eye produces.</p>
+            <p>Every camera and lens has limitations. And limitations, if you choose the right ones, narrow your focus. They define your niche. They become your signature.</p>
+          </div>
+        </div>
+
+        <div class="gear-qa-item reveal">
+          <div class="gear-qa-split">
+            <div class="gear-qa-split__text">
+              <h3 class="gear-qa__question">Why Leica?</h3>
+              <div class="gear-qa__answer">
+                <p>At the beginning, I did what most photographers do. I spent months watching reviews, comparing bodies, reading forums, trying to build certainty out of someone else's opinion. I ended up with two cameras and seven lenses. Most of them gathered dust.</p>
+                <p>In 2022, I decided to stop. I wanted quality over quantity. Simplicity over options. A camera that would get out of the way.</p>
+                <p>In Wetzlar — where Leica cameras have been made for over a century — my father and I walked into the store, and someone handed me an M11 and a 50mm lens and told me to try it out. I took it into the forest nearby for a few hours. When I came back, the decision had already been made.</p>
+                <p>The Leica M11 is built around a different philosophy from other manufacturers. Most brands compete on features — more buttons, more modes, more automation. The M11 strips all of that away. What remains is a rangefinder: a small glass window through which you see the world exactly as it is. Not a screen. Not a rendering. The world, framed in glass. When you press the shutter, there is no blackout — you never lose sight of what is happening outside your frame. You see the moment before it, during it, and after it. The frame lines show you what the lens sees, but your eyes are capable to see everything around it — the person about to enter, the gesture forming at the edge.</p>
+                <p>That experience is addictive. You find yourself looking for reasons to stay out longer.</p>
+                <p>The body itself is part of the philosophy. Deceptively small for what it produces. In a crowd, you are not carrying a declaration of intent. You are carrying something that barely registers. That invisibility is not incidental — it is essential. The closer you get without disturbing what you're photographing, the more honest the image is.</p>
+                <p>You pick your lens for the day. After that, there are no decisions to make about equipment — only about the image. You disappear into the city. Nothing stands between you and what you're seeing.</p>
+              </div>
+            </div>
+            <div class="gear-qa-split__image">
+              <img src="images/profile_pictures/L1050156.JPG" alt="Roy Ezuz, Wetzlar 2022" loading="lazy">
+              <span class="gear-qa-split__caption">It is where my decision has been made.<br>Wetzlar, 2022.</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /gear-qa -->
+
+      <div class="bio-quote-image reveal" style="background-image: url('images/profile_pictures/L1001242 copy.jpg')">
+        <div class="bio-quote-image__overlay"></div>
+        <blockquote class="bio-quote-image__quote">
+          The 50mm shows you the world as it is.<br>The 28mm tells you the story around it.
+        </blockquote>
+      </div>
+      <span class="bio-quote-image__spec">28mm &nbsp;·&nbsp; f/8 &nbsp;·&nbsp; 1/250s</span>
+
+      <div class="gear-qa">
+
+        <div class="gear-qa-item reveal">
+          <h3 class="gear-qa__question">Why only two lenses?</h3>
+          <div class="gear-qa__answer">
+            <p>For the first year and a half, I used one lens: a 50mm Summilux. One camera, one focal length, manual focus only. The combination forces you to work. You cannot zoom. You cannot rely on autofocus to make the decision. You move your feet to find the frame. You turn the focus ring to commit to the moment. There is a clarity that comes from having no other option — you stop thinking about equipment and start thinking entirely about the image.</p>
+            <p>I added the 28mm after that year and a half — not out of impatience, but because I wanted another layer. The 50mm is intimate. It isolates. It is the lens for faces, for close encounters, for the decisive expression on the street. It is also the focal length closest to what the human eye sees naturally — no distortion, no exaggeration of perspective, no compression of space. Every other focal length interprets the world. The 50mm simply shows it. There is something philosophically consistent about that: a camera built to strip away automation, paired with a lens built to strip away interpretation.</p>
+            <p>The 28mm opens the frame. It pulls in the world around the subject — the architecture, the light, the crowd pressing at the edges. A wide lens creates perspective: a relationship between foreground and background that places the subject more honestly inside their environment.</p>
+            <p>Both lenses open to f/1.4. That maximum aperture does something no zoom can replicate — it gives the image a third dimension. The subject is sharp; the world behind them dissolves. Not as a stylistic trick, but as a statement of priority. This is what matters. Everything else recedes. That separation between subject and environment is where the intimacy of the image lives.</p>
+            <p>Two lenses is not a constraint. It is a decision. Every photograph I make has been made with one of two possible fields of view. That limitation forces me to know my tools completely — and to know, before I raise the camera, exactly what I am trying to say.</p>
+          </div>
+        </div>
+
+        <div class="gear-qa-item reveal">
+          <h3 class="gear-qa__question">What does manual focus demand of you?</h3>
+          <div class="gear-qa__answer">
+            <p>When you shoot in autofocus, you hand a decision to the camera. And the camera will make the obvious choice — the eye, the closest subject, the most legible element in the frame. Most of the time, that works. But photography is not obligated to be obvious. Your message is what should dictate the final image — not the camera's algorithm.</p>
+            <p>Manual focus returns that decision to you. It requires practice. It requires accepting that at f/1.4, with a subject close enough to fill the frame, the depth of field is measured in millimeters — and you will miss. You will come home with frames that almost worked. That cost is real.</p>
+            <p>But when you decide where the focus lands and you get it right, something shifts. The photograph belongs to you in a way that an autofocused image never quite does. The act of deciding — physically, deliberately — where the eye should go is itself a creative choice. It is the first sentence of the image.</p>
+          </div>
+        </div>
+
+        <div class="gear-qa-item reveal">
+          <h3 class="gear-qa__question">Does anything about your gear frustrate you?</h3>
+          <div class="gear-qa__answer">
+            <p>Of course. There are evenings when I open the files on my computer and find that I missed focus on something I cannot go back and reshoot. The M11 is not a fast camera — in purely spontaneous situations, it will sometimes be too slow. These are real limitations.</p>
+            <p>But I have come to understand something about satisfaction: it is not a byproduct of success alone. It is a byproduct of success earned through hard work and genuine intention. Limitations are not obstacles to that — they are part of the path toward it. Every missed frame pulls me back to the present. Every slow shutter forces me to be more deliberate. The Leica's constraints don't diminish the experience. They are the experience.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <site-footer></site-footer>
+
+  <script>
+    /* ENSURE PAGE STARTS AT TOP ON REFRESH */
+    window.onload = () => {
+      window.scrollTo(0, 0);
+    };
+
+    /* HERO TITLE */
+    (() => {
+      const title = document.getElementById('heroTitle');
+      'PROFILE'.split('').forEach((c, i) => {
+        const s = document.createElement('span');
+        s.textContent = c;
+        s.style.animationDelay = `${0.9 + i * 0.08}s`;
+        title.appendChild(s);
+      });
+    })();
+
+    /* TAB SYSTEM */
+    (() => {
+      const navItems = document.querySelectorAll('.tab-nav__item');
+      const wrapper = document.getElementById('tabContentWrapper');
+      let busy = false;
+
+      function switchTab(target) {
+        if (busy) return;
+        const cur = document.querySelector('.tab-panel.active');
+        const next = document.querySelector(`[data-panel="${target}"]`);
+        if (!next || cur === next) return;
+        busy = true;
+
+        navItems.forEach(i => i.classList.remove('active'));
+        document.querySelector(`[data-tab="${target}"]`).classList.add('active');
+
+        wrapper.style.height = cur.offsetHeight + 'px';
+        cur.style.opacity = '0';
+        cur.style.transform = 'translateY(-18px)';
+
+        setTimeout(() => {
+          cur.classList.remove('active');
+          next.style.opacity = '0';
+          next.style.transform = 'translateY(24px)';
+          next.classList.add('active');
+          wrapper.style.height = next.offsetHeight + 'px';
+
+          requestAnimationFrame(() => {
+            next.style.opacity = '1';
+            next.style.transform = 'translateY(0)';
+            next.querySelectorAll('.reveal').forEach((el, i) => {
+              el.classList.remove('visible');
+              setTimeout(() => el.classList.add('visible'), 120 + i * 90);
+            });
+          });
+
+          setTimeout(() => { wrapper.style.height = 'auto'; busy = false; }, 750);
+        }, 420);
+      }
+
+      navItems.forEach(i => i.addEventListener('click', () => switchTab(i.dataset.tab)));
+    })();
+
+    /* SCROLL REVEAL */
+    (() => {
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+      document.querySelectorAll('.tab-panel.active .reveal').forEach(el => obs.observe(el));
+
+      new MutationObserver((muts) => {
+        muts.forEach(m => {
+          if (m.target.classList.contains('active'))
+            m.target.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+        });
+      }).observe(document.getElementById('tabContentWrapper'), { subtree: true, attributes: true, attributeFilter: ['class'] });
+    })();
+
+    /* SCROLL PARALLAX FOR BIO QUOTE IMAGE */
+    (() => {
+      function updateBioParallax() {
+        document.querySelectorAll('.bio-quote-image').forEach(el => {
+          const rect = el.getBoundingClientRect();
+          const windowH = window.innerHeight;
+          if (rect.bottom > 0 && rect.top < windowH) {
+            const progress = (windowH - rect.top) / (windowH + rect.height);
+            const offset = (progress - 0.5) * 140;
+            el.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+          }
+        });
+      }
+      window.addEventListener('scroll', updateBioParallax, { passive: true });
+      updateBioParallax();
+    })();
+
+    /* IMAGE PARALLAX (MOUSE MOVE ONLY) */
+    (() => {
+      document.addEventListener('mousemove', e => {
+        const t = e.target.closest('.fullbleed-image, .bio-asymmetric__image');
+        if (!t) return;
+        const r = t.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        const img = t.querySelector('img');
+        if (img) img.style.transform = `scale(1.04) translate(${x*-10}px, ${y*-10}px)`;
+      });
+      document.addEventListener('mouseout', e => {
+        const t = e.target.closest('.fullbleed-image, .bio-asymmetric__image');
+        if (!t) return;
+        const img = t.querySelector('img');
+        if (img) img.style.transform = 'scale(1) translate(0,0)';
+      });
+    })();
+  </script>
+
+</body>
+</html>

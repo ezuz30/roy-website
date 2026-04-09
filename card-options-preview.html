@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Design Options — Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600&family=Raleway:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0a0a;
+  --text-primary: #f0f0f2;
+  --text-secondary: #b0b0b8;
+  --text-muted: #8a8a92;
+  --accent-red: #E32119;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Barlow', Helvetica Neue, sans-serif;
+  --condensed: 'Barlow Condensed', Helvetica Neue, sans-serif;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; }
+
+body {
+  background: #050505;
+  color: var(--text-primary);
+  font-family: var(--sans);
+  padding: 4vh 4vw;
+}
+
+h1 {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  text-align: center;
+  font-family: var(--condensed);
+  font-weight: 300;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 5vh;
+}
+
+/* ═══════════════════════════════════════════
+   OPTION SECTIONS
+   ═══════════════════════════════════════════ */
+.option-section {
+  margin-bottom: 8vh;
+  padding: 4vh 3vw;
+  border-radius: 12px;
+}
+
+.option-label {
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-red);
+  margin-bottom: 0.5rem;
+}
+
+.option-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 1.8rem;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.option-desc {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 3vh;
+  max-width: 600px;
+}
+
+/* Shared card grid */
+.demo-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 1fr;
+  gap: 1.2rem;
+  max-width: 1200px;
+}
+
+/* Shared card content */
+.demo-card__label {
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.demo-card__title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: var(--text-primary);
+}
+
+.demo-card__text {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.demo-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: 0.6rem 1.2rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 3px;
+  transition: border-color 0.4s ease, background 0.4s ease;
+}
+
+.demo-card__cta:hover {
+  border-color: var(--accent-red);
+  background: rgba(227, 33, 25, 0.08);
+}
+
+.demo-portrait {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.demo-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.demo-social a {
+  font-family: var(--condensed);
+  font-weight: 300;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-right: 1.5rem;
+  transition: color 0.3s;
+}
+.demo-social a:hover { color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════
+   OPTION A — GALLERY FRAME
+   ═══════════════════════════════════════════ */
+.option-a { background: #111113; }
+
+.option-a .card-a {
+  background: #161618;
+  border: 1px solid rgba(255,255,255,0.04);
+  border-radius: 6px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s ease;
+}
+
+/* Inner matted frame effect */
+.option-a .card-a::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.option-a .card-a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.5);
+}
+
+.option-a .card-a--bio {
+  aspect-ratio: 1 / 1;
+  padding: 2.5rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.option-a .card-a--portrait {
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-a .card-a--portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+}
+
+.option-a .card-a--image {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-a .card-a--image .img-wrap {
+  flex: 1;
+  overflow: hidden;
+}
+
+.option-a .card-a--image-title {
+  padding: 0.8rem 1rem;
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.option-a .card-a--contact {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+/* ═══════════════════════════════════════════
+   OPTION B — EXHIBITION PLACARD
+   ═══════════════════════════════════════════ */
+.option-b { background: #0e0e10; }
+
+.option-b .card-b {
+  background: linear-gradient(135deg, #161618 0%, #1c1c20 100%);
+  border: none;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.5s var(--ease-out-expo), box-shadow 0.5s ease;
+}
+
+/* Red left accent bar */
+.option-b .card-b--text::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent-red);
+}
+
+.option-b .card-b:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+}
+
+.option-b .card-b--bio {
+  aspect-ratio: 1 / 1;
+  padding: 2.5rem 2.8rem 2.5rem 3.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.option-b .card-b--portrait {
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid rgba(255,255,255,0.06);
+}
+
+.option-b .card-b--portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 2px;
+}
+
+.option-b .card-b--image {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.option-b .card-b--image .img-wrap {
+  flex: 1;
+  overflow: hidden;
+}
+
+.option-b .card-b--image-title {
+  padding: 0.8rem 1rem;
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.option-b .card-b--contact {
+  padding: 2rem 2.5rem 2rem 3.2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+/* ═══════════════════════════════════════════
+   OPTION C — LIGHTBOX
+   ═══════════════════════════════════════════ */
+.option-c {
+  background: #0a0a0a;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 128px;
+  background-blend-mode: overlay;
+}
+
+.option-c .card-c {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.6s ease, box-shadow 0.6s ease;
+}
+
+.option-c .card-c:hover {
+  border-color: rgba(255,255,255,0.1);
+  box-shadow: 0 0 40px rgba(255,255,255,0.04), 0 0 80px rgba(255,255,255,0.02);
+}
+
+.option-c .card-c--bio {
+  aspect-ratio: 1 / 1;
+  padding: 2.5rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.option-c .card-c--portrait {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-c .card-c--portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  opacity: 0.9;
+  transition: opacity 0.5s ease;
+}
+
+.option-c .card-c--portrait:hover img { opacity: 1; }
+
+.option-c .card-c--image {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-c .card-c--image .img-wrap {
+  flex: 1;
+  overflow: hidden;
+}
+
+.option-c .card-c--image .img-wrap img {
+  opacity: 0.85;
+  transition: opacity 0.5s ease;
+}
+
+.option-c .card-c--image:hover .img-wrap img { opacity: 1; }
+
+.option-c .card-c--image-title {
+  padding: 0.8rem 1rem;
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.option-c .card-c--contact {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+/* ═══════════════════════════════════════════
+   OPTION D — CONTACT SHEET
+   ═══════════════════════════════════════════ */
+.option-d { background: #0c0c0c; }
+
+.option-d .card-d {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.4s ease;
+}
+
+.option-d .card-d:hover {
+  border-color: rgba(255,255,255,0.2);
+}
+
+/* Sprocket holes on image cards */
+.option-d .card-d--image::before,
+.option-d .card-d--image::after {
+  content: '';
+  position: absolute;
+  left: 8px;
+  width: 10px;
+  height: 6px;
+  border-radius: 1px;
+  background: rgba(255,255,255,0.06);
+  z-index: 2;
+}
+.option-d .card-d--image::before { top: 8px; }
+.option-d .card-d--image::after { bottom: 8px; }
+
+.option-d .card-d--bio {
+  aspect-ratio: 1 / 1;
+  padding: 2.2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  border-left: 3px solid rgba(255,255,255,0.08);
+}
+
+.option-d .card-d--portrait {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-d .card-d--portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.05);
+  transition: filter 0.5s ease;
+}
+
+.option-d .card-d--portrait:hover img { filter: contrast(1.15); }
+
+.option-d .card-d--image .img-wrap {
+  flex: 1;
+  overflow: hidden;
+}
+
+.option-d .card-d--image {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-d .card-d--image-title {
+  padding: 0.7rem 1rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 400;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.option-d .card-d--contact {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  border-left: 3px solid rgba(255,255,255,0.08);
+}
+
+/* ═══════════════════════════════════════════
+   OPTION E — GLASS PANEL
+   ═══════════════════════════════════════════ */
+.option-e { background: linear-gradient(160deg, #0d0d10 0%, #12121a 50%, #0d0d10 100%); }
+
+.option-e .card-e {
+  background: rgba(255,255,255,0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.5s ease, border-color 0.5s ease, transform 0.5s var(--ease-out-expo);
+}
+
+.option-e .card-e:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+}
+
+/* Subtle top highlight */
+.option-e .card-e::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.15), transparent);
+  z-index: 1;
+}
+
+.option-e .card-e--bio {
+  aspect-ratio: 1 / 1;
+  padding: 2.5rem 2.8rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+.option-e .card-e--portrait {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-e .card-e--portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.option-e .card-e--portrait:hover img { transform: scale(1.02); }
+
+.option-e .card-e--image {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-e .card-e--image .img-wrap {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.option-e .card-e--image-title {
+  padding: 0.8rem 1.2rem;
+  font-family: var(--condensed);
+  font-weight: 400;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.option-e .card-e--contact {
+  padding: 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+}
+
+/* ═══════════════════════════════════════════
+   OPTION F — DARK POLAROID
+   ═══════════════════════════════════════════ */
+.option-f { background: #0a0a0a; }
+
+.option-f .card-f {
+  background: #141416;
+  border: none;
+  border-radius: 2px;
+  overflow: visible;
+  position: relative;
+  transition: transform 0.6s var(--ease-out-expo);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.option-f .card-f:hover {
+  transform: rotate(-0.5deg) translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+}
+
+.option-f .card-f--bio {
+  aspect-ratio: 1 / 1;
+  padding: 2.5rem 2.8rem 3.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  border-bottom: 4px solid #1a1a1e;
+}
+
+.option-f .card-f--portrait {
+  padding: 0.8rem 0.8rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.option-f .card-f--portrait img {
+  width: 100%;
+  height: auto;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.option-f .card-f--portrait:hover img { transform: scale(1.02); }
+
+.option-f .card-f--image {
+  display: flex;
+  flex-direction: column;
+}
+
+.option-f .card-f--image .img-wrap {
+  flex: 1;
+  overflow: hidden;
+  margin: 0.8rem 0.8rem 0;
+}
+
+.option-f .card-f--image-title {
+  padding: 1rem 1.2rem 1.5rem;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.option-f .card-f--contact {
+  padding: 2rem 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.2rem;
+  border-bottom: 4px solid #1a1a1e;
+}
+
+/* ═══════════════════════════════════════════
+   DIVIDERS
+   ═══════════════════════════════════════════ */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.06), transparent);
+  margin: 2vh 0;
+}
+</style>
+</head>
+<body>
+
+<h1>Card Design Options</h1>
+<p class="subtitle">Hover over each card to see the interaction</p>
+
+<!-- ═══════════════════════════════════════════
+     OPTION A — GALLERY FRAME
+     ═══════════════════════════════════════════ -->
+<div class="option-section option-a">
+  <div class="option-label">Option A</div>
+  <div class="option-title">Gallery Frame</div>
+  <p class="option-desc">Double-border matted frame effect. Cards lift on hover with shadow. Classic gallery presentation.</p>
+
+  <div class="demo-grid">
+    <div class="card-a card-a--bio card-a--text">
+      <span class="demo-card__label">Photographer</span>
+      <div class="demo-card__title">Roy Ezuz</div>
+      <p class="demo-card__text">I grew up on the edges — watching, not from disinterest, but because the margins were where the truth was. Today, that instinct drives everything I photograph.</p>
+      <a href="#" class="demo-card__cta">Read Full Profile</a>
+    </div>
+
+    <div class="card-a card-a--portrait">
+      <img class="demo-portrait" src="images/profile_pictures/DSC_5410.jpg" alt="Roy Ezuz">
+    </div>
+
+    <div class="card-a card-a--image">
+      <div class="img-wrap">
+        <img class="demo-image" src="images/moments/seville photo.jpg" alt="">
+      </div>
+      <div class="card-a--image-title">Selected Work</div>
+    </div>
+
+    <div class="card-a card-a--contact card-a--text" style="grid-column: span 2;">
+      <span class="demo-card__label">Connect</span>
+      <div class="demo-social"><a href="#">Instagram</a><a href="#">Email</a></div>
+      <a href="#" class="demo-card__cta">View Selected Work</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     OPTION B — EXHIBITION PLACARD
+     ═══════════════════════════════════════════ -->
+<div class="option-section option-b">
+  <div class="option-label">Option B</div>
+  <div class="option-title">Exhibition Placard</div>
+  <p class="option-desc">Red accent bar on text cards. Gradient background. Institutional, serious — like a museum wall.</p>
+
+  <div class="demo-grid">
+    <div class="card-b card-b--bio card-b--text">
+      <span class="demo-card__label">Photographer</span>
+      <div class="demo-card__title">Roy Ezuz</div>
+      <p class="demo-card__text">I grew up on the edges — watching, not from disinterest, but because the margins were where the truth was. Today, that instinct drives everything I photograph.</p>
+      <a href="#" class="demo-card__cta">Read Full Profile</a>
+    </div>
+
+    <div class="card-b card-b--portrait">
+      <img class="demo-portrait" src="images/profile_pictures/DSC_5410.jpg" alt="Roy Ezuz">
+    </div>
+
+    <div class="card-b card-b--image">
+      <div class="img-wrap">
+        <img class="demo-image" src="images/moments/seville photo.jpg" alt="">
+      </div>
+      <div class="card-b--image-title">Selected Work</div>
+    </div>
+
+    <div class="card-b card-b--contact card-b--text" style="grid-column: span 2;">
+      <span class="demo-card__label">Connect</span>
+      <div class="demo-social"><a href="#">Instagram</a><a href="#">Email</a></div>
+      <a href="#" class="demo-card__cta">View Selected Work</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     OPTION C — LIGHTBOX
+     ═══════════════════════════════════════════ -->
+<div class="option-section option-c">
+  <div class="option-label">Option C</div>
+  <div class="option-title">Lightbox</div>
+  <p class="option-desc">Invisible borders at rest. Soft white glow on hover — like a lightbox illuminating a slide. Minimal, subtle noise texture.</p>
+
+  <div class="demo-grid">
+    <div class="card-c card-c--bio">
+      <span class="demo-card__label">Photographer</span>
+      <div class="demo-card__title">Roy Ezuz</div>
+      <p class="demo-card__text">I grew up on the edges — watching, not from disinterest, but because the margins were where the truth was. Today, that instinct drives everything I photograph.</p>
+      <a href="#" class="demo-card__cta">Read Full Profile</a>
+    </div>
+
+    <div class="card-c card-c--portrait">
+      <img class="demo-portrait" src="images/profile_pictures/DSC_5410.jpg" alt="Roy Ezuz">
+    </div>
+
+    <div class="card-c card-c--image">
+      <div class="img-wrap">
+        <img class="demo-image" src="images/moments/seville photo.jpg" alt="">
+      </div>
+      <div class="card-c--image-title">Selected Work</div>
+    </div>
+
+    <div class="card-c card-c--contact" style="grid-column: span 2;">
+      <span class="demo-card__label">Connect</span>
+      <div class="demo-social"><a href="#">Instagram</a><a href="#">Email</a></div>
+      <a href="#" class="demo-card__cta">View Selected Work</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     OPTION D — CONTACT SHEET
+     ═══════════════════════════════════════════ -->
+<div class="option-section option-d">
+  <div class="option-label">Option D</div>
+  <div class="option-title">Contact Sheet</div>
+  <p class="option-desc">Sharp corners, thin borders, monospace type — like a darkroom contact sheet. Raw, analog, photographic.</p>
+
+  <div class="demo-grid">
+    <div class="card-d card-d--bio">
+      <span class="demo-card__label">Photographer</span>
+      <div class="demo-card__title">Roy Ezuz</div>
+      <p class="demo-card__text">I grew up on the edges — watching, not from disinterest, but because the margins were where the truth was. Today, that instinct drives everything I photograph.</p>
+      <a href="#" class="demo-card__cta">Read Full Profile</a>
+    </div>
+
+    <div class="card-d card-d--portrait card-d--image">
+      <img class="demo-portrait" src="images/profile_pictures/DSC_5410.jpg" alt="Roy Ezuz">
+    </div>
+
+    <div class="card-d card-d--image">
+      <div class="img-wrap">
+        <img class="demo-image" src="images/moments/seville photo.jpg" alt="">
+      </div>
+      <div class="card-d--image-title">Selected Work — 001</div>
+    </div>
+
+    <div class="card-d card-d--contact" style="grid-column: span 2;">
+      <span class="demo-card__label">Connect</span>
+      <div class="demo-social"><a href="#">Instagram</a><a href="#">Email</a></div>
+      <a href="#" class="demo-card__cta">View Selected Work</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     OPTION E — GLASS PANEL
+     ═══════════════════════════════════════════ -->
+<div class="option-section option-e">
+  <div class="option-label">Option E</div>
+  <div class="option-title">Glass Panel</div>
+  <p class="option-desc">Frosted glass with top-edge highlight. Rounded, modern, elevated. Subtle lift on hover.</p>
+
+  <div class="demo-grid">
+    <div class="card-e card-e--bio">
+      <span class="demo-card__label">Photographer</span>
+      <div class="demo-card__title">Roy Ezuz</div>
+      <p class="demo-card__text">I grew up on the edges — watching, not from disinterest, but because the margins were where the truth was. Today, that instinct drives everything I photograph.</p>
+      <a href="#" class="demo-card__cta">Read Full Profile</a>
+    </div>
+
+    <div class="card-e card-e--portrait">
+      <img class="demo-portrait" src="images/profile_pictures/DSC_5410.jpg" alt="Roy Ezuz">
+    </div>
+
+    <div class="card-e card-e--image">
+      <div class="img-wrap">
+        <img class="demo-image" src="images/moments/seville photo.jpg" alt="">
+      </div>
+      <div class="card-e--image-title">Selected Work</div>
+    </div>
+
+    <div class="card-e card-e--contact" style="grid-column: span 2;">
+      <span class="demo-card__label">Connect</span>
+      <div class="demo-social"><a href="#">Instagram</a><a href="#">Email</a></div>
+      <a href="#" class="demo-card__cta">View Selected Work</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════
+     OPTION F — DARK POLAROID
+     ═══════════════════════════════════════════ -->
+<div class="option-section option-f">
+  <div class="option-label">Option F</div>
+  <div class="option-title">Dark Polaroid</div>
+  <p class="option-desc">Cards styled like dark polaroids — thick bottom border, slight rotation on hover. Tactile, analog, personal.</p>
+
+  <div class="demo-grid">
+    <div class="card-f card-f--bio">
+      <span class="demo-card__label">Photographer</span>
+      <div class="demo-card__title">Roy Ezuz</div>
+      <p class="demo-card__text">I grew up on the edges — watching, not from disinterest, but because the margins were where the truth was. Today, that instinct drives everything I photograph.</p>
+      <a href="#" class="demo-card__cta">Read Full Profile</a>
+    </div>
+
+    <div class="card-f card-f--portrait">
+      <img class="demo-portrait" src="images/profile_pictures/DSC_5410.jpg" alt="Roy Ezuz">
+    </div>
+
+    <div class="card-f card-f--image">
+      <div class="img-wrap">
+        <img class="demo-image" src="images/moments/seville photo.jpg" alt="">
+      </div>
+      <div class="card-f--image-title">Selected Work</div>
+    </div>
+
+    <div class="card-f card-f--contact" style="grid-column: span 2;">
+      <span class="demo-card__label">Connect</span>
+      <div class="demo-social"><a href="#">Instagram</a><a href="#">Email</a></div>
+      <a href="#" class="demo-card__cta">View Selected Work</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
