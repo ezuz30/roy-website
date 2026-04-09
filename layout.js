@@ -51,6 +51,82 @@ class SiteFooter extends HTMLElement {
 customElements.define('site-footer', SiteFooter);
 
 // ==========================================
+// 3b. COLLABORATE MODAL (global, all pages)
+// ==========================================
+(function initCollaborateModal() {
+  // Inject CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    .collab-mo { position: fixed; inset: 0; z-index: 50000; background: rgba(0,0,0,.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .5s; }
+    .collab-mo.active { opacity: 1; pointer-events: all; }
+    .collab-mc { position: relative; border: 1px solid rgba(255,255,255,0.08); background: rgba(10,10,10,.92); padding: 4rem 3.5rem; max-width: 480px; width: 90vw; text-align: center; transform: translateY(20px); transition: transform .5s cubic-bezier(.25,1,.5,1); }
+    .collab-mo.active .collab-mc { transform: translateY(0); }
+    .collab-mx { position: absolute; top: 1.2rem; right: 1.5rem; background: none; border: none; font-family: 'Barlow', sans-serif; font-weight: 200; font-size: 1.4rem; color: #8a8a92; cursor: none; transition: color .3s; line-height: 1; padding: 4px; }
+    .collab-mx:hover { color: #E32119; }
+    .collab-ms { font-family: 'Barlow Condensed', sans-serif; font-weight: 300; font-size: .6rem; letter-spacing: .35em; text-transform: uppercase; color: #8a8a92; margin-bottom: 1.5rem; }
+    .collab-mh { font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic; font-size: clamp(1.3rem, 2.5vw, 1.8rem); line-height: 1.4; color: #f0f0f2; margin-bottom: 2.5rem; }
+    .collab-md { width: 30px; height: 1px; background: #E32119; margin: 0 auto 2rem; }
+    .collab-cfw { display: flex; flex-direction: column; gap: 1rem; }
+    .collab-cfw input, .collab-cfw textarea { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.1); padding: .85rem 1rem; font-family: 'Barlow', sans-serif; font-weight: 300; font-size: .82rem; color: #f0f0f2; letter-spacing: .03em; transition: border-color .3s; outline: none; resize: vertical; cursor: none; }
+    .collab-cfw input::placeholder, .collab-cfw textarea::placeholder { color: #8a8a92; }
+    .collab-cfw input:focus, .collab-cfw textarea:focus { border-color: #E32119; }
+    .collab-sb { width: 100%; padding: .9rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); font-family: 'Barlow Condensed', sans-serif; font-weight: 400; font-size: .72rem; letter-spacing: .25em; text-transform: uppercase; color: #f0f0f2; cursor: none; transition: all .4s; margin-top: .5rem; }
+    .collab-sb:hover { border-color: #E32119; background: #E32119; color: #fff; }
+    .collab-fs { font-family: 'Barlow', sans-serif; font-weight: 300; font-size: .75rem; text-align: center; color: #8a8a92; min-height: 1.2em; margin-top: .5rem; }
+    .collab-fs.ok { color: #4caf50; } .collab-fs.er { color: #E32119; }
+  `;
+  document.head.appendChild(style);
+
+  // Inject HTML
+  const modal = document.createElement('div');
+  modal.className = 'collab-mo';
+  modal.id = 'globalCollaborateModal';
+  modal.innerHTML = `
+    <div class="collab-mc">
+      <button class="collab-mx" id="globalModalClose">&times;</button>
+      <div class="collab-ms">G E T &nbsp; I N &nbsp; T O U C H</div>
+      <h2 class="collab-mh">Let's create something together.</h2>
+      <div class="collab-md"></div>
+      <div class="collab-cfw">
+        <input type="text" id="globalFormName" placeholder="Your Name" required>
+        <input type="email" id="globalFormEmail" placeholder="Your Email" required>
+        <textarea id="globalFormMessage" placeholder="Your Message" rows="3" required></textarea>
+        <button type="button" class="collab-sb" id="globalFormSubmit">Send Message</button>
+        <div class="collab-fs" id="globalFormStatus"></div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  function openModal(e) { e && e.preventDefault(); modal.classList.add('active'); }
+  function closeModal() { modal.classList.remove('active'); }
+
+  document.getElementById('globalModalClose').addEventListener('click', closeModal);
+  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
+
+  document.addEventListener('click', e => {
+    const trigger = e.target.closest('#openCollaborate');
+    if (trigger) { e.preventDefault(); openModal(); }
+  });
+
+  document.getElementById('globalFormSubmit').addEventListener('click', function() {
+    const n = document.getElementById('globalFormName');
+    const em = document.getElementById('globalFormEmail');
+    const m = document.getElementById('globalFormMessage');
+    const status = document.getElementById('globalFormStatus');
+    if (!n.value || !em.value || !m.value) {
+      status.textContent = 'Please fill in all fields.';
+      status.className = 'collab-fs er';
+      return;
+    }
+    status.textContent = 'Message sent. Thank you.';
+    status.className = 'collab-fs ok';
+    setTimeout(() => { closeModal(); n.value = ''; em.value = ''; m.value = ''; status.textContent = ''; status.className = 'collab-fs'; }, 2000);
+  });
+})();
+
+// ==========================================
 // 3. GLOBAL CURSOR LOGIC (EXACT MATCH TO INDEX.HTML)
 // ==========================================
 (function initCursor() {
