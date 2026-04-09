@@ -402,7 +402,8 @@ site-footer { display: block; flex-shrink: 0; }
 }
 
 @media (max-width: 768px) {
-  /* Disable scroll snap on mobile — too aggressive on small screens */
+  /* Disable scroll snap on mobile — body & html need height:auto to scroll naturally */
+  html { height: auto; overflow: visible; }
   body { scroll-snap-type: none; height: auto; min-height: 100dvh; overflow-y: auto; }
   .section-hero { scroll-snap-align: none; height: auto; min-height: 60vh; }
   .section-cards { scroll-snap-align: none; min-height: auto; }
