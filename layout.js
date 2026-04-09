@@ -45,6 +45,7 @@ class SiteNav extends HTMLElement {
         </button>
       </header>
       <nav class="nav-mobile-drawer" id="navMobileDrawer">
+        <a href="index.html">Home</a>
         <a href="selected-work.html">Collection</a>
         <a href="profile.html">Profile</a>
         <a href="#" id="openCollaborateMobile">Collaborate</a>
