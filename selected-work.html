@@ -195,6 +195,49 @@ body {
 .scroll-mouse::after { content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 2px; height: 6px; background: var(--accent-red); border-radius: 1px; animation: wheel 2s ease-in-out infinite; }
 @keyframes wheel { 0% {opacity:1; top:6px;} 50% {opacity:1; top:18px;} 80% {opacity:0; top:22px;} 100% {opacity:0; top:6px;} }
 
+/* ═══════════════════════════════════════════
+   MOBILE STYLES
+   ═══════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Hide left timeline, show bottom dots instead */
+  .timeline { display: none; }
+
+  /* Bottom dot indicators */
+  .mobile-dots {
+    position: fixed; bottom: 6vh; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 10px; z-index: 100; align-items: center;
+  }
+  .mobile-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-muted); transition: background 0.4s, transform 0.4s;
+  }
+  .mobile-dot.active { background: var(--accent-red); transform: scale(1.4); }
+
+  /* Hide mouse scroll hint, show swipe hint */
+  .scroll-mouse { display: none; }
+  .scroll-hint span::before { content: 'SWIPE'; }
+  .scroll-hint span { display: none; }
+  .scroll-hint span:first-of-type { display: block; }
+
+  /* Smaller title on mobile */
+  .huge-title { font-size: clamp(2.2rem, 12vw, 4rem); }
+
+  /* Tap hint at bottom */
+  .mobile-tap-hint {
+    position: fixed; bottom: 12vh; left: 50%; transform: translateX(-50%);
+    font-family: var(--condensed); font-size: 0.5rem; letter-spacing: 0.3em;
+    text-transform: uppercase; color: var(--text-muted); z-index: 100;
+    transition: opacity 0.6s;
+  }
+  .mobile-tap-hint.hidden { opacity: 0; pointer-events: none; }
+}
+
+/* Hide mobile-specific elements on desktop */
+@media (min-width: 769px) {
+  .mobile-dots { display: none; }
+  .mobile-tap-hint { display: none; }
+}
+
 </style>
 </head>
 <body>
@@ -390,10 +433,14 @@ let targetMouseY = 0;
 let currentMouseX = 0;
 let currentMouseY = 0;
 
-window.addEventListener('mousemove', (e) => {
-  targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
-  targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-});
+const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+if (!isTouchDevice) {
+  window.addEventListener('mousemove', (e) => {
+    targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+}
 
 /* ═══ SCROLL & ANIMATION LOGIC ═══ */
 let currentScroll = 0;
@@ -406,6 +453,8 @@ window.addEventListener('scroll', () => {
 
   if (window.scrollY > 50) {
     scrollHint.classList.add('hidden');
+    const tapHint = document.getElementById('mobileTapHint');
+    if (tapHint) tapHint.classList.add('hidden');
     if(nav) nav.classList.add('solid');
   } else {
     scrollHint.classList.remove('hidden');
@@ -453,7 +502,7 @@ window.addEventListener('resize', () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ── Click on canvas navigates to active collection ── */
+/* ── Click/tap on canvas navigates to active collection ── */
 canvas.style.pointerEvents = 'auto';
 canvas.addEventListener('click', () => {
   const idx = Math.round(currentScroll);
@@ -461,7 +510,38 @@ canvas.addEventListener('click', () => {
     window.location.href = COLLECTIONS[idx].url;
   }
 });
+
+/* ── Mobile dots ── */
+const mobileDots = document.querySelector('.mobile-dots');
+const mobileTapHint = document.querySelector('.mobile-tap-hint');
+if (mobileDots) {
+  COLLECTIONS.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'mobile-dot' + (i === 0 ? ' active' : '');
+    mobileDots.appendChild(dot);
+  });
+}
+
+// Update dots in animate loop
+const _origAnimate = animate;
+let _lastActiveIndex = -1;
+function updateMobileDots() {
+  const idx = Math.round(currentScroll);
+  if (idx !== _lastActiveIndex && mobileDots) {
+    _lastActiveIndex = idx;
+    mobileDots.querySelectorAll('.mobile-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+}
+// Patch animate to also update dots
+const _baseAnimate = window.requestAnimationFrame;
+(function patchLoop() {
+  updateMobileDots();
+  requestAnimationFrame(patchLoop);
+})();
 </script>
+
+<div class="mobile-dots"></div>
+<div class="mobile-tap-hint" id="mobileTapHint">TAP IMAGE TO ENTER</div>
 
 <site-footer></site-footer>
 
