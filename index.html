@@ -403,9 +403,9 @@ site-footer { display: block; flex-shrink: 0; }
 
 @media (max-width: 768px) {
   /* Disable scroll snap on mobile — too aggressive on small screens */
-  body { scroll-snap-type: none; overflow-y: auto; }
+  body { scroll-snap-type: none; height: auto; min-height: 100dvh; overflow-y: auto; }
   .section-hero { scroll-snap-align: none; height: auto; min-height: 60vh; }
-  .section-cards { scroll-snap-align: none; }
+  .section-cards { scroll-snap-align: none; min-height: auto; }
   .section-manifesto { scroll-snap-align: none; }
 
   .card-grid { grid-template-columns: 1fr; height: auto; gap: 0.6rem; }
