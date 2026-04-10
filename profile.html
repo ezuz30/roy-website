@@ -434,32 +434,63 @@
       .recognition-grid { grid-template-columns: 1fr; gap: 32px; }
     }
     @media (max-width: 768px) {
+      /* Tighter gutter on mobile */
+      :root { --gutter: 5vw; }
+
       body { padding-top: 70px; }
       .hero { height: 35vh; min-height: 250px; padding-top: 30px; justify-content: center; }
       .hero__title { letter-spacing: 0.25em; font-size: 3rem; }
-      .tab-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 4vw; top: 70px; gap: 24px; }
+      .hero__scroll { display: none; }
+
+      /* Tab nav — scrollable horizontal strip */
+      .tab-nav { overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 0 4vw; top: 70px; gap: 20px; }
       .tab-nav::-webkit-scrollbar { display: none; }
-      .tab-nav__item { font-size: 10px; letter-spacing: 2.5px; white-space: nowrap; margin: 0; }
-      
-      .mega-quote, .opening-quote { font-size: clamp(1.2rem, 5vw, 1.8rem); padding: 40px var(--gutter); text-align: left; }
-      .opening-quote { margin: 0; } 
-      
-      /* ביטול fixed במובייל למניעת באגים של מערכות הפעלה */
-      .parallax-window { 
-        height: 50vh; 
-        background-attachment: scroll; 
-      }
-      
-      .statement-article { padding-top: 60px; }
-      
-      .fullbleed-image--medium { height: 40vh; }
-      .fullbleed-image--short { height: 30vh; }
-      .gear-qa-item { padding: 40px 0; }
-      .gear-qa-split { grid-template-columns: 1fr; gap: 40px; }
+      .tab-nav__item { font-size: 10px; letter-spacing: 2px; white-space: nowrap; }
+
+      /* Quotes */
+      .mega-quote, .opening-quote { font-size: clamp(1.1rem, 4.5vw, 1.6rem); padding: 36px var(--gutter); }
+      .opening-quote { margin: 0; }
+
+      /* Body text — slightly smaller for comfortable reading */
+      .body-text,
+      .section-dropcap,
+      .statement-article p,
+      .statement-split__text p,
+      .statement-closing p,
+      .gear-qa__answer p { font-size: 15px; line-height: 1.85; }
+      .section-dropcap::first-letter { font-size: 3rem; }
       .statement-article .dropcap-para::first-letter { font-size: 3.5rem; }
+
+      /* Section labels */
+      .section-label { font-size: clamp(1.1rem, 4.5vw, 1.5rem); margin-bottom: 18px; }
+
+      /* Section paddings — reduce for mobile */
+      .bio-opening { padding: 36px var(--gutter) 0; }
+      .bio-text-section { padding: 36px var(--gutter); }
+      .bio-editorial { padding: 32px var(--gutter) 40px; }
+      .bio-editorial__accent { font-size: 1rem; }
+      .recognition-grid { padding: 36px var(--gutter); }
+      .statement-article { padding: 36px var(--gutter) 0; }
+      .statement-pullquote { padding: 28px var(--gutter); }
+      .statement-closing { padding: 0 var(--gutter) 36px; }
+      .statement-signature { padding-top: 28px; padding-bottom: 56px; }
+
+      /* Gear Q&A — full width on mobile */
+      .gear-qa__question { max-width: 100%; font-size: clamp(1.1rem, 4.5vw, 1.5rem); }
+      .gear-qa__answer { max-width: 100%; }
+      .gear-qa-item { padding: 36px 0; }
+      .gear-qa-split { grid-template-columns: 1fr; gap: 32px; }
+
+      /* Parallax → scroll on mobile (OS bug prevention) */
+      .parallax-window { height: 45vh; background-attachment: scroll; }
+
+      /* Images */
+      .fullbleed-image--medium { height: 38vh; }
+      .fullbleed-image--short { height: 28vh; }
     }
     @media (max-width: 480px) {
-      .hero__title { letter-spacing: 0.15em; font-size: 2.8rem; }
+      .hero__title { letter-spacing: 0.15em; font-size: 2.5rem; }
+      .tab-nav { gap: 16px; }
     }
   </style>
 </head>
