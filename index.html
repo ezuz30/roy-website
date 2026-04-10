@@ -437,6 +437,9 @@ site-footer { display: block; flex-shrink: 0; }
     grid-row: 1;
     display: block; /* block so float works */
     padding: 1.3rem 1.4rem 1.4rem;
+    height: auto;
+    min-height: 0;
+    align-self: start; /* don't stretch to fill grid row */
   }
 
   /* Portrait floated inside bio on mobile */
@@ -450,6 +453,9 @@ site-footer { display: block; flex-shrink: 0; }
     margin: 0 0 0.8rem 1rem;
     shape-outside: margin-box;
   }
+
+  /* Bio card must never clip its own content */
+  .card--bio { overflow: visible; }
 
   /* Hide the standalone portrait card on mobile */
   .card--portrait { display: none; }
