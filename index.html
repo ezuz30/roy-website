@@ -402,21 +402,31 @@ site-footer { display: block; flex-shrink: 0; }
 }
 
 @media (max-width: 768px) {
-  /* Disable scroll snap on mobile — body & html need height:auto to scroll naturally */
+  /* Disable scroll snap on mobile */
   html { height: auto; overflow: visible; }
   body { scroll-snap-type: none; height: auto; min-height: 100dvh; overflow-y: auto; }
-  .section-hero { scroll-snap-align: none; height: auto; min-height: 60vh; }
-  .section-cards { scroll-snap-align: none; min-height: auto; }
+
+  /* Hero — shrink to show image + a bit, not full screen */
+  .section-hero { scroll-snap-align: none; height: auto; min-height: auto; }
+  .carousel-wrapper { padding: 0; min-height: auto; }
+  .carousel { width: 100vw; max-height: 55vh; }
+  .carousel img { max-height: 55vh; object-fit: cover; }
+
+  /* Hide scroll mouse indicator on mobile */
+  .scroll-cue { display: none; }
+
+  /* Cards section */
+  .section-cards { scroll-snap-align: none; min-height: auto; padding: 1rem 4vw 4vh; gap: 0.6rem; margin-top: 0; }
   .section-manifesto { scroll-snap-align: none; }
 
+  /* Card grid — single column, fixed heights */
   .card-grid { grid-template-columns: 1fr; height: auto; gap: 0.6rem; }
-  .section-cards { padding: 2vh 4vw 4vh; gap: 0.6rem; margin-top: 90px; }
-  .manifesto { font-size: clamp(0.9rem, 3.5vw, 1.15rem); max-width: 95vw; }
-  .card--image { min-height: 50vw; grid-column: auto; grid-row: auto; }
-  .card--portrait { min-height: 45vw; grid-column: auto; grid-row: auto; }
   .card--bio { padding: 1.6rem 1.4rem; gap: 1rem; grid-row: auto; grid-column: auto; }
+  .card--portrait { min-height: 60vw; max-height: 70vw; grid-column: auto; grid-row: auto; }
+  .card--image { min-height: 55vw; max-height: 65vw; grid-column: auto; grid-row: auto; }
   .card__title { font-size: clamp(1.3rem, 5vw, 1.8rem); }
   .card__text { font-size: 0.82rem; }
+  .manifesto { font-size: clamp(0.9rem, 3.5vw, 1.15rem); max-width: 95vw; }
 }
 
 /* ═══════════════════════════════════════════
