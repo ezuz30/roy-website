@@ -406,26 +406,67 @@ site-footer { display: block; flex-shrink: 0; }
   html { height: auto; overflow: visible; }
   body { scroll-snap-type: none; height: auto; min-height: 100dvh; overflow-y: auto; }
 
-  /* Hero — shrink to show image + a bit, not full screen */
+  /* Hero — compact */
   .section-hero { scroll-snap-align: none; height: auto; min-height: auto; }
   .carousel-wrapper { padding: 0; min-height: auto; }
-  .carousel { width: 100vw; max-height: 55vh; }
-  .carousel img { max-height: 55vh; object-fit: cover; }
+  .carousel { width: 100vw; max-height: 50vh; }
+  .carousel img { max-height: 50vh; object-fit: cover; }
 
-  /* Hide scroll mouse indicator on mobile */
-  .scroll-cue { display: none; }
+  /* Force hide scroll mouse on mobile */
+  .scroll-cue, #scrollCue { display: none !important; }
 
   /* Cards section */
-  .section-cards { scroll-snap-align: none; min-height: auto; padding: 1rem 4vw 4vh; gap: 0.6rem; margin-top: 0; }
+  .section-cards { scroll-snap-align: none; min-height: auto; padding: 0.8rem 3vw 4vh; gap: 0.6rem; margin-top: 0; }
   .section-manifesto { scroll-snap-align: none; }
 
-  /* Card grid — single column, fixed heights */
-  .card-grid { grid-template-columns: 1fr; height: auto; gap: 0.6rem; }
-  .card--bio { padding: 1.6rem 1.4rem; gap: 1rem; grid-row: auto; grid-column: auto; }
-  .card--portrait { min-height: 60vw; max-height: 70vw; grid-column: auto; grid-row: auto; }
-  .card--image { min-height: 55vw; max-height: 65vw; grid-column: auto; grid-row: auto; }
-  .card__title { font-size: clamp(1.3rem, 5vw, 1.8rem); }
-  .card__text { font-size: 0.82rem; }
+  /* Card grid — 2 col top row, then full width */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-template-rows: auto auto auto auto;
+    height: auto;
+    gap: 0.6rem;
+  }
+
+  /* Row 1: portrait (small) + bio (large) side by side */
+  .card--portrait {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 45vw;
+    max-height: 55vw;
+  }
+  .card--bio {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 1rem;
+    gap: 0.6rem;
+  }
+
+  /* Row 2: Selected Work — full width */
+  .card--image {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    min-height: 45vw;
+  }
+
+  /* Row 3: Collaborate — full width */
+  .card--cta {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    min-height: 80px;
+  }
+
+  /* Row 4: Social — full width */
+  .card--contact {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    min-height: 80px;
+  }
+
+  .card__title { font-size: clamp(1rem, 4vw, 1.4rem); }
+  .card__text { font-size: 0.75rem; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+  .card__cta { font-size: 0.65rem; padding: 0.5rem 1rem; }
+  .card__label { font-size: 0.6rem; }
   .manifesto { font-size: clamp(0.9rem, 3.5vw, 1.15rem); max-width: 95vw; }
 }
 
