@@ -450,9 +450,8 @@ const Globe = (() => {
       if (touchStartScroll < 10 && track.scrollTop <= 0) {
         const deltaY = e.changedTouches[0].clientY - touchStartY;
         if (deltaY > 80) {
-          // Swiped down from top — exit
+          // Swiped down from top — close modal, back to gallery grid
           closeModal();
-          window.history.back();
         }
       }
     }, { passive: true });
