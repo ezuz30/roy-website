@@ -478,24 +478,12 @@ if (!isTouchDevice) {
 /* ═══ SCROLL & ANIMATION LOGIC ═══ */
 let currentScroll = 0;
 let targetScroll = 0;
-let prevTargetScroll = 0; // to compute real frame velocity on mobile
 const MAX_SCROLL = COLLECTIONS.length - 1;
 const scrollHint = document.getElementById('scrollHint');
 const nav = document.getElementById('nav');
 
-let snapTimer = null;
 window.addEventListener('scroll', () => {
-  // Clamp to valid range — prevents iOS rubber-band from pushing out of bounds
   targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / window.innerHeight));
-
-  // Mobile: instant snap 50ms after scroll stops — no animation, no delay
-  if (isMobile) {
-    clearTimeout(snapTimer);
-    snapTimer = setTimeout(() => {
-      const nearest = Math.max(0, Math.min(MAX_SCROLL, Math.round(window.scrollY / window.innerHeight)));
-      window.scrollTo({ top: nearest * window.innerHeight, behavior: 'instant' });
-    }, 50);
-  }
 
   if (window.scrollY > 50) {
     scrollHint.classList.add('hidden');
@@ -506,32 +494,27 @@ window.addEventListener('scroll', () => {
     scrollHint.classList.remove('hidden');
     if(nav) nav.classList.remove('solid');
   }
-});
+}, { passive: true });
 
 function animate() {
   requestAnimationFrame(animate);
 
-  let shaderVelocity;
-
   if (isMobile) {
-    // Immediate — trust iOS native scroll smoothing, no JS lerp on top
-    shaderVelocity = targetScroll - prevTargetScroll; // real frame-to-frame speed
-    prevTargetScroll = targetScroll;
+    // Mobile: direct sync — no lerp, no snap, no effects
     currentScroll = targetScroll;
   } else {
+    // Desktop: cinematic lerp
     const velocity = targetScroll - currentScroll;
     currentScroll += velocity * 0.08;
-    shaderVelocity = velocity;
   }
 
-  // Cap shader velocity so fast scrolling doesn't distort images
-  shaderVelocity = Math.max(-1.5, Math.min(1.5, shaderVelocity));
-
+  // Mouse parallax (desktop only, mobile values stay 0)
   currentMouseX += (targetMouseX - currentMouseX) * 0.05;
   currentMouseY += (targetMouseY - currentMouseY) * 0.05;
 
-  const textTranslateY = (currentScroll * -100) + (currentMouseY * -2);
-  const textTranslateX = currentMouseX * -20;
+  // Text overlay position
+  const textTranslateY = currentScroll * -100 + (isMobile ? 0 : currentMouseY * -2);
+  const textTranslateX = isMobile ? 0 : currentMouseX * -20;
   textSyncContainer.style.transform = `translateY(${textTranslateY}vh) translateX(${textTranslateX}px)`;
 
   const activeIndex = Math.round(currentScroll);
@@ -539,12 +522,22 @@ function animate() {
     item.classList.toggle('active', idx === activeIndex);
   });
 
+  // Desktop-only velocity for shader bend effect
+  const desktopVelocity = isMobile ? 0 : (targetScroll - currentScroll);
+
   meshes.forEach((mesh, i) => {
-    mesh.position.y = (currentScroll - i) * PLANE_GAP + (currentMouseY * 0.15);
-    mesh.position.x = currentMouseX * 0.15;
-    mesh.rotation.y = currentMouseX * 0.05;
-    mesh.rotation.x = -currentMouseY * 0.05;
-    mesh.material.uniforms.uScrollVelocity.value = shaderVelocity * (isMobile ? 8.0 : 15.0);
+    mesh.position.y = (currentScroll - i) * PLANE_GAP;
+
+    // Desktop: mouse parallax + rotation
+    if (!isMobile) {
+      mesh.position.y += currentMouseY * 0.15;
+      mesh.position.x = currentMouseX * 0.15;
+      mesh.rotation.y = currentMouseX * 0.05;
+      mesh.rotation.x = -currentMouseY * 0.05;
+    }
+
+    // Shader bend: desktop only, mobile gets 0 (flat images, stable size)
+    mesh.material.uniforms.uScrollVelocity.value = desktopVelocity * 15.0;
 
     const distance = Math.abs(currentScroll - i);
     mesh.material.uniforms.uOpacity.value = Math.max(0, 1.0 - (distance * 0.6));
