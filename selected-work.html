@@ -483,9 +483,23 @@ const MAX_SCROLL = COLLECTIONS.length - 1;
 const scrollHint = document.getElementById('scrollHint');
 const nav = document.getElementById('nav');
 
+let snapTimer = null;
+
+function snapToNearest() {
+  const nearest = Math.round(window.scrollY / window.innerHeight);
+  const clamped = Math.max(0, Math.min(MAX_SCROLL, nearest));
+  window.scrollTo({ top: clamped * window.innerHeight, behavior: 'smooth' });
+}
+
 window.addEventListener('scroll', () => {
   // Clamp to valid range — prevents iOS rubber-band from pushing out of bounds
   targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / window.innerHeight));
+
+  // Mobile: snap to nearest section after finger lifts
+  if (isMobile) {
+    clearTimeout(snapTimer);
+    snapTimer = setTimeout(snapToNearest, 120);
+  }
 
   if (window.scrollY > 50) {
     scrollHint.classList.add('hidden');
