@@ -274,30 +274,35 @@ const COLLECTIONS = [
     meta: 'Street & Travel',
     title: 'Moments',
     image: 'images/moments/seville photo.jpg',
+    mobileImage: 'images/mobile-covers/moments.jpg',
     url: 'moments.html'
   },
   {
     meta: 'People',
     title: 'Portraits',
     image: 'images/portraits/L1004839.jpg',
+    mobileImage: 'images/mobile-covers/portraits.jpg',
     url: 'portraits.html'
   },
   {
     meta: 'Nature',
     title: 'Animals',
     image: 'images/animals/H_0004_L1002572.jpg',
+    mobileImage: 'images/mobile-covers/animals.jpg',
     url: 'animals.html'
   },
   {
     meta: 'Architecture',
     title: 'Light & Shadow',
     image: 'images/light_and_shadow/H_0011_Brightness_Contrast 1.jpg',
+    mobileImage: 'images/mobile-covers/light-and-shadow.jpg',
     url: 'light-and-shadow.html'
   },
   {
     meta: 'City',
     title: 'Urban Life',
     image: 'images/urban_life/L1067694.jpg',
+    mobileImage: 'images/mobile-covers/urban-life.jpg',
     url: 'urban-life.html'
   }
 ];
@@ -426,7 +431,7 @@ function loadColorManagedTexture(src) {
 
 const planeAspect = PLANE_W / PLANE_H;
 
-Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(results => {
+Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(isMobile ? col.mobileImage : col.image))).then(results => {
   results.forEach(({ texture, aspect }) => {
     const material = new THREE.ShaderMaterial({
       vertexShader,
