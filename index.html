@@ -409,14 +409,54 @@ site-footer { display: block; flex-shrink: 0; }
   html { height: auto; overflow: visible; }
   body { scroll-snap-type: none; height: auto; min-height: 100dvh; overflow-y: auto; }
 
-  /* Hero — compact */
-  .section-hero { scroll-snap-align: none; height: auto; min-height: auto; }
-  .carousel-wrapper { padding: 0; min-height: auto; }
-  .carousel { width: 100vw; max-height: 50vh; }
-  .carousel img { max-height: 50vh; object-fit: cover; }
+  /* Hero — full screen on mobile */
+  .section-hero {
+    scroll-snap-align: none;
+    height: 100svh;
+    min-height: 100svh;
+    position: relative;
+  }
+  .carousel-wrapper { padding: 0 2vw; min-height: auto; }
+  .carousel { width: 96vw; max-height: 75svh; }
+  .carousel img { max-height: 75svh; object-fit: contain; }
 
-  /* Force hide scroll mouse on mobile */
+  /* Force hide desktop scroll mouse on mobile */
   .scroll-cue, #scrollCue { display: none !important; }
+
+  /* Mobile scroll-down hint at bottom of hero */
+  .mobile-scroll-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    opacity: 0.7;
+    z-index: 10;
+    transition: opacity 0.5s ease;
+  }
+  .mobile-scroll-hint.hidden { opacity: 0; pointer-events: none; }
+  .mobile-scroll-hint__chevron {
+    width: 20px;
+    height: 20px;
+    border-right: 1.5px solid var(--text-muted);
+    border-bottom: 1.5px solid var(--text-muted);
+    transform: rotate(45deg);
+    animation: chevronBounce 2s ease-in-out infinite;
+  }
+  .mobile-scroll-hint__text {
+    font-family: var(--condensed);
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+  @keyframes chevronBounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50% { transform: rotate(45deg) translateY(5px); }
+  }
 
   /* Cards section */
   .section-cards { scroll-snap-align: none; min-height: auto; padding: 0.8rem 3vw 4vh; gap: 0.6rem; margin-top: 0; }
@@ -487,6 +527,9 @@ site-footer { display: block; flex-shrink: 0; }
   .card__cta { font-size: 0.65rem; padding: 0.5rem 1rem; margin-top: 0.8rem; }
   .manifesto { font-size: clamp(0.9rem, 3.5vw, 1.15rem); max-width: 95vw; }
 }
+
+/* Hide mobile-only elements on desktop */
+.mobile-scroll-hint { display: none; }
 
 /* ═══════════════════════════════════════════
    SCROLL INDICATOR
@@ -627,6 +670,9 @@ site-footer { display: block; flex-shrink: 0; }
     <div class="scroll-mouse"></div>
     <span class="scroll-cue-text">Scroll</span>
   </div>
+  <div class="mobile-scroll-hint" id="mobileScrollHint">
+    <div class="mobile-scroll-hint__chevron"></div>
+  </div>
 </section>
 
 <!-- BLOCK 2: Card Grid -->
@@ -732,10 +778,23 @@ site-footer { display: block; flex-shrink: 0; }
 /* HIDE SCROLL CUE ON SCROLL */
 (() => {
   const cue = document.getElementById('scrollCue');
+  const mobileHint = document.getElementById('mobileScrollHint');
   if (!cue) return;
-  document.body.addEventListener('scroll', () => {
-    if (document.body.scrollTop > window.innerHeight * 0.5) cue.classList.add('hidden');
-    else cue.classList.remove('hidden');
+  const scrollTarget = document.body;
+  scrollTarget.addEventListener('scroll', () => {
+    const scrolled = scrollTarget.scrollTop > 50;
+    if (scrolled) {
+      cue.classList.add('hidden');
+      if (mobileHint) mobileHint.classList.add('hidden');
+    } else {
+      cue.classList.remove('hidden');
+      if (mobileHint) mobileHint.classList.remove('hidden');
+    }
+  }, { passive: true });
+
+  /* On mobile, also listen on window (body scroll may not fire) */
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50 && mobileHint) mobileHint.classList.add('hidden');
   }, { passive: true });
 })();
 
