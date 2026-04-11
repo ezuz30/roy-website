@@ -199,9 +199,6 @@ body {
    MOBILE STYLES
    ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
-  /* Native scroll snap — handled during momentum, zero JS delay */
-  html { scroll-snap-type: y mandatory; }
-
   /* Hide left timeline, show bottom dots instead */
   .timeline { display: none; }
 
@@ -311,16 +308,6 @@ const COLLECTIONS = [
 ];
 
 document.body.style.height = `${COLLECTIONS.length * 100}vh`;
-
-// Create CSS scroll-snap anchor points (one per section)
-if (isMobile) {
-  document.body.style.position = 'relative';
-  COLLECTIONS.forEach((_, i) => {
-    const anchor = document.createElement('div');
-    anchor.style.cssText = `position:absolute;top:${i * 100}vh;left:0;width:1px;height:100vh;scroll-snap-align:start;pointer-events:none;`;
-    document.body.appendChild(anchor);
-  });
-}
 
 /* ═══ DOM ELEMENTS BUILDER ═══ */
 const timelineItemsEl = document.getElementById('timelineItems');
@@ -496,9 +483,19 @@ const MAX_SCROLL = COLLECTIONS.length - 1;
 const scrollHint = document.getElementById('scrollHint');
 const nav = document.getElementById('nav');
 
+let snapTimer = null;
 window.addEventListener('scroll', () => {
   // Clamp to valid range — prevents iOS rubber-band from pushing out of bounds
   targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / window.innerHeight));
+
+  // Mobile: instant snap 50ms after scroll stops — no animation, no delay
+  if (isMobile) {
+    clearTimeout(snapTimer);
+    snapTimer = setTimeout(() => {
+      const nearest = Math.max(0, Math.min(MAX_SCROLL, Math.round(window.scrollY / window.innerHeight)));
+      window.scrollTo({ top: nearest * window.innerHeight, behavior: 'instant' });
+    }, 50);
+  }
 
   if (window.scrollY > 50) {
     scrollHint.classList.add('hidden');
