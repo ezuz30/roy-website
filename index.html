@@ -101,13 +101,11 @@ site-footer { display: block; flex-shrink: 0; }
    BLOCK 2 — CARD GRID (GALLERY FRAME)
    ═══════════════════════════════════════════ */
 .section-cards {
-  min-height: calc(100dvh - 90px);
-  scroll-snap-align: start;
   background: #111113;
-  padding: calc(90px + 3vh) 4vw 4vh;
+  padding: calc(90px + 3vh) 4vw 6vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
   gap: 3vh;
 }
 
@@ -117,7 +115,7 @@ site-footer { display: block; flex-shrink: 0; }
   grid-template-rows: 1fr 0.38fr 0.38fr;
   gap: 0.8rem;
   max-width: 1400px;
-  height: 65vh;
+  height: 60vh;
   margin: 0 auto;
   width: 100%;
 }
