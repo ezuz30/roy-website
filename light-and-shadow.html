@@ -39,7 +39,7 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 
 @media (max-width: 768px) {
   .story-hints { display: none; }
-  .scroll-cue { display: none; }
+  .scroll-cue { display: flex; }
   .story-close { top: 1rem; right: 1rem; font-size: 1.6rem; padding: 12px; }
   .story-arrow { width: 56px; height: 56px; }
   .story-arrow svg { width: 24px; height: 24px; }
@@ -113,7 +113,7 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 
 @media (max-width: 768px) {
   .story-hints { display: none; }
-  .scroll-cue { display: none; }
+  .scroll-cue { display: flex; }
   .story-close { top: 1rem; right: 1rem; font-size: 1.6rem; padding: 12px; }
   .story-arrow { width: 56px; height: 56px; }
   .story-arrow svg { width: 24px; height: 24px; }
@@ -122,18 +122,6 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
   .story-spacer { scroll-snap-align: none; }
   .story-card { scroll-snap-align: none; }
 
-  .story-progress {
-    position: fixed;
-    bottom: 0; left: 0;
-    height: 2px;
-    width: 0%;
-    background: var(--accent-red);
-    z-index: 2100;
-    transition: width 0.1s linear;
-    pointer-events: none;
-    opacity: 0;
-  }
-  .story-modal.active .story-progress { opacity: 1; }
 }
 
 @media (max-width: 768px) { .card-narrative { grid-template-columns: 1fr; gap: 3rem; } .card-right { border-left: none; padding-left: 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 2rem; } }
@@ -220,7 +208,6 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 </div>
 </div>
 <div class="story-modal" id="storyModal">
-<div class="story-progress" id="storyProgress"></div>
 <button class="story-close" id="storyClose">×</button>
 <button class="story-arrow story-arrow-prev" id="storyPrev"><svg viewbox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
 <button class="story-arrow story-arrow-next" id="storyNext"><svg viewbox="0 0 24 24"><polyline points="9 6 15 12 9 18"></polyline></svg></button>
@@ -342,13 +329,8 @@ const Globe = (() => {
     if (e.key === 'Escape') closeModal(); else if (e.key === 'ArrowRight') goNext(); else if (e.key === 'ArrowLeft') goPrev();
   });
   const scrollCue = document.getElementById('scrollCue');
-  const progressBar = document.getElementById('storyProgress');
   track.addEventListener('scroll', () => {
     if (track.scrollTop > 20) scrollCue.classList.add('hidden');
-    const maxScroll = track.scrollHeight - track.clientHeight;
-    if (maxScroll > 0 && progressBar) {
-      progressBar.style.width = (track.scrollTop / maxScroll * 100) + '%';
-    }
   }, { passive: true });
 })();
 

@@ -86,7 +86,7 @@ body {
 
 @media (max-width: 768px) {
   .story-hints { display: none; }
-  .scroll-cue { display: none; }
+  .scroll-cue { display: flex; }
   .story-close { top: 1rem; right: 1rem; font-size: 1.6rem; padding: 12px; }
   .story-arrow { width: 56px; height: 56px; }
   .story-arrow svg { width: 24px; height: 24px; }
@@ -178,7 +178,7 @@ body {
 
 @media (max-width: 768px) {
   .story-hints { display: none; }
-  .scroll-cue { display: none; }
+  .scroll-cue { display: flex; }
   .story-close { top: 1rem; right: 1rem; font-size: 1.6rem; padding: 12px; }
   .story-arrow { width: 56px; height: 56px; }
   .story-arrow svg { width: 24px; height: 24px; }
@@ -187,18 +187,6 @@ body {
   .story-spacer { scroll-snap-align: none; }
   .story-card { scroll-snap-align: none; }
 
-  .story-progress {
-    position: fixed;
-    bottom: 0; left: 0;
-    height: 2px;
-    width: 0%;
-    background: var(--accent-red);
-    z-index: 2100;
-    transition: width 0.1s linear;
-    pointer-events: none;
-    opacity: 0;
-  }
-  .story-modal.active .story-progress { opacity: 1; }
 }
 
 @media (max-width: 768px) {
@@ -253,7 +241,6 @@ body {
 </div>
 <div class="rm-item"><img loading="lazy" alt="No Fixed Address" data-coords="38.7749° N, 9.5000° W" data-country="Portugal" data-exif="[Update EXIF Later]" data-location="Cabo Da Roca, Portugal" data-story="" data-title="No Fixed Address" src="images/portraits/L1050055_1.jpg"/></div><div class="rm-item"><img loading="lazy" alt="Incognito" data-coords="41.3851° N, 2.1734° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Barcelona, Spain" data-story="" data-title="Incognito" src="images/portraits/L1003569.jpg"/></div><div class="rm-item rm-inset"><img loading="lazy" alt="Number Twenty-Three" data-coords="38.7139° N, 9.1394° W" data-country="Portugal" data-exif="[Update EXIF Later]" data-location="Lisbon, Portugal" data-story="" data-title="Number Twenty-Three" src="images/portraits/L1001020.jpg"/></div><div class="rm-item"><img loading="lazy" alt="In Transit" data-coords="40.7128° N, 74.0060° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="New York City, USA" data-story="" data-title="In Transit" src="images/portraits/L1004839.jpg"/></div><div class="rm-item"><img loading="lazy" alt="La Catrina" data-coords="40.7128° N, 74.0060° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="New York City, USA" data-story="" data-title="La Catrina" src="images/portraits/L1004616.jpg"/></div><div class="rm-item rm-inset"><img loading="lazy" alt="The Platform" data-coords="40.7128° N, 74.0060° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="New York City, USA" data-story="" data-title="The Platform" src="images/portraits/L1004311.jpg"/></div><div class="rm-item"><img loading="lazy" alt="Private Hours" data-coords="40.7128° N, 74.0060° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="New York City, USA" data-story="" data-title="Private Hours" src="images/portraits/L1004174.jpg"/></div><div class="rm-item"><img loading="lazy" alt="The Keeper of Things" data-coords="40.4168° N, 3.7038° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Madrid, Spain" data-story="" data-title="The Keeper of Things" src="images/portraits/L1002915.jpg"/></div><div class="rm-item rm-inset"><img loading="lazy" alt="The River Man" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Girona, Spain" data-story="" data-title="The River Man" src="images/portraits/H_0002_L1002464.jpg"/></div><div class="rm-item"><img loading="lazy" alt="One More Hour" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Girona, Spain" data-story="" data-title="One More Hour" src="images/portraits/H_0003_L1002441_1.jpg"/></div><div class="rm-item"><img loading="lazy" alt="Made for the Sun" data-coords="37.3891° N, 5.9845° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Seville, Spain" data-story="" data-title="Made for the Sun" src="images/portraits/H_0010_L1000336.jpg"/></div><div class="rm-item rm-inset"><img loading="lazy" alt="The Kid" data-coords="52.5200° N, 13.4050° E" data-country="Germany" data-exif="[Update EXIF Later]" data-location="Berlin, Germany" data-story="" data-title="The Kid" src="images/portraits/V_0005_L1009113-Edit.jpg"/></div><div class="rm-item"><img loading="lazy" alt="La Vérité" data-coords="40.7128° N, 74.0060° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="New York City, USA" data-story="" data-title="La Vérité" src="images/portraits/V_0012_L1004427.jpg"/></div><div class="rm-item"><img loading="lazy" alt="Last Song" data-coords="41.1579° N, 8.6291° W" data-country="Portugal" data-exif="[Update EXIF Later]" data-location="Porto, Portugal" data-story="" data-title="Last Song" src="images/portraits/L1066798 copy.jpg"/></div><div class="rm-item rm-inset"><img loading="lazy" alt="One More Thing" data-coords="40.4168° N, 3.7038° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Madrid, Spain" data-story="" data-title="One More Thing" src="images/portraits/L1004171-Edit.jpg"/></div></div>
 <div class="story-modal" id="storyModal">
-<div class="story-progress" id="storyProgress"></div>
 <button class="story-close" id="storyClose">×</button>
 <button class="story-arrow story-arrow-prev" id="storyPrev"><svg viewbox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
 <button class="story-arrow story-arrow-next" id="storyNext"><svg viewbox="0 0 24 24"><polyline points="9 6 15 12 9 18"></polyline></svg></button>
@@ -429,13 +416,8 @@ const Globe = (() => {
   });
 
   const scrollCue = document.getElementById('scrollCue');
-  const progressBar = document.getElementById('storyProgress');
   track.addEventListener('scroll', () => {
     if (track.scrollTop > 20) scrollCue.classList.add('hidden');
-    const maxScroll = track.scrollHeight - track.clientHeight;
-    if (maxScroll > 0 && progressBar) {
-      progressBar.style.width = (track.scrollTop / maxScroll * 100) + '%';
-    }
   }, { passive: true });
 })();
 
