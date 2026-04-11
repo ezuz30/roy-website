@@ -392,9 +392,9 @@ const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerH
 const isMobile = window.matchMedia('(max-width: 768px)').matches;
 camera.position.z = isMobile ? 8 : 6;
 
-const PLANE_W = isMobile ? 2.6 : 5.53;
-const PLANE_H = isMobile ? 3.8 : 3.4;
-const PLANE_GAP = isMobile ? 7.0 : 5.5;
+const PLANE_W = isMobile ? 3.0 : 5.53;
+const PLANE_H = isMobile ? 4.4 : 3.4;
+const PLANE_GAP = isMobile ? 8.0 : 5.5;
 
 const geometry = new THREE.PlaneGeometry(PLANE_W, PLANE_H, 32, 32);
 const meshes = [];
