@@ -9,10 +9,10 @@ class SiteNav extends HTMLElement {
         .nav-logo { font-family: 'Raleway', sans-serif; font-weight: 300; font-size: 1.4rem; letter-spacing: 0.12em; text-decoration: none; color: #f0f0f2; }
         .nav-logo .accent { color: #E32119; font-weight: 400; }
         .nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
-        .nav-links a { font-family: 'Barlow Condensed', sans-serif; font-weight: 300; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: #b0b0b8; position: relative; transition: 0.3s; }
+        .nav-links a { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 0.95rem; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; color: #ffffff; position: relative; transition: 0.3s; }
         .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: #E32119; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .nav-links a:hover::after { width: 100%; }
-        .nav-links a:hover { color: #f0f0f2; }
+        .nav-links a:hover { color: #ffffff; }
 
         /* Hamburger button */
         .nav-hamburger { display: none; flex-direction: column; justify-content: center; gap: 5px; background: none; border: none; padding: 8px; cursor: pointer; z-index: 10002; }
