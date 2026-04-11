@@ -212,7 +212,7 @@ body {
 /* Fixed image — stays in place, never moves */
 .story-image-layer {
   position: fixed;
-  inset: 0;
+  top: 90px; left: 0; right: 0; bottom: 0;
   z-index: 2001;
   display: flex;
   align-items: center;
@@ -619,6 +619,7 @@ body {
     border-top: 1px solid rgba(255,255,255,0.06);
     padding-top: 2rem;
   }
+  .story-image-layer { top: 0; }
 }
 
 /* ═══════════════════════════════════════════

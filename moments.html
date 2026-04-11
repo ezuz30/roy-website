@@ -113,7 +113,7 @@ body {
 .story-modal.active { opacity: 1; pointer-events: all; visibility: visible; transition: opacity 0.5s ease, visibility 0s linear 0s; }
 .story-close { position: fixed; top: 1.5rem; right: 1.8rem; z-index: 2020; background: none; border: none; font-family: var(--sans); font-weight: 200; font-size: 2rem; color: rgba(255,255,255,0.5); cursor: none; transition: color 0.3s ease; line-height: 1; padding: 8px; }
 .story-close:hover { color: #ff2d20; }
-.story-image-layer { position: fixed; inset: 0; z-index: 2001; display: flex; align-items: center; justify-content: center; background: #000; padding: 4vh 4vw; pointer-events: none; cursor: none; }
+.story-image-layer { position: fixed; top: 90px; left: 0; right: 0; bottom: 0; z-index: 2001; display: flex; align-items: center; justify-content: center; background: #000; padding: 4vh 4vw; pointer-events: none; cursor: none; }
 .story-modal.active .story-image-layer { pointer-events: auto; }
 .story-image-layer img { max-width: 88vw; max-height: 86vh; width: auto; height: auto; object-fit: contain; display: block; opacity: 0; transform: scale(0.97); transition: opacity 0.8s ease 0.2s, transform 1s cubic-bezier(0.2, 0, 0.2, 1) 0.2s; }
 .story-modal.active .story-image-layer img { opacity: 1; transform: scale(1); animation: kenBurns 20s ease-in-out forwards; }
@@ -196,6 +196,7 @@ body {
   .gallery-header { padding: 100px 5vw 40px; }
   .card-narrative { grid-template-columns: 1fr; gap: 3rem; }
   .card-right { border-left: none; padding-left: 0; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 2rem; }
+  .story-image-layer { top: 0; }
 }
 
 /* ═══════════════════════════════════════════
