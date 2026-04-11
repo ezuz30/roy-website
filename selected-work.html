@@ -478,11 +478,14 @@ if (!isTouchDevice) {
 /* ═══ SCROLL & ANIMATION LOGIC ═══ */
 let currentScroll = 0;
 let targetScroll = 0;
+let prevTargetScroll = 0; // to compute real frame velocity on mobile
+const MAX_SCROLL = COLLECTIONS.length - 1;
 const scrollHint = document.getElementById('scrollHint');
 const nav = document.getElementById('nav');
 
 window.addEventListener('scroll', () => {
-  targetScroll = window.scrollY / window.innerHeight;
+  // Clamp to valid range — prevents iOS rubber-band from pushing out of bounds
+  targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / window.innerHeight));
 
   if (window.scrollY > 50) {
     scrollHint.classList.add('hidden');
@@ -498,10 +501,21 @@ window.addEventListener('scroll', () => {
 function animate() {
   requestAnimationFrame(animate);
 
-  const velocity = targetScroll - currentScroll;
-  // On touch/mobile: snap fast (no double-smoothing on top of native scroll)
-  // On desktop: slow cinematic lerp
-  currentScroll += velocity * (isMobile ? 0.22 : 0.08);
+  let shaderVelocity;
+
+  if (isMobile) {
+    // Immediate — trust iOS native scroll smoothing, no JS lerp on top
+    shaderVelocity = targetScroll - prevTargetScroll; // real frame-to-frame speed
+    prevTargetScroll = targetScroll;
+    currentScroll = targetScroll;
+  } else {
+    const velocity = targetScroll - currentScroll;
+    currentScroll += velocity * 0.08;
+    shaderVelocity = velocity;
+  }
+
+  // Cap shader velocity so fast scrolling doesn't distort images
+  shaderVelocity = Math.max(-1.5, Math.min(1.5, shaderVelocity));
 
   currentMouseX += (targetMouseX - currentMouseX) * 0.05;
   currentMouseY += (targetMouseY - currentMouseY) * 0.05;
@@ -520,7 +534,7 @@ function animate() {
     mesh.position.x = currentMouseX * 0.15;
     mesh.rotation.y = currentMouseX * 0.05;
     mesh.rotation.x = -currentMouseY * 0.05;
-    mesh.material.uniforms.uScrollVelocity.value = velocity * 15.0;
+    mesh.material.uniforms.uScrollVelocity.value = shaderVelocity * (isMobile ? 8.0 : 15.0);
 
     const distance = Math.abs(currentScroll - i);
     mesh.material.uniforms.uOpacity.value = Math.max(0, 1.0 - (distance * 0.6));
