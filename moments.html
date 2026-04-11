@@ -436,17 +436,21 @@ const Globe = (() => {
     if (track.scrollTop > 20) scrollCue.classList.add('hidden');
   }, { passive: true });
 
-  /* Mobile: scroll down on image (when card is closed) exits to gallery */
+  /* Mobile: swipe down on image area exits back to gallery */
   if (window.matchMedia('(max-width: 768px)').matches) {
     let touchStartY = 0;
-    imageLayer.addEventListener('touchstart', (e) => {
+    let touchStartScroll = 0;
+    track.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
+      touchStartScroll = track.scrollTop;
     }, { passive: true });
-    imageLayer.addEventListener('touchend', (e) => {
+    track.addEventListener('touchend', (e) => {
       if (!modal.classList.contains('active')) return;
-      if (track.scrollTop < 10) {
-        const deltaY = touchStartY - e.changedTouches[0].clientY;
+      // Only trigger when started at the very top (image view, not card)
+      if (touchStartScroll < 10 && track.scrollTop <= 0) {
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
         if (deltaY > 80) {
+          // Swiped down from top — exit
           closeModal();
           window.history.back();
         }
