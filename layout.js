@@ -48,7 +48,7 @@ class SiteNav extends HTMLElement {
         <a href="index.html">Home</a>
         <a href="selected-work.html">Collection</a>
         <a href="profile.html">Profile</a>
-        <a href="#" id="openCollaborateMobile">Collaborate</a>
+        <a href="#" id="openCollaborateMobile">Contact</a>
       </nav>
     `;
   }
