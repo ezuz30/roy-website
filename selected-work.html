@@ -196,27 +196,66 @@ body {
 @keyframes wheel { 0% {opacity:1; top:6px;} 50% {opacity:1; top:18px;} 80% {opacity:0; top:22px;} 100% {opacity:0; top:6px;} }
 
 /* ═══════════════════════════════════════════
-   MOBILE STYLES
+   MOBILE: Pure HTML gallery (replaces WebGL)
    ═══════════════════════════════════════════ */
-@media (max-width: 768px) {
-  /* Hide left timeline, show bottom dots instead */
-  .timeline { display: none; }
+.mobile-gallery { display: none; }
 
-  /* Title: push below the image (image takes top ~58% of screen) */
-  .text-section {
-    justify-content: flex-end;
-    padding-bottom: 16vh;
+@media (max-width: 768px) {
+  /* Hide all WebGL/desktop elements */
+  #webgl-canvas,
+  #text-sync-container,
+  .timeline,
+  .scroll-hint { display: none !important; }
+
+  /* Plain scroll — no snap, no tricks */
+  html { cursor: auto; }
+  body {
+    -webkit-overflow-scrolling: touch;
+    height: auto !important;
+    cursor: auto;
   }
-  .huge-title {
+
+  /* Mobile gallery */
+  .mobile-gallery {
+    display: block;
+  }
+
+  .mobile-gallery__section {
+    height: 100svh;          /* svh = small viewport, never changes on iOS */
+    width: 100%;
+    position: relative;       /* anchor for absolute title */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .mobile-gallery__image {
+    width: 88vw;
+    height: 70svh;            /* fixed svh — no resizing when chrome hides/shows */
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+
+  .mobile-gallery__title {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--serif);
     font-size: clamp(2rem, 9vw, 3rem);
-    text-shadow: 0 4px 24px rgba(0,0,0,0.9);
-    margin-bottom: 0;
+    font-weight: 400;
+    color: #fff;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.7);
+    text-align: center;
+    pointer-events: none;
+    z-index: 2;
   }
-  .project-meta-overlay { font-size: 0.7rem; }
 
   /* Bottom dot indicators */
   .mobile-dots {
-    position: fixed; bottom: 5vh; left: 50%; transform: translateX(-50%);
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
     display: flex; gap: 10px; z-index: 100; align-items: center;
   }
   .mobile-dot {
@@ -225,12 +264,8 @@ body {
   }
   .mobile-dot.active { background: var(--accent-red); transform: scale(1.4); }
 
-  /* Hide mouse scroll hint entirely — swipe is intuitive */
-  .scroll-hint { display: none; }
-
-  /* Tap hint */
   .mobile-tap-hint {
-    position: fixed; bottom: 10vh; left: 50%; transform: translateX(-50%);
+    position: fixed; bottom: 48px; left: 50%; transform: translateX(-50%);
     font-family: var(--condensed); font-size: 0.5rem; letter-spacing: 0.3em;
     text-transform: uppercase; color: var(--text-muted); z-index: 100;
     transition: opacity 0.6s; white-space: nowrap;
@@ -262,6 +297,10 @@ body {
   <div class="scroll-mouse"></div>
   <span>Scroll to Explore</span>
 </div>
+
+<div class="mobile-gallery" id="mobileGallery"></div>
+<div class="mobile-dots"></div>
+<div class="mobile-tap-hint" id="mobileTapHint">TAP IMAGE TO ENTER</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
@@ -307,293 +346,285 @@ const COLLECTIONS = [
   }
 ];
 
-document.body.style.height = `${COLLECTIONS.length * 100}vh`;
+const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-/* ═══ DOM ELEMENTS BUILDER ═══ */
-const timelineItemsEl = document.getElementById('timelineItems');
-const textSyncContainer = document.getElementById('text-sync-container');
+if (isMobile) {
+  /* ═══════════════════════════════════════════
+     MOBILE: Pure HTML/CSS gallery (no Three.js)
+     ═══════════════════════════════════════════ */
+  const gallery = document.getElementById('mobileGallery');
+  const mobileDots = document.querySelector('.mobile-dots');
+  const nav = document.getElementById('nav');
 
-COLLECTIONS.forEach((col, i) => {
-  const item = document.createElement('button');
-  item.className = 'timeline-item';
-  item.innerHTML = `
-    <div class="tl-dot"></div>
-    <div class="tl-text">
-      <div class="tl-year">${col.title}</div>
-    </div>
-  `;
-  item.addEventListener('click', () => {
-    window.scrollTo({ top: i * window.innerHeight, behavior: 'smooth' });
+  COLLECTIONS.forEach((col, i) => {
+    const section = document.createElement('a');
+    section.className = 'mobile-gallery__section';
+    section.href = col.url;
+    section.innerHTML = `
+      <img class="mobile-gallery__image" src="${col.mobileImage}" alt="${col.title}" loading="${i === 0 ? 'eager' : 'lazy'}">
+      <h2 class="mobile-gallery__title">${col.title}</h2>
+    `;
+    gallery.appendChild(section);
+
+    if (mobileDots) {
+      const dot = document.createElement('div');
+      dot.className = 'mobile-dot' + (i === 0 ? ' active' : '');
+      mobileDots.appendChild(dot);
+    }
   });
-  timelineItemsEl.appendChild(item);
 
-  const textSect = document.createElement('div');
-  textSect.className = 'text-section';
-  textSect.style.top = `${i * 100}vh`;
-  textSect.innerHTML = `
-    <h2 class="huge-title">${col.title}</h2>
-  `;
-  textSyncContainer.appendChild(textSect);
-});
+  let lastIdx = -1;
+  window.addEventListener('scroll', () => {
+    const idx = Math.min(COLLECTIONS.length - 1, Math.max(0, Math.round(window.scrollY / window.innerHeight)));
 
-const tlItems = document.querySelectorAll('.timeline-item');
-
-/* ═══ WEBGL SHADERS ═══ */
-const vertexShader = `
-  uniform float uScrollVelocity;
-  varying vec2 vUv;
-
-  void main() {
-    vUv = uv;
-    vec3 pos = position;
-
-    float distFromCenterY = abs(pos.y);
-    pos.z += cos(vUv.x * 3.1415 - 1.57) * 0.3;
-    pos.z += sin(vUv.y * 3.1415) * uScrollVelocity * 0.05;
-
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-  }
-`;
-
-const fragmentShader = `
-  uniform sampler2D uTexture;
-  uniform float uOpacity;
-  uniform float uImageAspect;
-  uniform float uPlaneAspect;
-  varying vec2 vUv;
-
-  void main() {
-    vec2 uv = vUv;
-
-    // object-fit: cover — crop to fill plane without distortion
-    if (uImageAspect > uPlaneAspect) {
-      // Image wider than plane: crop left/right
-      float scale = uPlaneAspect / uImageAspect;
-      uv.x = (uv.x - 0.5) * scale + 0.5;
+    if (window.scrollY > 50) {
+      const tapHint = document.getElementById('mobileTapHint');
+      if (tapHint) tapHint.classList.add('hidden');
+      if (nav) nav.classList.add('solid');
     } else {
-      // Image taller than plane: crop top/bottom
-      float scale = uImageAspect / uPlaneAspect;
-      uv.y = (uv.y - 0.5) * scale + 0.5;
+      if (nav) nav.classList.remove('solid');
     }
 
-    vec4 texColor = texture2D(uTexture, uv);
-    float vig = 1.0 - smoothstep(0.5, 1.5, length(vUv - 0.5) * 1.5);
-    texColor.rgb *= mix(0.8, 1.0, vig);
-    texColor.rgb *= 0.8;
-    gl_FragColor = vec4(texColor.rgb, uOpacity);
-  }
-`;
+    if (idx !== lastIdx && mobileDots) {
+      lastIdx = idx;
+      mobileDots.querySelectorAll('.mobile-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === idx);
+      });
+    }
+  }, { passive: true });
 
-/* ═══ THREE.JS SETUP ═══ */
-const canvas = document.getElementById('webgl-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5)); // cap lower on mobile for perf
-renderer.setSize(window.innerWidth, window.innerHeight);
+} else {
+  /* ═══════════════════════════════════════════
+     DESKTOP: Three.js WebGL gallery
+     ═══════════════════════════════════════════ */
+  document.body.style.height = `${COLLECTIONS.length * 100}vh`;
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  /* ═══ DOM ELEMENTS BUILDER ═══ */
+  const timelineItemsEl = document.getElementById('timelineItems');
+  const textSyncContainer = document.getElementById('text-sync-container');
 
-// On mobile portrait: pull camera back + use portrait-friendly plane dimensions
-const isMobile = window.matchMedia('(max-width: 768px)').matches;
-camera.position.z = isMobile ? 8 : 6;
+  COLLECTIONS.forEach((col, i) => {
+    const item = document.createElement('button');
+    item.className = 'timeline-item';
+    item.innerHTML = `
+      <div class="tl-dot"></div>
+      <div class="tl-text">
+        <div class="tl-year">${col.title}</div>
+      </div>
+    `;
+    item.addEventListener('click', () => {
+      window.scrollTo({ top: i * window.innerHeight, behavior: 'smooth' });
+    });
+    timelineItemsEl.appendChild(item);
 
-const PLANE_W = isMobile ? 3.0 : 5.53;
-const PLANE_H = isMobile ? 4.4 : 3.4;
-const PLANE_GAP = isMobile ? 8.0 : 5.5;
-
-const geometry = new THREE.PlaneGeometry(PLANE_W, PLANE_H, 32, 32);
-const meshes = [];
-
-/*
-  Color-managed texture loading
-*/
-function loadColorManagedTexture(src) {
-  return new Promise(resolve => {
-    const img = new Image();
-    img.onload = () => {
-      const aspect = img.naturalWidth / img.naturalHeight;
-      const c = document.createElement('canvas');
-      c.width = img.naturalWidth;
-      c.height = img.naturalHeight;
-      const ctx = c.getContext('2d', { colorSpace: 'srgb' });
-      ctx.drawImage(img, 0, 0);
-
-      const tex = new THREE.CanvasTexture(c);
-      tex.generateMipmaps = false;
-      tex.minFilter = THREE.LinearFilter;
-      tex.needsUpdate = true;
-      resolve({ texture: tex, aspect });
-    };
-    img.onerror = () => resolve({ texture: new THREE.Texture(), aspect: 1.0 });
-    img.src = src;
+    const textSect = document.createElement('div');
+    textSect.className = 'text-section';
+    textSect.style.top = `${i * 100}vh`;
+    textSect.innerHTML = `
+      <h2 class="huge-title">${col.title}</h2>
+    `;
+    textSyncContainer.appendChild(textSect);
   });
-}
 
-const planeAspect = PLANE_W / PLANE_H;
+  const tlItems = document.querySelectorAll('.timeline-item');
 
-Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(isMobile ? col.mobileImage : col.image))).then(results => {
-  results.forEach(({ texture, aspect }) => {
-    const material = new THREE.ShaderMaterial({
-      vertexShader,
-      fragmentShader,
-      uniforms: {
-        uTexture: { value: texture },
-        uScrollVelocity: { value: 0.0 },
-        uOpacity: { value: 1.0 },
-        uImageAspect: { value: aspect },
-        uPlaneAspect: { value: planeAspect }
-      },
-      transparent: true,
-      side: THREE.DoubleSide
+  /* ═══ WEBGL SHADERS ═══ */
+  const vertexShader = `
+    uniform float uScrollVelocity;
+    varying vec2 vUv;
+
+    void main() {
+      vUv = uv;
+      vec3 pos = position;
+
+      float distFromCenterY = abs(pos.y);
+      pos.z += cos(vUv.x * 3.1415 - 1.57) * 0.3;
+      pos.z += sin(vUv.y * 3.1415) * uScrollVelocity * 0.05;
+
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+    }
+  `;
+
+  const fragmentShader = `
+    uniform sampler2D uTexture;
+    uniform float uOpacity;
+    uniform float uImageAspect;
+    uniform float uPlaneAspect;
+    varying vec2 vUv;
+
+    void main() {
+      vec2 uv = vUv;
+
+      // object-fit: cover — crop to fill plane without distortion
+      if (uImageAspect > uPlaneAspect) {
+        float scale = uPlaneAspect / uImageAspect;
+        uv.x = (uv.x - 0.5) * scale + 0.5;
+      } else {
+        float scale = uImageAspect / uPlaneAspect;
+        uv.y = (uv.y - 0.5) * scale + 0.5;
+      }
+
+      vec4 texColor = texture2D(uTexture, uv);
+      float vig = 1.0 - smoothstep(0.5, 1.5, length(vUv - 0.5) * 1.5);
+      texColor.rgb *= mix(0.8, 1.0, vig);
+      texColor.rgb *= 0.8;
+      gl_FragColor = vec4(texColor.rgb, uOpacity);
+    }
+  `;
+
+  /* ═══ THREE.JS SETUP ═══ */
+  const canvas = document.getElementById('webgl-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 6;
+
+  const PLANE_W = 5.53;
+  const PLANE_H = 3.4;
+  const PLANE_GAP = 5.5;
+
+  const geometry = new THREE.PlaneGeometry(PLANE_W, PLANE_H, 32, 32);
+  const meshes = [];
+
+  function loadColorManagedTexture(src) {
+    return new Promise(resolve => {
+      const img = new Image();
+      img.onload = () => {
+        const aspect = img.naturalWidth / img.naturalHeight;
+        const c = document.createElement('canvas');
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        const ctx = c.getContext('2d', { colorSpace: 'srgb' });
+        ctx.drawImage(img, 0, 0);
+
+        const tex = new THREE.CanvasTexture(c);
+        tex.generateMipmaps = false;
+        tex.minFilter = THREE.LinearFilter;
+        tex.needsUpdate = true;
+        resolve({ texture: tex, aspect });
+      };
+      img.onerror = () => resolve({ texture: new THREE.Texture(), aspect: 1.0 });
+      img.src = src;
+    });
+  }
+
+  const planeAspect = PLANE_W / PLANE_H;
+
+  Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(results => {
+    results.forEach(({ texture, aspect }) => {
+      const material = new THREE.ShaderMaterial({
+        vertexShader,
+        fragmentShader,
+        uniforms: {
+          uTexture: { value: texture },
+          uScrollVelocity: { value: 0.0 },
+          uOpacity: { value: 1.0 },
+          uImageAspect: { value: aspect },
+          uPlaneAspect: { value: planeAspect }
+        },
+        transparent: true,
+        side: THREE.DoubleSide
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.rotation.z = -0.04;
+      scene.add(mesh);
+      meshes.push(mesh);
     });
 
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.rotation.z = -0.04;
-    scene.add(mesh);
-    meshes.push(mesh);
+    setTimeout(() => {
+      canvas.classList.add('loaded');
+      textSyncContainer.classList.add('loaded');
+    }, 50);
   });
 
-  /* ═══ הסנכרון המושלם (זמן ההמתנה קוצץ בחצי) ═══ */
-  setTimeout(() => {
-    canvas.classList.add('loaded');
-    textSyncContainer.classList.add('loaded');
-  }, 50); 
-});
+  /* ═══ MOUSE PARALLAX TRACKING ═══ */
+  let targetMouseX = 0;
+  let targetMouseY = 0;
+  let currentMouseX = 0;
+  let currentMouseY = 0;
 
-/* ═══ MOUSE PARALLAX TRACKING ═══ */
-let targetMouseX = 0;
-let targetMouseY = 0;
-let currentMouseX = 0;
-let currentMouseY = 0;
-
-const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-
-if (!isTouchDevice) {
   window.addEventListener('mousemove', (e) => {
     targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
     targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
   });
-}
 
-/* ═══ SCROLL & ANIMATION LOGIC ═══ */
-let currentScroll = 0;
-let targetScroll = 0;
-const MAX_SCROLL = COLLECTIONS.length - 1;
-const scrollHint = document.getElementById('scrollHint');
-const nav = document.getElementById('nav');
+  /* ═══ SCROLL & ANIMATION LOGIC ═══ */
+  let currentScroll = 0;
+  let targetScroll = 0;
+  const MAX_SCROLL = COLLECTIONS.length - 1;
+  const scrollHint = document.getElementById('scrollHint');
+  const nav = document.getElementById('nav');
 
-window.addEventListener('scroll', () => {
-  targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / window.innerHeight));
+  window.addEventListener('scroll', () => {
+    targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / window.innerHeight));
 
-  if (window.scrollY > 50) {
-    scrollHint.classList.add('hidden');
-    const tapHint = document.getElementById('mobileTapHint');
-    if (tapHint) tapHint.classList.add('hidden');
-    if(nav) nav.classList.add('solid');
-  } else {
-    scrollHint.classList.remove('hidden');
-    if(nav) nav.classList.remove('solid');
-  }
-}, { passive: true });
+    if (window.scrollY > 50) {
+      scrollHint.classList.add('hidden');
+      if (nav) nav.classList.add('solid');
+    } else {
+      scrollHint.classList.remove('hidden');
+      if (nav) nav.classList.remove('solid');
+    }
+  }, { passive: true });
 
-function animate() {
-  requestAnimationFrame(animate);
+  function animate() {
+    requestAnimationFrame(animate);
 
-  if (isMobile) {
-    // Mobile: direct sync — no lerp, no snap, no effects
-    currentScroll = targetScroll;
-  } else {
-    // Desktop: cinematic lerp
     const velocity = targetScroll - currentScroll;
     currentScroll += velocity * 0.08;
-  }
 
-  // Mouse parallax (desktop only, mobile values stay 0)
-  currentMouseX += (targetMouseX - currentMouseX) * 0.05;
-  currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+    currentMouseX += (targetMouseX - currentMouseX) * 0.05;
+    currentMouseY += (targetMouseY - currentMouseY) * 0.05;
 
-  // Text overlay position
-  const textTranslateY = currentScroll * -100 + (isMobile ? 0 : currentMouseY * -2);
-  const textTranslateX = isMobile ? 0 : currentMouseX * -20;
-  textSyncContainer.style.transform = `translateY(${textTranslateY}vh) translateX(${textTranslateX}px)`;
+    const textTranslateY = currentScroll * -100 + currentMouseY * -2;
+    const textTranslateX = currentMouseX * -20;
+    textSyncContainer.style.transform = `translateY(${textTranslateY}vh) translateX(${textTranslateX}px)`;
 
-  const activeIndex = Math.round(currentScroll);
-  tlItems.forEach((item, idx) => {
-    item.classList.toggle('active', idx === activeIndex);
-  });
+    const activeIndex = Math.round(currentScroll);
+    tlItems.forEach((item, idx) => {
+      item.classList.toggle('active', idx === activeIndex);
+    });
 
-  // Desktop-only velocity for shader bend effect
-  const desktopVelocity = isMobile ? 0 : (targetScroll - currentScroll);
+    const shaderVelocity = targetScroll - currentScroll;
 
-  meshes.forEach((mesh, i) => {
-    mesh.position.y = (currentScroll - i) * PLANE_GAP;
-
-    // Desktop: mouse parallax + rotation
-    if (!isMobile) {
+    meshes.forEach((mesh, i) => {
+      mesh.position.y = (currentScroll - i) * PLANE_GAP;
       mesh.position.y += currentMouseY * 0.15;
       mesh.position.x = currentMouseX * 0.15;
       mesh.rotation.y = currentMouseX * 0.05;
       mesh.rotation.x = -currentMouseY * 0.05;
+
+      mesh.material.uniforms.uScrollVelocity.value = shaderVelocity * 15.0;
+
+      const distance = Math.abs(currentScroll - i);
+      mesh.material.uniforms.uOpacity.value = Math.max(0, 1.0 - (distance * 0.6));
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  /* ── Click/tap on canvas navigates to active collection ── */
+  canvas.style.pointerEvents = 'auto';
+  canvas.addEventListener('click', () => {
+    const idx = Math.round(currentScroll);
+    if (COLLECTIONS[idx]) {
+      window.location.href = COLLECTIONS[idx].url;
     }
-
-    // Shader bend: desktop only, mobile gets 0 (flat images, stable size)
-    mesh.material.uniforms.uScrollVelocity.value = desktopVelocity * 15.0;
-
-    const distance = Math.abs(currentScroll - i);
-    mesh.material.uniforms.uOpacity.value = Math.max(0, 1.0 - (distance * 0.6));
-  });
-
-  renderer.render(scene, camera);
-}
-
-animate();
-
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-/* ── Click/tap on canvas navigates to active collection ── */
-canvas.style.pointerEvents = 'auto';
-canvas.addEventListener('click', () => {
-  const idx = Math.round(currentScroll);
-  if (COLLECTIONS[idx]) {
-    window.location.href = COLLECTIONS[idx].url;
-  }
-});
-
-/* ── Mobile dots ── */
-const mobileDots = document.querySelector('.mobile-dots');
-const mobileTapHint = document.querySelector('.mobile-tap-hint');
-if (mobileDots) {
-  COLLECTIONS.forEach((_, i) => {
-    const dot = document.createElement('div');
-    dot.className = 'mobile-dot' + (i === 0 ? ' active' : '');
-    mobileDots.appendChild(dot);
   });
 }
-
-// Update dots in animate loop
-const _origAnimate = animate;
-let _lastActiveIndex = -1;
-function updateMobileDots() {
-  const idx = Math.round(currentScroll);
-  if (idx !== _lastActiveIndex && mobileDots) {
-    _lastActiveIndex = idx;
-    mobileDots.querySelectorAll('.mobile-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
-  }
-}
-// Patch animate to also update dots
-const _baseAnimate = window.requestAnimationFrame;
-(function patchLoop() {
-  updateMobileDots();
-  requestAnimationFrame(patchLoop);
-})();
 </script>
-
-<div class="mobile-dots"></div>
-<div class="mobile-tap-hint" id="mobileTapHint">TAP IMAGE TO ENTER</div>
 
 <site-footer></site-footer>
 
