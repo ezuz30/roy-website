@@ -436,23 +436,69 @@ const Globe = (() => {
     if (track.scrollTop > 20) scrollCue.classList.add('hidden');
   }, { passive: true });
 
-  /* Mobile: swipe down on image area exits back to gallery */
+  /* Mobile: drag image down to dismiss */
   if (window.matchMedia('(max-width: 768px)').matches) {
-    let touchStartY = 0;
-    let touchStartScroll = 0;
+    const storyImg = document.getElementById('storyImage');
+    let dragStartY = 0;
+    let dragStartScroll = 0;
+    let isDragging = false;
+
     track.addEventListener('touchstart', (e) => {
-      touchStartY = e.touches[0].clientY;
-      touchStartScroll = track.scrollTop;
+      dragStartY = e.touches[0].clientY;
+      dragStartScroll = track.scrollTop;
+      isDragging = (dragStartScroll < 10);
+      if (isDragging) {
+        // Pause ken burns and transitions while dragging
+        storyImg.style.animation = 'none';
+        storyImg.style.transition = 'none';
+        imageLayer.style.transition = 'none';
+      }
     }, { passive: true });
+
+    track.addEventListener('touchmove', (e) => {
+      if (!isDragging || !modal.classList.contains('active')) return;
+      const deltaY = e.touches[0].clientY - dragStartY;
+      if (deltaY > 0) {
+        // Drag down: move image, fade background
+        storyImg.style.transform = 'translateY(' + deltaY + 'px) scale(' + Math.max(0.85, 1 - deltaY / 1000) + ')';
+        const bgOpacity = Math.max(0, 1 - deltaY / 400);
+        imageLayer.style.background = 'rgba(0,0,0,' + bgOpacity + ')';
+      }
+    }, { passive: true });
+
     track.addEventListener('touchend', (e) => {
-      if (!modal.classList.contains('active')) return;
-      // Only trigger when started at the very top (image view, not card)
-      if (touchStartScroll < 10 && track.scrollTop <= 0) {
-        const deltaY = e.changedTouches[0].clientY - touchStartY;
-        if (deltaY > 80) {
-          // Swiped down from top — close modal, back to gallery grid
+      if (!isDragging || !modal.classList.contains('active')) return;
+      isDragging = false;
+      const deltaY = e.changedTouches[0].clientY - dragStartY;
+
+      if (deltaY > 80) {
+        // Passed threshold — animate out and close
+        storyImg.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+        imageLayer.style.transition = 'background 0.25s ease';
+        storyImg.style.transform = 'translateY(' + (deltaY + 200) + 'px) scale(0.8)';
+        storyImg.style.opacity = '0';
+        imageLayer.style.background = 'rgba(0,0,0,0)';
+        setTimeout(() => {
           closeModal();
-        }
+          // Reset styles
+          storyImg.style.transform = '';
+          storyImg.style.opacity = '';
+          storyImg.style.transition = '';
+          storyImg.style.animation = '';
+          imageLayer.style.transition = '';
+          imageLayer.style.background = '';
+        }, 250);
+      } else {
+        // Didn't pass threshold — snap back
+        storyImg.style.transition = 'transform 0.3s ease';
+        imageLayer.style.transition = 'background 0.3s ease';
+        storyImg.style.transform = 'scale(1)';
+        imageLayer.style.background = '';
+        setTimeout(() => {
+          storyImg.style.transition = '';
+          storyImg.style.animation = '';
+          imageLayer.style.transition = '';
+        }, 300);
       }
     }, { passive: true });
   }
