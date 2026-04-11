@@ -38,7 +38,7 @@ class SiteNav extends HTMLElement {
         <ul class="nav-links">
           <li><a href="selected-work.html">Collection</a></li>
           <li><a href="profile.html">Profile</a></li>
-          <li><a href="#" id="openCollaborate">Collaborate</a></li>
+          <li><a href="#" id="openCollaborate">Contact</a></li>
         </ul>
         <button class="nav-hamburger" id="navHamburger" aria-label="Menu">
           <span></span><span></span><span></span>
