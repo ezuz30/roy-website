@@ -37,7 +37,7 @@ body {
   height: 100dvh;
   overflow-y: scroll;
   overflow-x: hidden;
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: y proximity;
   scroll-padding-top: 90px;
 }
 
@@ -101,7 +101,7 @@ site-footer { display: block; flex-shrink: 0; }
    BLOCK 2 — CARD GRID (GALLERY FRAME)
    ═══════════════════════════════════════════ */
 .section-cards {
-  min-height: 100dvh;
+  min-height: calc(100dvh - 90px);
   scroll-snap-align: start;
   background: #111113;
   padding: calc(90px + 3vh) 4vw 4vh;
