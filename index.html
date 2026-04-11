@@ -104,7 +104,7 @@ site-footer { display: block; flex-shrink: 0; }
   min-height: 100dvh;
   scroll-snap-align: start;
   background: #111113;
-  padding: calc(90px + 4vh) 4vw 4vh;
+  padding: calc(90px + 3vh) 4vw 4vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -370,21 +370,11 @@ site-footer { display: block; flex-shrink: 0; }
 
 .card__social-links a:hover { color: var(--text-primary); }
 
-/* Quote section */
-.section-manifesto {
-  height: calc(100dvh - 90px);
-  scroll-snap-align: start;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #0a0a0a;
-  padding: 0 8vw;
-}
-
 .manifesto-bar {
   text-align: center;
   max-width: 1150px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .manifesto {
@@ -482,7 +472,7 @@ site-footer { display: block; flex-shrink: 0; }
 
   /* Cards section */
   .section-cards { scroll-snap-align: none; min-height: auto; padding: 0.8rem 3vw 4vh; gap: 0.6rem; margin-top: 0; }
-  .section-manifesto { scroll-snap-align: none; height: auto; padding: 5vh 6vw; }
+  .manifesto-bar { padding: 2vh 0; }
 
   /* Card grid — single column, full-width rows */
   .card-grid {
@@ -697,15 +687,14 @@ site-footer { display: block; flex-shrink: 0; }
   </div>
 </section>
 
-<!-- BLOCK 2: Quote -->
-<section class="section-manifesto">
+<!-- BLOCK 2: Card Grid -->
+<section class="section-cards">
+
+  <!-- Quote above cards -->
   <div class="manifesto-bar">
     <p class="manifesto" id="manifesto">Photography is perhaps the only art form that allows you to completely detach<br>from the outside world, only to make you feel more connected than ever before.</p>
   </div>
-</section>
 
-<!-- BLOCK 3: Card Grid -->
-<section class="section-cards">
   <div class="card-grid">
 
     <!-- Card 1: Bio (square) -->
