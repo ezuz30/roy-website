@@ -944,16 +944,17 @@ const Globe = (() => {
 
   if (window.matchMedia('(max-width: 768px)').matches) {
     let touchStartY = 0;
-    imageLayer.addEventListener('touchstart', (e) => {
+    let touchStartScroll = 0;
+    track.addEventListener('touchstart', (e) => {
       touchStartY = e.touches[0].clientY;
+      touchStartScroll = track.scrollTop;
     }, { passive: true });
-    imageLayer.addEventListener('touchend', (e) => {
+    track.addEventListener('touchend', (e) => {
       if (!modal.classList.contains('active')) return;
-      if (track.scrollTop < 10) {
-        const deltaY = touchStartY - e.changedTouches[0].clientY;
+      if (touchStartScroll < 10 && track.scrollTop <= 0) {
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
         if (deltaY > 80) {
           closeModal();
-          window.history.back();
         }
       }
     }, { passive: true });
