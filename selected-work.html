@@ -353,10 +353,25 @@ const vertexShader = `
 const fragmentShader = `
   uniform sampler2D uTexture;
   uniform float uOpacity;
+  uniform float uImageAspect;
+  uniform float uPlaneAspect;
   varying vec2 vUv;
 
   void main() {
-    vec4 texColor = texture2D(uTexture, vUv);
+    vec2 uv = vUv;
+
+    // object-fit: cover — crop to fill plane without distortion
+    if (uImageAspect > uPlaneAspect) {
+      // Image wider than plane: crop left/right
+      float scale = uPlaneAspect / uImageAspect;
+      uv.x = (uv.x - 0.5) * scale + 0.5;
+    } else {
+      // Image taller than plane: crop top/bottom
+      float scale = uImageAspect / uPlaneAspect;
+      uv.y = (uv.y - 0.5) * scale + 0.5;
+    }
+
+    vec4 texColor = texture2D(uTexture, uv);
     float vig = 1.0 - smoothstep(0.5, 1.5, length(vUv - 0.5) * 1.5);
     texColor.rgb *= mix(0.8, 1.0, vig);
     texColor.rgb *= 0.8;
@@ -391,6 +406,7 @@ function loadColorManagedTexture(src) {
   return new Promise(resolve => {
     const img = new Image();
     img.onload = () => {
+      const aspect = img.naturalWidth / img.naturalHeight;
       const c = document.createElement('canvas');
       c.width = img.naturalWidth;
       c.height = img.naturalHeight;
@@ -401,23 +417,26 @@ function loadColorManagedTexture(src) {
       tex.generateMipmaps = false;
       tex.minFilter = THREE.LinearFilter;
       tex.needsUpdate = true;
-      resolve(tex);
+      resolve({ texture: tex, aspect });
     };
-    img.onerror = () => resolve(new THREE.Texture());
+    img.onerror = () => resolve({ texture: new THREE.Texture(), aspect: 1.0 });
     img.src = src;
   });
 }
 
-// מחכים שכל הטקסטורות ייטענו
-Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(textures => {
-  textures.forEach(texture => {
+const planeAspect = PLANE_W / PLANE_H;
+
+Promise.all(COLLECTIONS.map(col => loadColorManagedTexture(col.image))).then(results => {
+  results.forEach(({ texture, aspect }) => {
     const material = new THREE.ShaderMaterial({
       vertexShader,
       fragmentShader,
       uniforms: {
         uTexture: { value: texture },
         uScrollVelocity: { value: 0.0 },
-        uOpacity: { value: 1.0 }
+        uOpacity: { value: 1.0 },
+        uImageAspect: { value: aspect },
+        uPlaneAspect: { value: planeAspect }
       },
       transparent: true,
       side: THREE.DoubleSide
