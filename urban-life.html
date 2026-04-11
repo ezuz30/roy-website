@@ -184,11 +184,11 @@ body {
 .story-modal {
   position: fixed; inset: 0; z-index: 2000; background: #000;
   opacity: 0; pointer-events: none; visibility: hidden;
-  transition: opacity 0.6s ease, visibility 0s linear 0.6s;
+  transition: opacity 0.25s ease, visibility 0s linear 0.25s;
 }
 .story-modal.active {
   opacity: 1; pointer-events: all; visibility: visible;
-  transition: opacity 0.6s ease, visibility 0s linear 0s;
+  transition: opacity 0.5s ease, visibility 0s linear 0s;
 }
 
 .story-close {
@@ -901,6 +901,7 @@ const Globe = (() => {
   function closeModal() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
+    track.scrollTop = 0;
   }
   closeBtn.addEventListener('click', closeModal);
 
@@ -940,6 +941,23 @@ const Globe = (() => {
   track.addEventListener('scroll', () => {
     if (track.scrollTop > 20) scrollCue.classList.add('hidden');
   }, { passive: true });
+
+  if (window.matchMedia('(max-width: 768px)').matches) {
+    let touchStartY = 0;
+    imageLayer.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    imageLayer.addEventListener('touchend', (e) => {
+      if (!modal.classList.contains('active')) return;
+      if (track.scrollTop < 10) {
+        const deltaY = touchStartY - e.changedTouches[0].clientY;
+        if (deltaY > 80) {
+          closeModal();
+          window.history.back();
+        }
+      }
+    }, { passive: true });
+  }
 
 })();
 
