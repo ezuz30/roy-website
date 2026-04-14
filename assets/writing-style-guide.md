@@ -177,9 +177,11 @@ These lose power fast:
 
 ---
 
-## The Light & Shadow Pattern (strongest series description to date)
+## The Light & Shadow Pattern (one strong example — not a fixed formula)
 
-When writing about a subject that has philosophical depth, follow this arc:
+Flexibility between tones is the key. The structure always serves the subject. This pattern worked for Light & Shadow — it won't always be the right approach. Use it as a reference, not a rule.
+
+When writing about a subject that has philosophical depth, this arc is one option:
 
 1. **Give the subject a personality** — make it behave like a character, not a phenomenon. Give it agency, attitude, independence. *"Light doesn't ask for permission. It falls where it wants."*
 2. **Find the accidental beauty** — the unintended, the overlooked, the pattern nobody designed. The thing that wasn't meant to be seen.
@@ -188,8 +190,46 @@ When writing about a subject that has philosophical depth, follow this arc:
 5. **Close with a paradox or double meaning** — the thing that seems to work against the subject is what gives it meaning. *"The shadow doesn't diminish the light - it defines it."*
 6. **Final line carries two meanings simultaneously** — photographic truth and personal/philosophical truth in the same sentence. The reader takes from it whatever they bring. *"And so does everything that leaves."*
 
-### Reference Text — Light & Shadow Series Description (April 2026)
+### Reference Text — Exposure Series Description (April 2026)
+*(formerly Light & Shadow — renamed to carry more philosophical weight)*
 > Light doesn't ask for permission. It falls where it wants. It hits a wall and suddenly there is a pattern that nobody designed. Light doesn't decorate what we build - it rewrites it. It is the key element that shapes our observation of any object and any living being. The shadow doesn't diminish the light - it defines it. And so does everything that leaves.
+
+**The hidden double meaning:** "And so does everything that leaves" operates on two levels simultaneously — photographically (shadow defines light, absence creates pattern) and personally (people who are light in your life are only fully understood once they are gone). The reader takes from it whatever they bring. Never explain the double meaning. Let it live in the subtext.
+
+### Reference Text — Animals Series Description (April 2026)
+> We share the city with more than we tend to acknowledge. The cat commands its corner, the dog walks across our feet and the bird answers to nothing we built - none of them are passing through. They live here too. And we need them more than we can really admit.
+
+### Reference Text — Perspective Series Description (April 2026)
+*(formerly Urban Life — renamed to Perspective)*
+> At the base of any structure, another perspective reveals itself. The city was not built around you - you were placed inside it. The towers, the bridges, the streets carrying millions of fleeting footsteps - none of which it will ever remember. From a certain distance, we all move like particles in a giant space - each one a star in its own galaxy. Every one of us certain we are the protagonist. A broader view of the city always shows us otherwise.
+
+**The hidden message:** We are so consumed by our wars, arguments, challenges, and self-stories — we forget how temporary we all are. The text never states this. It lives entirely in the subtext. "Fleeting footsteps," "none of which it will ever remember," "particles," "each one a star in its own galaxy" — the reader arrives at the philosophical truth without being told what to think.
+
+---
+
+## The Five Categories — Names, Order & The Journey
+
+The categories are ordered intentionally. They create a philosophical arc from the most intimate to the most cosmic — the reader doesn't notice it consciously, they simply feel it.
+
+| Order | Category | What it's really about |
+|---|---|---|
+| 1 | **Portraits** | One face. The most intimate entry point. The gap between the mask and the person beneath. |
+| 2 | **Moments** | Human interaction. A step back. The beauty in fleeting encounters between people. |
+| 3 | **Animals** | Other life sharing our space. We are not the only ones here. |
+| 4 | **Exposure** | Invisible forces that shape everything we see. Absence defines presence. |
+| 5 | **Perspective** | The furthest zoom. The cosmic. We are temporary particles in a giant space. |
+
+**The arc:** One face → Two people → Other life → Invisible forces → The infinite.
+
+**The key distinction between Moments and Perspective:**
+- Moments — people who happen to be in cities. The human is always the emotional center.
+- Perspective — cities that happen to have people in them. The city is the protagonist. Humans appear as elements of scale, not as emotional subjects.
+
+**Why the names matter:**
+- Portraits, Moments, Animals — describe a subject
+- Exposure — describes what photography does (and what loss does)
+- Perspective — describes a state of mind
+That progression is intentional. The series moves from concrete subjects toward abstract states of understanding.
 
 ---
 
