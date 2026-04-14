@@ -1,6 +1,6 @@
 # Writing Voice & Style Guide — Roy Ezuz
 
-This is the single reference for Roy's voice. Use it for photo captions, series descriptions, Instagram posts, and any public-facing copy. It is a living document — updated every time a new text is written and analyzed.
+This is the single reference for **Roy's tone**. Use it for photo captions, series descriptions, Instagram posts, and any public-facing copy. It is a living document — updated every time a new text is written and analyzed.
 
 ---
 
@@ -18,11 +18,11 @@ This is the single reference for Roy's voice. Use it for photo captions, series 
 
 ---
 
-## The Hybrid Voice
+## Roy's Tone
 
-Roy's writing sits between two voices he has developed:
+Roy's tone sits between two voices he has developed:
 
-| Profile Page Voice | Instagram Voice | The Hybrid |
+| Profile Page Voice | Instagram Voice | Roy's Tone |
 |---|---|---|
 | Builds slowly, earns the emotion | States emotion directly | Builds slowly, then states it plainly |
 | Literary vocabulary | Natural, conversational | Precise but never elevated for its own sake |
@@ -33,7 +33,7 @@ Roy's writing sits between two voices he has developed:
 
 The profile page builds tension well but keeps the reader at a distance.
 The Instagram voice connects directly but doesn't always earn the moment first.
-The hybrid does both.
+Roy's tone does both.
 
 ---
 
