@@ -175,7 +175,7 @@ customElements.define('site-footer', SiteFooter);
     <div class="collab-mc">
       <button class="collab-mx" id="globalModalClose">&times;</button>
       <div class="collab-ms">G E T &nbsp; I N &nbsp; T O U C H</div>
-      <h2 class="collab-mh">For any question, feel free to reach out.</h2>
+      <h2 class="collab-mh">Questions, collaborations, or just to say hello — reach out.</h2>
       <div class="collab-md"></div>
       <div class="collab-cfw">
         <input type="text" id="globalFormName" placeholder="Your Name" required>
