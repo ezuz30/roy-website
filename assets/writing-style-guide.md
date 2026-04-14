@@ -233,6 +233,22 @@ That progression is intentional. The series moves from concrete subjects toward 
 
 ---
 
+## Caption Length Mirrors the Category Journey
+
+The length and depth of captions is not arbitrary — it follows the philosophical arc of the five categories. The form embodies the content. The reader feels the journey not just through the images but through how much space each caption occupies.
+
+| Category | Caption Length | Why |
+|---|---|---|
+| **Portraits** | Very short — 2 to 4 sentences | One face, one gap. Leave maximum space for imagination. The image carries the weight. |
+| **Moments** | Medium — 4 to 8 sentences | A story happened. The narrative earns its length. |
+| **Animals** | Medium — 4 to 6 sentences | Observation wider than a single person, slightly more room. |
+| **Exposure** | Longer — philosophical layers, the text deepens | The invisible requires more words to approach. |
+| **Perspective** | Most expansive | The widest view. The cosmic. The text opens up as the lens does. |
+
+**The portrait caption rule:** The image shows the surface. The caption lives underneath it. Never describe what you can already see. Enter through what you don't know, what you felt standing there, or the question the face raises — without answering it.
+
+---
+
 ## The Governing Questions
 
 Before publishing anything, ask:
