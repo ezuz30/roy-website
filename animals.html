@@ -78,7 +78,7 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 .scroll-mouse::after { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 4px; height: 10px; background: var(--accent-red); border-radius: 2px; animation: mouseWheel 2s ease-in-out infinite; }
 @keyframes mouseWheel { 0% {opacity:1; top:8px;} 50% {opacity:1; top:28px;} 80% {opacity:0; top:34px;} 100% {opacity:0; top:8px;} }
 .scroll-cue-text { font-family: var(--condensed); font-weight: 300; font-size: 0.625rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.95); }
-.story-exif { font-family: var(--condensed); font-weight: 300; font-size: 0.82rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ededed; margin-top: 1.5rem; text-align: left; opacity: 1; }
+.story-exif { font-family: var(--condensed); font-weight: 300; font-size: 0.82rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ededed; margin-top: 1.5rem; text-align: center; opacity: 1; }
 .story-arrow { position: fixed; top: 50%; transform: translateY(-50%); z-index: 2008; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: none; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
 .story-modal.active .story-arrow { opacity: 1; pointer-events: auto; }
 .story-arrow svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.2); fill: none; stroke-width: 1.5; transition: stroke 0.3s ease; }
@@ -100,13 +100,13 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 .card-section { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8vh 6vw; text-align: left; }
 .card-section + .card-section { border-top: 1px solid rgba(255,255,255,0.04); background: #080808; }
 .card-narrative { display: grid; grid-template-columns: 1fr 1fr; gap: 6vw; width: 100%; max-width: 1200px; padding: 0 4vw; align-items: start; }
-.card-left { padding-top: 2vh; display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+.card-left { padding-top: 2vh; display: flex; flex-direction: column; align-items: center; text-align: center; }
 .card-right { padding-top: 2vh; border-left: 1px solid rgba(255,255,255,0.06); padding-left: 4vw; }
 .story-title { font-family: var(--condensed); font-weight: 600; font-size: clamp(2.4rem, 5vw, 4rem); text-transform: uppercase; letter-spacing: 0.03em; color: #fff; margin-bottom: 1.8rem; }
 .loc-pin { display: flex; align-items: center; gap: 8px; }
 .loc-pin-icon { width: 18px; height: 18px; stroke: #ff2d20; fill: none; stroke-width: 1.5; flex-shrink: 0; }
 .loc-pin-text { font-family: var(--condensed); font-weight: 300; font-size: 0.82rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ededed; }
-.loc-divider { width: 30px; height: 2px; background: #ff2d20; margin-top: 1.5rem; margin-bottom: 1.5rem; margin-left: 0; }
+.loc-divider { width: 30px; height: 2px; background: #ff2d20; margin-top: 1.5rem; margin-bottom: 1.5rem; }
 .globe-wrap { width: 100%; max-width: 412px; margin: 0.5rem auto 0; }
 .globe-svg { width: 100%; height: auto; }
 .globe-svg .sphere { fill: none; stroke: #ededed; stroke-width: 0.8; opacity: 0.25; }
