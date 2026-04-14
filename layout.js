@@ -6,8 +6,7 @@ class SiteNav extends HTMLElement {
     this.innerHTML = `
       <style>
         .nav-header { flex-shrink: 0; height: 90px; display: flex; align-items: center; justify-content: space-between; padding: 0 6vw; border-bottom: 1px solid #2a2a2e; z-index: 10000; position: fixed; top: 0; left: 0; right: 0; background: #0a0a0a; }
-        .nav-logo { font-family: 'Raleway', sans-serif; font-weight: 300; font-size: 1.4rem; letter-spacing: 0.12em; text-decoration: none; color: #f0f0f2; }
-        .nav-logo .accent { color: #E32119; font-weight: 400; }
+        .nav-logo { text-decoration: none; display: inline-flex; align-items: center; line-height: 0; }
         .nav-links { display: flex; gap: 3rem; list-style: none; margin: 0; padding: 0; }
         .nav-links a { font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 0.95rem; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; color: #ffffff; position: relative; transition: 0.3s; }
         .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px; background: #E32119; transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -34,7 +33,34 @@ class SiteNav extends HTMLElement {
         }
       </style>
       <header class="nav-header">
-        <a href="index.html" class="nav-logo">R<span class="accent">O</span>Y EZUZ</a>
+        <a href="index.html" class="nav-logo">
+          <svg width="252" height="46" viewBox="0 0 252 54" xmlns="http://www.w3.org/2000/svg">
+            <!-- Camera body -->
+            <rect x="1" y="7" width="126" height="40" rx="3" fill="none" stroke="#f0f0f2" stroke-width="0.9"/>
+            <!-- Top plate separation line -->
+            <line x1="1" y1="18.5" x2="127" y2="18.5" stroke="#f0f0f2" stroke-width="0.45" stroke-opacity="0.22"/>
+            <!-- Viewfinder window -->
+            <rect x="81" y="12.5" width="33" height="20" rx="2" fill="none" stroke="#f0f0f2" stroke-width="0.7"/>
+            <!-- Viewfinder inner reflection -->
+            <rect x="84" y="15.5" width="27" height="14" rx="1" fill="none" stroke="#f0f0f2" stroke-width="0.35" stroke-opacity="0.28"/>
+            <!-- Lens outer ring -->
+            <circle cx="39" cy="28" r="8.5" fill="none" stroke="#f0f0f2" stroke-width="0.9"/>
+            <!-- Lens mid ring -->
+            <circle cx="39" cy="28" r="6.1" fill="none" stroke="#f0f0f2" stroke-width="0.55" stroke-opacity="0.6"/>
+            <!-- Lens inner ring -->
+            <circle cx="39" cy="28" r="3.4" fill="none" stroke="#f0f0f2" stroke-width="0.45" stroke-opacity="0.38"/>
+            <!-- Red center -->
+            <circle cx="39" cy="28" r="1.9" fill="#E32119"/>
+            <!-- Lens glint -->
+            <circle cx="35.2" cy="24.3" r="1.05" fill="#f0f0f2" fill-opacity="0.18"/>
+            <!-- R -->
+            <text x="14" y="36.5" font-family="Raleway, sans-serif" font-weight="300" font-size="22" fill="#f0f0f2">R</text>
+            <!-- Y -->
+            <text x="50.5" y="36.5" font-family="Raleway, sans-serif" font-weight="300" font-size="22" fill="#f0f0f2">Y</text>
+            <!-- EZUZ -->
+            <text x="140" y="36.5" font-family="Raleway, sans-serif" font-weight="300" font-size="22" letter-spacing="2.8" fill="#f0f0f2">EZUZ</text>
+          </svg>
+        </a>
         <ul class="nav-links">
           <li><a href="selected-work.html">Collection</a></li>
           <li><a href="profile.html">Profile</a></li>
@@ -149,7 +175,7 @@ customElements.define('site-footer', SiteFooter);
     <div class="collab-mc">
       <button class="collab-mx" id="globalModalClose">&times;</button>
       <div class="collab-ms">G E T &nbsp; I N &nbsp; T O U C H</div>
-      <h2 class="collab-mh">Let's create something together.</h2>
+      <h2 class="collab-mh">For any question, feel free to reach out.</h2>
       <div class="collab-md"></div>
       <div class="collab-cfw">
         <input type="text" id="globalFormName" placeholder="Your Name" required>
