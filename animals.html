@@ -78,7 +78,6 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 .scroll-mouse::after { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 4px; height: 10px; background: var(--accent-red); border-radius: 2px; animation: mouseWheel 2s ease-in-out infinite; }
 @keyframes mouseWheel { 0% {opacity:1; top:8px;} 50% {opacity:1; top:28px;} 80% {opacity:0; top:34px;} 100% {opacity:0; top:8px;} }
 .scroll-cue-text { font-family: var(--condensed); font-weight: 300; font-size: 0.625rem; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(255,255,255,0.95); }
-.story-exif { font-family: var(--condensed); font-weight: 300; font-size: 0.82rem; letter-spacing: 0.2em; text-transform: uppercase; color: #ededed; margin-top: 1.5rem; text-align: center; opacity: 1; }
 .story-arrow { position: fixed; top: 50%; transform: translateY(-50%); z-index: 2008; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: none; opacity: 0; transition: opacity 0.4s ease; pointer-events: none; }
 .story-modal.active .story-arrow { opacity: 1; pointer-events: auto; }
 .story-arrow svg { width: 20px; height: 20px; stroke: rgba(255,255,255,0.2); fill: none; stroke-width: 1.5; transition: stroke 0.3s ease; }
@@ -208,7 +207,6 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 </div>
 <div class="loc-divider"></div>
 <div class="globe-wrap"><svg class="globe-svg" id="d3Globe" viewbox="0 0 220 220"></svg></div>
-<div class="story-exif" id="storyExif"></div>
 </div>
 <div class="card-right"><p class="story-text" id="storyText"></p></div>
 </div>
@@ -257,7 +255,7 @@ const Globe = (() => {
   const modal = document.getElementById('storyModal'); const track = document.getElementById('storyTrack');
   const closeBtn = document.getElementById('storyClose'); const storyImg = document.getElementById('storyImage');
   const storyTitle = document.getElementById('storyTitle'); const storyText = document.getElementById('storyText');
-  const locPinText = document.getElementById('storyPinLoc'); const exifEl = document.getElementById('storyExif');
+  const locPinText = document.getElementById('storyPinLoc');
   const prevBtn = document.getElementById('storyPrev'); const nextBtn = document.getElementById('storyNext');
   const hints = document.getElementById('storyHints'); const galleryImages = document.querySelectorAll('.rm-item img');
   const imageArr = Array.from(galleryImages); let currentIndex = 0; let hintsShown = false;
@@ -278,7 +276,6 @@ const Globe = (() => {
     storyImg.style.animation = 'none'; storyImg.offsetHeight; storyImg.style.animation = '';
     storyImg.src = img.src; storyTitle.textContent = img.dataset.title || 'Untitled';
     storyText.textContent = img.dataset.story || ''; locPinText.textContent = loc + (year ? ' — ' + year : '');
-    exifEl.textContent = img.dataset.exif || '';
     const { lat, lng } = parseCoords(coords); Globe.rotateTo(lng, lat, country);
     track.scrollTop = 0;
     const cue = document.getElementById('scrollCue'); if (cue) cue.classList.remove('hidden');
