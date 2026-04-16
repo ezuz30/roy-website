@@ -93,7 +93,7 @@ class SiteFooter extends HTMLElement {
       </style>
       <footer class="site-footer">
         <div>© 2026 ROY EZUZ</div>
-        <div class="footer-links"><a href="#">Instagram</a><a href="#">Email</a></div>
+        <div class="footer-links"><a href="https://www.instagram.com/roy.ezuz/" target="_blank" rel="noopener">Instagram</a><a href="mailto:ezuz30@gmail.com">Email</a></div>
       </footer>
     `;
   }
