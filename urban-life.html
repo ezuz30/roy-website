@@ -313,18 +313,6 @@ body {
   color: rgba(255,255,255,0.95);
 }
 
-/* EXIF — under the globe */
-.story-exif {
-  font-family: var(--condensed);
-  font-weight: 300;
-  font-size: 0.82rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #ededed;
-  margin-top: 1.5rem;
-  text-align: center;
-}
-
 .story-modal.active .story-exif {
   opacity: 1;
 }
@@ -470,7 +458,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 8vh 6vw;
-  text-align: center;
+  text-align: left;
 }
 
 .card-section + .card-section {
@@ -725,9 +713,7 @@ body {
 <div class="rm-item">
 <img alt="Yellow Line" data-coords="40.4168° N, 3.7038° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Madrid, Spain" data-story="" data-title="Yellow Line" src="images/Perspective/L1006403.jpg"/>
 </div>
-<div class="rm-item">
-<img alt="Upwards" data-coords="40.7830° N, 73.9590° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="New York City, USA" data-story="" data-title="Upwards" src="images/Perspective/L1004027.jpg"/>
-</div>
+
 </div>
 <div class="story-modal" id="storyModal">
 <button class="story-close" id="storyClose">×</button>
@@ -764,7 +750,6 @@ body {
 <div class="globe-wrap">
 <svg class="globe-svg" id="d3Globe" viewbox="0 0 220 220"></svg>
 </div>
-<div class="story-exif" id="storyExif"></div>
 </div>
 <div class="card-right">
 <p class="story-text" id="storyText"></p>
@@ -853,7 +838,6 @@ const Globe = (() => {
   const storyTitle = document.getElementById('storyTitle');
   const storyText = document.getElementById('storyText');
   const locPinText = document.getElementById('storyPinLoc');
-  const exifEl = document.getElementById('storyExif');
   const prevBtn = document.getElementById('storyPrev');
   const nextBtn = document.getElementById('storyNext');
   const hints = document.getElementById('storyHints');
@@ -886,8 +870,6 @@ const Globe = (() => {
     storyTitle.textContent = img.dataset.title || 'Untitled';
     storyText.textContent = img.dataset.story || '';
     locPinText.textContent = loc + (year ? ' — ' + year : '');
-    exifEl.textContent = img.dataset.exif || '';
-
     const { lat, lng } = parseCoords(coords);
     Globe.rotateTo(lng, lat, country);
 
