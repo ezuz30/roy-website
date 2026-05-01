@@ -199,7 +199,7 @@ customElements.define('site-footer', SiteFooter);
 
   const style = document.createElement('style');
   style.textContent = `
-    html, body { cursor: none !important; }
+    *, *::before, *::after { cursor: none !important; }
     .cursor-dot {
       position: fixed; top: 0; left: 0; width: 4px; height: 4px;
       background: #E32119; border-radius: 50%; pointer-events: none;
@@ -220,7 +220,7 @@ customElements.define('site-footer', SiteFooter);
     }
     .cursor-dot.on-link { width: 3px; height: 3px; background: #f0f0f2; }
     .cursor-ring.on-link { width: 12px; height: 12px; border-color: #b0b0b8; }
-    a, button { cursor: none !important; }
+    a, button, input, textarea, select { cursor: none !important; }
   `;
   document.head.appendChild(style);
 
