@@ -9,8 +9,10 @@ import re
 import openpyxl
 
 
-EXCEL_PATH = "/Users/royezuz/Desktop/roy-website/assets/moments-metadata.xlsx"
-HTML_PATH = "/Users/royezuz/Desktop/roy-website/moments.html"
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent
+EXCEL_PATH = str(BASE_DIR / "assets" / "moments-metadata.xlsx")
+HTML_PATH = str(BASE_DIR / "moments.html")
 
 
 def load_stories_from_excel(path):

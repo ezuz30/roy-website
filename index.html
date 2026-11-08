@@ -12,6 +12,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ROY EZUZ — Fine Art Street Photography</title>
+<meta name="description" content="Fine art street and portrait photography by Roy Ezuz. Documenting faces, fleeting moments, and human connection across continents.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ROY EZUZ — Fine Art Street Photography">
+<meta property="og:title" content="ROY EZUZ — Fine Art Street Photography">
+<meta property="og:description" content="Fine art street and portrait photography by Roy Ezuz. Documenting faces, fleeting moments, and human connection across continents.">
+<meta property="og:image" content="https://royezuz.com/images/portraits/L1004839.jpg">
+<meta property="og:url" content="https://royezuz.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ROY EZUZ — Fine Art Street Photography">
+<meta name="twitter:description" content="Fine art street and portrait photography by Roy Ezuz. Documenting faces, fleeting moments, and human connection across continents.">
+<meta name="twitter:image" content="https://royezuz.com/images/portraits/L1004839.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23E32119'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@300;400;500;600&family=Raleway:wght@100;200;300;400;500&display=swap" rel="stylesheet">
 <script src="layout.js" defer></script>
 <style>
@@ -74,6 +86,7 @@ site-footer { display: block; flex-shrink: 0; }
 .carousel {
   position: relative;
   width: 96vw;
+  height: calc(100dvh - 110px);
   max-height: calc(100dvh - 110px);
   opacity: 0;
   transform: scale(0.98);
@@ -83,18 +96,18 @@ site-footer { display: block; flex-shrink: 0; }
 .carousel img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
   max-height: calc(100dvh - 110px);
   object-fit: contain;
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
+  margin: auto;
   opacity: 0;
   transition: opacity 1s ease-in-out;
 }
 
 .carousel img:first-child {
-  position: relative;
+  position: absolute;
 }
 
 .carousel img.active {
@@ -431,6 +444,7 @@ site-footer { display: block; flex-shrink: 0; }
   }
   .carousel {
     width: 94vw;
+    height: auto;
     aspect-ratio: 3 / 2;
     max-height: none;
   }
@@ -624,27 +638,6 @@ site-footer { display: block; flex-shrink: 0; }
 .splash.fade-out { opacity: 0; pointer-events: none; }
 .splash img { max-width: 55vw; max-height: 50vh; object-fit: contain; }
 
-/* ═══════════════════════════════════════════
-   COLLABORATE MODAL
-   ═══════════════════════════════════════════ */
-.mo { position: fixed; inset: 0; z-index: 50000; background: rgba(0,0,0,.75); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .5s; }
-.mo.active { opacity: 1; pointer-events: all; }
-.mc { position: relative; border: 1px solid rgba(255,255,255,0.08); background: rgba(10,10,10,.92); padding: 4rem 3.5rem; max-width: 480px; width: 90vw; text-align: center; transform: translateY(20px); transition: transform .5s cubic-bezier(.25,1,.5,1); }
-.mo.active .mc { transform: translateY(0); }
-.mx { position: absolute; top: 1.2rem; right: 1.5rem; background: none; border: none; font-family: var(--sans); font-weight: 200; font-size: 1.4rem; color: var(--text-muted); cursor: none; transition: color .3s; line-height: 1; padding: 4px; }
-.mx:hover { color: var(--accent-red); }
-.ms { font-family: var(--condensed); font-weight: 300; font-size: .6rem; letter-spacing: .35em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 1.5rem; }
-.mh { font-family: var(--serif); font-weight: 300; font-style: italic; font-size: clamp(1.3rem, 2.5vw, 1.8rem); line-height: 1.4; color: var(--text-primary); margin-bottom: 2.5rem; }
-.md { width: 30px; height: 1px; background: var(--accent-red); margin: 0 auto 2rem; }
-.cfw { display: flex; flex-direction: column; gap: 1rem; }
-.cfw input, .cfw textarea { width: 100%; background: transparent; border: 1px solid rgba(255,255,255,0.1); padding: .85rem 1rem; font-family: var(--sans); font-weight: 300; font-size: .82rem; color: var(--text-primary); letter-spacing: .03em; transition: border-color .3s; outline: none; resize: vertical; cursor: none; }
-.cfw input::placeholder, .cfw textarea::placeholder { color: var(--text-muted); }
-.cfw input:focus, .cfw textarea:focus { border-color: var(--accent-red); }
-.sb { width: 100%; padding: .9rem; background: transparent; border: 1px solid rgba(255,255,255,0.2); font-family: var(--condensed); font-weight: 400; font-size: .72rem; letter-spacing: .25em; text-transform: uppercase; color: var(--text-primary); cursor: none; transition: all .4s; margin-top: .5rem; }
-.sb:hover { border-color: var(--accent-red); background: var(--accent-red); color: #fff; }
-.fs { font-family: var(--sans); font-weight: 300; font-size: .75rem; text-align: center; color: var(--text-muted); min-height: 1.2em; margin-top: .5rem; }
-.fs.ok { color: #4caf50; } .fs.er { color: var(--accent-red); }
-
 /* Social icons in Connect card */
 .card__social-icons { display: flex; gap: 1.6rem; align-items: center; }
 .card__social-icons a {
@@ -722,9 +715,9 @@ site-footer { display: block; flex-shrink: 0; }
     <!-- Card 3: Selected Photos mini carousel -->
     <a href="selected-work.html" class="card card--image" style="text-decoration:none;">
       <div class="mini-carousel">
-        <img class="active" src="images/Perspective/white_wall.jpg" alt="">
-        <img src="images/moments/V_0017_L1067793.jpg" alt="">
-        <img src="images/animals/woman + Bird.jpg" alt="">
+        <img class="active" src="images/Perspective/white_Canvas.jpg" alt="White Canvas" style="object-position: center bottom;">
+        <img src="images/moments/V_0017_L1067793.jpg" alt="Where's Next" style="object-position: center bottom;">
+        <img src="images/animals/woman + Bird.jpg" alt="The Crown">
       </div>
       <span class="card__image-title">Selected Work</span>
     </a>
@@ -733,7 +726,7 @@ site-footer { display: block; flex-shrink: 0; }
     <div class="card card--contact">
       <div class="card__social-icons">
         <!-- Instagram -->
-        <a href="https://www.instagram.com/royezuz" target="_blank" rel="noopener" aria-label="Instagram">
+        <a href="https://www.instagram.com/roy.ezuz/" target="_blank" rel="noopener" aria-label="Instagram">
           <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
         </a>
         <!-- Facebook -->
@@ -755,33 +748,25 @@ site-footer { display: block; flex-shrink: 0; }
 
 <site-footer></site-footer>
 
-<!-- COLLABORATE MODAL -->
-<div class="mo" id="collaborateModal">
-  <div class="mc">
-    <button class="mx" id="modalClose">&times;</button>
-    <div class="ms">G E T &nbsp; I N &nbsp; T O U C H</div>
-    <h2 class="mh">Let's create something together.</h2>
-    <div class="md"></div>
-    <div class="cfw">
-      <input type="text" id="formName" placeholder="Your Name" required>
-      <input type="email" id="formEmail" placeholder="Your Email" required>
-      <textarea id="formMessage" placeholder="Your Message" rows="3" required></textarea>
-      <button type="button" class="sb" id="formSubmit">Send Message</button>
-      <div class="fs" id="formStatus"></div>
-    </div>
-  </div>
+</div>
 </div>
 
 <script>
-/* SPLASH */
+/* SPLASH (once per browsing session) */
 (() => {
   const splash = document.getElementById('splash');
-  if (splash) {
-    setTimeout(() => {
-      splash.classList.add('fade-out');
-      setTimeout(() => splash.remove(), 800);
-    }, 500);
-  }
+  if (!splash) return;
+  try {
+    if (sessionStorage.getItem('roy_splash_seen')) {
+      splash.remove();
+      return;
+    }
+    sessionStorage.setItem('roy_splash_seen', '1');
+  } catch (e) {}
+  setTimeout(() => {
+    splash.classList.add('fade-out');
+    setTimeout(() => splash.remove(), 800);
+  }, 500);
 })();
 
 /* CAROUSEL */
@@ -849,45 +834,6 @@ site-footer { display: block; flex-shrink: 0; }
   if (quote) observer.observe(quote);
 })();
 
-/* COLLABORATE MODAL */
-(() => {
-  const modal = document.getElementById('collaborateModal');
-  const closeBtn = document.getElementById('modalClose');
-  const cardBtn = document.getElementById('openCollaborateCard');
-
-  function openModal(e) { e && e.preventDefault(); modal.classList.add('active'); }
-  function closeModal() { modal.classList.remove('active'); }
-
-  // Open from card
-  if (cardBtn) cardBtn.addEventListener('click', openModal);
-
-  // Open from nav link (openCollaborate — defined in layout.js nav)
-  document.addEventListener('click', e => {
-    const trigger = e.target.closest('#openCollaborate');
-    if (trigger) { e.preventDefault(); openModal(); }
-  });
-
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
-
-  // Form submit
-  const submitBtn = document.getElementById('formSubmit');
-  const status = document.getElementById('formStatus');
-  submitBtn.addEventListener('click', function() {
-    const n = document.getElementById('formName');
-    const em = document.getElementById('formEmail');
-    const m = document.getElementById('formMessage');
-    if (!n.value || !em.value || !m.value) {
-      status.textContent = 'Please fill in all fields.';
-      status.className = 'fs er';
-      return;
-    }
-    status.textContent = 'Message sent. Thank you.';
-    status.className = 'fs ok';
-    setTimeout(() => { closeModal(); n.value = ''; em.value = ''; m.value = ''; status.textContent = ''; status.className = 'fs'; }, 2000);
-  });
-})();
 </script>
 </body>
 </html>

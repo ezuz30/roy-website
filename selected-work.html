@@ -11,11 +11,23 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ROY EZUZ — Selected Work</title>
+<title>Collection — ROY EZUZ</title>
+<meta name="description" content="Explore five fine art photography series by Roy Ezuz: Portraits, Moments, Animals, Exposure, and Perspective.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ROY EZUZ — Fine Art Street Photography">
+<meta property="og:title" content="Collection — ROY EZUZ">
+<meta property="og:description" content="Explore five fine art photography series by Roy Ezuz: Portraits, Moments, Animals, Exposure, and Perspective.">
+<meta property="og:image" content="https://royezuz.com/images/collection/desktop version/portraits.jpg">
+<meta property="og:url" content="https://royezuz.com/selected-work.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Collection — ROY EZUZ">
+<meta name="twitter:description" content="Explore five fine art photography series by Roy Ezuz: Portraits, Moments, Animals, Exposure, and Perspective.">
+<meta name="twitter:image" content="https://royezuz.com/images/collection/desktop version/portraits.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23E32119'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Lora:ital,wght@0,400;0,500;1,400&family=Barlow:wght@100;300;400;600&family=Barlow+Condensed:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="layout.js?v=2" defer></script>
-<link rel="preload" as="image" href="images/collection/desktop version/moments.jpg">
 <link rel="preload" as="image" href="images/collection/desktop version/portraits.jpg">
+<link rel="preload" as="image" href="images/collection/desktop version/moments.jpg">
 <link rel="preload" as="image" href="images/collection/desktop version/animals.jpg">
 <link rel="preload" as="image" href="images/collection/desktop version/exposure.jpg">
 <link rel="preload" as="image" href="images/collection/desktop version/perspective.jpg">
@@ -172,7 +184,7 @@ body {
   font-weight: 400;
   line-height: 0.9;
   color: #fff;
-  text-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  text-shadow: 0 10px 40px rgba(0,0,0,0.65);
   margin-bottom: -10px;
 }
 
@@ -404,7 +416,9 @@ if (isMobile) {
   /* ═══════════════════════════════════════════
      DESKTOP: Three.js WebGL gallery
      ═══════════════════════════════════════════ */
-  document.body.style.height = `${COLLECTIONS.length * 100}vh`;
+  const SCROLL_STEP_RATIO = 0.55; // 55vh of scroll travel per collection (faster, less scroll fatigue)
+  const getStepPx = () => window.innerHeight * SCROLL_STEP_RATIO;
+  document.body.style.height = `${(COLLECTIONS.length - 1) * (SCROLL_STEP_RATIO * 100) + 100}vh`;
 
   /* ═══ DOM ELEMENTS BUILDER ═══ */
   const timelineItemsEl = document.getElementById('timelineItems');
@@ -420,7 +434,7 @@ if (isMobile) {
       </div>
     `;
     item.addEventListener('click', () => {
-      window.scrollTo({ top: i * window.innerHeight, behavior: 'smooth' });
+      window.scrollTo({ top: i * getStepPx(), behavior: 'smooth' });
     });
     timelineItemsEl.appendChild(item);
 
@@ -472,9 +486,9 @@ if (isMobile) {
       }
 
       vec4 texColor = texture2D(uTexture, uv);
-      float vig = 1.0 - smoothstep(0.5, 1.5, length(vUv - 0.5) * 1.5);
-      texColor.rgb *= mix(0.8, 1.0, vig);
-      texColor.rgb *= 0.8;
+      float vig = 1.0 - smoothstep(0.45, 1.45, length(vUv - 0.5) * 1.35);
+      texColor.rgb *= mix(0.84, 1.0, vig);
+      texColor.rgb *= 0.93;
       gl_FragColor = vec4(texColor.rgb, uOpacity);
     }
   `;
@@ -567,7 +581,7 @@ if (isMobile) {
   const nav = document.getElementById('nav');
 
   window.addEventListener('scroll', () => {
-    targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / window.innerHeight));
+    targetScroll = Math.max(0, Math.min(MAX_SCROLL, window.scrollY / getStepPx()));
 
     if (window.scrollY > 50) {
       scrollHint.classList.add('hidden');
@@ -582,7 +596,7 @@ if (isMobile) {
     requestAnimationFrame(animate);
 
     const velocity = targetScroll - currentScroll;
-    currentScroll += velocity * 0.13;
+    currentScroll += velocity * 0.18;
 
     currentMouseX += (targetMouseX - currentMouseX) * 0.05;
     currentMouseY += (targetMouseY - currentMouseY) * 0.05;

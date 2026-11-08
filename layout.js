@@ -170,23 +170,77 @@ customElements.define('site-footer', SiteFooter);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('active')) closeModal(); });
 
   document.addEventListener('click', e => {
-    const trigger = e.target.closest('#openCollaborate');
+    const trigger = e.target.closest('#openCollaborate, #openCollaborateCard');
     if (trigger) { e.preventDefault(); openModal(); }
   });
 
-  document.getElementById('globalFormSubmit').addEventListener('click', function() {
+  const submitBtn = document.getElementById('globalFormSubmit');
+  submitBtn.addEventListener('click', async function() {
     const n = document.getElementById('globalFormName');
     const em = document.getElementById('globalFormEmail');
     const m = document.getElementById('globalFormMessage');
     const status = document.getElementById('globalFormStatus');
-    if (!n.value || !em.value || !m.value) {
+    const nameVal = n.value.trim();
+    const emailVal = em.value.trim();
+    const msgVal = m.value.trim();
+
+    if (!nameVal || !emailVal || !msgVal) {
       status.textContent = 'Please fill in all fields.';
       status.className = 'collab-fs er';
       return;
     }
-    status.textContent = 'Message sent. Thank you.';
-    status.className = 'collab-fs ok';
-    setTimeout(() => { closeModal(); n.value = ''; em.value = ''; m.value = ''; status.textContent = ''; status.className = 'collab-fs'; }, 2000);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      status.textContent = 'Please enter a valid email address.';
+      status.className = 'collab-fs er';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    const origText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    status.textContent = '';
+    status.className = 'collab-fs';
+
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/ezuz30@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: nameVal,
+          email: emailVal,
+          message: msgVal,
+          _subject: `Portfolio Inquiry from ${nameVal} — royezuz.com`
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.success !== 'false' && data.success !== false) {
+        status.textContent = 'Message sent. Thank you.';
+        status.className = 'collab-fs ok';
+        setTimeout(() => {
+          closeModal();
+          n.value = ''; em.value = ''; m.value = '';
+          status.textContent = ''; status.className = 'collab-fs';
+          submitBtn.disabled = false; submitBtn.textContent = origText;
+        }, 2000);
+        return;
+      }
+      throw new Error('Submission fallback');
+    } catch (err) {
+      const subject = encodeURIComponent(`Portfolio Inquiry from ${nameVal}`);
+      const body = encodeURIComponent(`Name: ${nameVal}\nEmail: ${emailVal}\n\n${msgVal}`);
+      window.location.href = `mailto:ezuz30@gmail.com?subject=${subject}&body=${body}`;
+      status.textContent = 'Opening your email client to send message...';
+      status.className = 'collab-fs ok';
+      setTimeout(() => {
+        closeModal();
+        n.value = ''; em.value = ''; m.value = '';
+        status.textContent = ''; status.className = 'collab-fs';
+        submitBtn.disabled = false; submitBtn.textContent = origText;
+      }, 2500);
+    }
   });
 })();
 
@@ -245,14 +299,15 @@ customElements.define('site-footer', SiteFooter);
   anim();
 
   // טיפול באינטראקציה עם לינקים (on-link)
+  const interactiveSelector = 'a, button, [role="button"], #openCollaborateCard, .rm-item, #webgl-canvas, [data-hoverable]';
   document.addEventListener('mouseover', e => {
-    if (e.target.closest('a, button')) {
+    if (e.target.closest(interactiveSelector)) {
       dot.classList.add('on-link');
       ring.classList.add('on-link');
     }
   });
   document.addEventListener('mouseout', e => {
-    if (e.target.closest('a, button')) {
+    if (e.target.closest(interactiveSelector)) {
       dot.classList.remove('on-link');
       ring.classList.remove('on-link');
     }

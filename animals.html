@@ -13,6 +13,18 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Animals — ROY EZUZ</title>
+<meta name="description" content="Animals by Roy Ezuz. Observing the cats, dogs, and birds that command their own corners of our cities.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ROY EZUZ — Fine Art Street Photography">
+<meta property="og:title" content="Animals — ROY EZUZ">
+<meta property="og:description" content="Animals by Roy Ezuz. Observing the cats, dogs, and birds that command their own corners of our cities.">
+<meta property="og:image" content="https://royezuz.com/images/animals/woman + Bird.jpg">
+<meta property="og:url" content="https://royezuz.com/animals.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Animals — ROY EZUZ">
+<meta name="twitter:description" content="Animals by Roy Ezuz. Observing the cats, dogs, and birds that command their own corners of our cities.">
+<meta name="twitter:image" content="https://royezuz.com/images/animals/woman + Bird.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230a0a0a'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23E32119'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&amp;family=Barlow:wght@300;400;500;600&amp;family=Barlow+Condensed:wght@300;400;500;600&amp;family=Raleway:wght@100;200;300;400;500&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;display=swap" rel="stylesheet"/>
 <script defer="" src="layout.js"></script>
 <style>
@@ -142,6 +154,76 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 .entrance { opacity: 0; transform: translateY(30px); animation: entranceFade 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
 .entrance-d1 { animation-delay: 0.15s; } .entrance-d2 { animation-delay: 0.35s; } .entrance-d3 { animation-delay: 0.6s; }
 @keyframes entranceFade { to { opacity: 1; transform: translateY(0); } }
+
+/* Centered museum placard when a photo has no written story yet */
+.card-narrative.no-story {
+  grid-template-columns: 1fr;
+  max-width: 520px;
+  justify-items: center;
+}
+.card-narrative.no-story .card-right {
+  display: none;
+}
+
+/* Next Series chapter navigation */
+.series-next-nav {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 20px 4vw 100px;
+  display: flex;
+  justify-content: center;
+}
+.series-next-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  padding: 1.5rem 3rem;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.series-next-kicker {
+  font-family: var(--condensed);
+  font-weight: 300;
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+.series-next-title {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: color 0.3s ease;
+}
+.series-next-arrow {
+  color: var(--accent-red);
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: 1.3rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.series-next-link:hover .series-next-kicker { color: var(--text-primary); }
+.series-next-link:hover .series-next-arrow { transform: translateX(6px); }
+@media (max-width: 768px) {
+  .back-link {
+    display: inline-flex !important;
+    position: static !important;
+    margin-bottom: 1.2rem;
+    font-size: 0.72rem;
+    opacity: 0.75;
+  }
+  .series-next-nav { padding: 10px 5vw 70px; }
+}
+
 </style>
 </head>
 <body>
@@ -158,39 +240,39 @@ body { background: var(--bg-primary); color: var(--text-primary); font-family: v
 </div>
 <div class="refined-masonry">
 <div class="rm-item">
-<img alt="The Crown" data-coords="41.3851° N, 2.1734° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Barcelona, Spain" data-story="The first time I saw her was on my first visit to the Port of Barcelona - she was feeding the birds. The second time was a different trip entirely, and she was doing exactly the same. There are people who move through life without the noise - who step away from work, from goals, from everything that usually pulls at us, and just sit with the birds for a while. She was one of them. I find something deeply human in that. The birds had clearly recognized her long before I did - this one landed on her head the way regulars do, without asking, without hesitation. I had one second to frame her against the Ferris wheel before she moved again. She moved a lot. The bird moved a lot. And my manual camera didn&#39;t make it easier. The light was already low and I had to open my aperture wide open. Every single move could put them in blur. It is one of the most difficult shots I have taken, but perhaps the most satisfying of them all." data-title="The Crown" src="images/animals/woman + Bird.jpg"/>
+<img decoding="async" width="1920" height="2891" alt="The Crown" data-coords="41.3851° N, 2.1734° E" data-country="Spain" data-location="Barcelona, Spain" data-story="The first time I saw her was on my first visit to the Port of Barcelona - she was feeding the birds. The second time was a different trip entirely, and she was doing exactly the same. There are people who move through life without the noise - who step away from work, from goals, from everything that usually pulls at us, and just sit with the birds for a while. She was one of them. I find something deeply human in that. The birds had clearly recognized her long before I did - this one landed on her head the way regulars do, without asking, without hesitation. I had one second to frame her against the Ferris wheel before she moved again. She moved a lot. The bird moved a lot. And my manual camera didn&#39;t make it easier. The light was already low and I had to open my aperture wide open. Every single move could put them in blur. It is one of the most difficult shots I have taken, but perhaps the most satisfying of them all." data-title="The Crown" src="images/animals/woman + Bird.jpg"/>
 </div>
 <div class="rm-item rm-inset">
-<img alt="Regular Hours" data-coords="45.4408° N, 12.3155° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Venice, Italy" data-story="" data-title="Regular Hours" src="images/animals/L1067523.jpg"/>
+<img decoding="async" width="1920" height="1275" alt="Regular Hours" data-coords="45.4408° N, 12.3155° E" data-country="Italy" data-location="Venice, Italy" data-story="" data-title="Regular Hours" src="images/animals/L1067523.jpg"/>
 </div>
 <div class="rm-item">
-<img alt="Uninvited Guest" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Girona, Spain" data-story="" data-title="Uninvited Guest" src="images/animals/L1002572.jpg"/>
+<img decoding="async" width="1920" height="1275" alt="Uninvited Guest" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-location="Girona, Spain" data-story="" data-title="Uninvited Guest" src="images/animals/L1002572.jpg"/>
 </div>
 <div class="rm-item">
-<img alt="The Keeper" data-coords="38.7139° N, 9.1394° W" data-country="Portugal" data-exif="[Update EXIF Later]" data-location="Lisbon, Portugal" data-story="" data-title="The Keeper" src="images/animals/ROY_7663.jpeg"/>
+<img decoding="async" width="1920" height="2880" alt="The Keeper" data-coords="38.7139° N, 9.1394° W" data-country="Portugal" data-location="Lisbon, Portugal" data-story="" data-title="The Keeper" src="images/animals/ROY_7663.jpeg"/>
 </div>
 <div class="rm-item">
-<img alt="Dressed for the Street" data-coords="40.4168° N, 3.7038° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Madrid, Spain" data-story="" data-title="Dressed for the Street" src="images/animals/L1077709.jpg"/>
+<img decoding="async" width="1920" height="1275" alt="Dressed for the Street" data-coords="40.4168° N, 3.7038° W" data-country="Spain" data-location="Madrid, Spain" data-story="" data-title="Dressed for the Street" src="images/animals/L1077709.jpg"/>
 </div>
 <div class="rm-item rm-inset">
-<img alt="Pure Light" data-coords="32.0853° N, 34.7818° E" data-country="Israel" data-exif="[Update EXIF Later]" data-location="Tel Aviv, Israel" data-story="Every other image on this site was taken somewhere far from home. This one was taken in my bed. She is my cat - my pure light, and my greatest love on four. I am grateful this photograph shows her the way I see her. There is something different about photographing a subject you love — you are not waiting for the right moment, because every moment already is. It is also a great reminder for me that I don&#39;t always need to cross continents to find something beautiful. Sometimes it&#39;s already right there, looking back at you." data-title="Pure Light" src="images/animals/L1003619.jpg"/>
+<img decoding="async" width="1920" height="2891" alt="Pure Light" data-coords="32.0853° N, 34.7818° E" data-country="Israel" data-location="Tel Aviv, Israel" data-story="Every other image on this site was taken somewhere far from home. This one was taken in my bed. She is my cat - my pure light, and my greatest love on four. I am grateful this photograph shows her the way I see her. There is something different about photographing a subject you love — you are not waiting for the right moment, because every moment already is. It is also a great reminder for me that I don&#39;t always need to cross continents to find something beautiful. Sometimes it&#39;s already right there, looking back at you." data-title="Pure Light" src="images/animals/L1003619.jpg"/>
 </div>
 <div class="rm-item">
-<img alt="Three's Company" data-coords="41.3851° N, 2.1734° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Barcelona, Spain" data-story="" data-title="Three's Company" src="images/animals/L1003402.jpg"/>
+<img loading="lazy" decoding="async" width="2400" height="1594" alt="Three's Company" data-coords="41.3851° N, 2.1734° E" data-country="Spain" data-location="Barcelona, Spain" data-story="" data-title="Three's Company" src="images/animals/L1003402.JPG"/>
 </div>
 <div class="rm-item rm-inset">
-<img alt="The Pack" data-coords="40.0704° N, 2.1374° W" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Cuenca, Spain" data-story="" data-title="The Pack" src="images/animals/L1009969.jpg"/>
+<img loading="lazy" decoding="async" width="1920" height="2890" alt="The Pack" data-coords="40.0704° N, 2.1374° W" data-country="Spain" data-location="Cuenca, Spain" data-story="" data-title="The Pack" src="images/animals/L1009969.jpg"/>
 </div>
 <div class="rm-item">
-<img alt="City Wolves" data-coords="40.6782° N, 73.9442° W" data-country="United States of America" data-exif="[Update EXIF Later]" data-location="Brooklyn, New York City, USA" data-story="" data-title="City Wolves" src="images/animals/L1004205.jpg"/>
+<img loading="lazy" decoding="async" width="1920" height="1275" alt="City Wolves" data-coords="40.6782° N, 73.9442° W" data-country="United States of America" data-location="Brooklyn, New York City, USA" data-story="" data-title="City Wolves" src="images/animals/L1004205.jpg"/>
 </div>
 <div class="rm-item">
-<img alt="Red Light" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-exif="[Update EXIF Later]" data-location="Girona, Spain" data-story="" data-title="Red Light" src="images/animals/L1002809-Edit.jpg"/>
+<img loading="lazy" decoding="async" width="1920" height="2891" alt="Red Light" data-coords="41.9794° N, 2.8214° E" data-country="Spain" data-location="Girona, Spain" data-story="" data-title="Red Light" src="images/animals/L1002809-Edit.jpg"/>
 </div>
 <div class="rm-item rm-inset">
-<img alt="Side by Side" data-coords="45.7619° N, 8.5583° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Arona, Italy" data-story="" data-title="Side by Side" src="images/animals/L1010191_1.jpg"/>
+<img loading="lazy" decoding="async" width="1920" height="2890" alt="Side by Side" data-coords="45.7619° N, 8.5583° E" data-country="Italy" data-location="Arona, Italy" data-story="" data-title="Side by Side" src="images/animals/L1010191_1.jpg"/>
 </div>
-<div class="rm-item"><img alt="Her Kingdom" data-coords="45.4654° N, 9.1859° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Milan, Italy" data-story="" data-title="Her Kingdom" src="images/animals/ROY_5005.jpg"/></div><div class="rm-item"><img alt="Queen of the Square" data-coords="45.4408° N, 12.3155° E" data-country="Italy" data-exif="[Update EXIF Later]" data-location="Venice, Italy" data-story="" data-title="Queen of the Square" src="images/animals/L1067604.jpg"/></div></div>
+<div class="rm-item"><img loading="lazy" decoding="async" width="1920" height="2880" alt="Her Kingdom" data-coords="45.4654° N, 9.1859° E" data-country="Italy" data-location="Milan, Italy" data-story="" data-title="Her Kingdom" src="images/animals/ROY_5005.jpg"/></div><div class="rm-item"><img loading="lazy" decoding="async" width="1920" height="1275" alt="Queen of the Square" data-coords="45.4408° N, 12.3155° E" data-country="Italy" data-location="Venice, Italy" data-story="" data-title="Queen of the Square" src="images/animals/L1067604.jpg"/></div></div>
 <div class="story-modal" id="storyModal">
 <button class="story-close" id="storyClose">×</button>
 <button class="story-arrow story-arrow-prev" id="storyPrev"><svg viewbox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
@@ -230,7 +312,16 @@ const Globe = (() => {
   const svg = d3.select('#d3Globe');
   const projection = d3.geoOrthographic().scale(105).translate([W/2, H/2]).clipAngle(90);
   const path = d3.geoPath(projection);
-  const countryIds = {'Germany': '276', 'Italy': '380', 'Spain': '724', 'Portugal': '620', 'France': '250', 'Israel': '376', 'United States of America': '840'};
+  const countryIds = {
+    'France': '250', 'Spain': '724', 'United States of America': '840', 'USA': '840',
+    'Germany': '276', 'Italy': '380', 'Portugal': '620', 'Israel': '376',
+    'Czech Republic': '203', 'Czechia': '203', 'China': '156', 'Mexico': '484',
+    'India': '356', 'United Kingdom': '826', 'UK': '826', 'Japan': '392',
+    'Greece': '300', 'Netherlands': '528', 'Austria': '040', 'Switzerland': '756',
+    'Belgium': '056', 'Poland': '616', 'Hungary': '348', 'Croatia': '191',
+    'Morocco': '504', 'Turkey': '792', 'Brazil': '076', 'Argentina': '032',
+    'Canada': '124', 'Thailand': '764', 'Vietnam': '704'
+  };
   svg.append('path').datum({type:'Sphere'}).attr('class','sphere').attr('d', path);
   const landGroup = svg.append('g'); const pinGroup = svg.append('g');
   let worldData = null; let ready = false;
@@ -260,18 +351,30 @@ const Globe = (() => {
 })();
 
 (() => {
-  const modal = document.getElementById('storyModal'); const track = document.getElementById('storyTrack');
-  const closeBtn = document.getElementById('storyClose'); const storyImg = document.getElementById('storyImage');
-  const storyTitle = document.getElementById('storyTitle'); const storyText = document.getElementById('storyText');
+  const modal = document.getElementById('storyModal');
+  const track = document.getElementById('storyTrack');
+  const closeBtn = document.getElementById('storyClose');
+  const storyImg = document.getElementById('storyImage');
+  const storyTitle = document.getElementById('storyTitle');
+  const storyText = document.getElementById('storyText');
   const locPinText = document.getElementById('storyPinLoc');
-  const prevBtn = document.getElementById('storyPrev'); const nextBtn = document.getElementById('storyNext');
-  const hints = document.getElementById('storyHints'); const galleryImages = document.querySelectorAll('.rm-item img');
-  const imageArr = Array.from(galleryImages); let currentIndex = 0; let hintsShown = false;
+  const prevBtn = document.getElementById('storyPrev');
+  const nextBtn = document.getElementById('storyNext');
+  const hints = document.getElementById('storyHints');
+  const narrativeEl = modal.querySelector('.card-narrative');
+  const galleryImages = document.querySelectorAll('.rm-item img');
+  const imageArr = Array.from(galleryImages);
+  let currentIndex = 0;
+  let hintsShown = false;
+
+  function slugify(str) {
+    return (str || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
 
   function parseCoords(str) {
-    if (!str) return { lat: 40, lng: -74 };
+    if (!str) return { lat: 48, lng: 2 };
     const m = str.match(/([\d.]+)°\s*([NS]),\s*([\d.]+)°\s*([EW])/);
-    if (!m) return { lat: 40, lng: -74 };
+    if (!m) return { lat: 48, lng: 2 };
     let lat = parseFloat(m[1]); if (m[2] === 'S') lat = -lat;
     let lng = parseFloat(m[3]); if (m[4] === 'W') lng = -lng;
     return { lat, lng };
@@ -279,59 +382,166 @@ const Globe = (() => {
 
   function loadImage(idx) {
     const img = imageArr[idx];
-    const loc = img.dataset.location || ''; const year = img.dataset.year || '';
-    const coords = img.dataset.coords || ''; const country = img.dataset.country || '';
-    storyImg.style.animation = 'none'; storyImg.offsetHeight; storyImg.style.animation = '';
-    storyImg.src = img.src; storyTitle.textContent = img.dataset.title || 'Untitled';
-    storyText.textContent = img.dataset.story || ''; locPinText.textContent = loc + (year ? ' — ' + year : '');
-    const { lat, lng } = parseCoords(coords); Globe.rotateTo(lng, lat, country);
+    const loc = img.dataset.location || '';
+    const year = img.dataset.year || '';
+    const coords = img.dataset.coords || '';
+    const country = img.dataset.country || '';
+    const storyVal = (img.dataset.story || '').trim();
+
+    storyImg.style.animation = 'none';
+    storyImg.offsetHeight;
+    storyImg.style.animation = '';
+
+    storyImg.src = img.src;
+    storyImg.alt = img.alt || img.dataset.title || '';
+    storyTitle.textContent = img.dataset.title || 'Untitled';
+    storyText.textContent = storyVal;
+    if (narrativeEl) narrativeEl.classList.toggle('no-story', !storyVal);
+    locPinText.textContent = loc + (year ? ' — ' + year : '');
+
+    const { lat, lng } = parseCoords(coords);
+    Globe.rotateTo(lng, lat, country);
+
     track.scrollTop = 0;
-    const cue = document.getElementById('scrollCue'); if (cue) cue.classList.remove('hidden');
+    const cue = document.getElementById('scrollCue');
+    if (cue) cue.classList.remove('hidden');
+
+    const slug = slugify(img.dataset.title);
+    if (slug && modal.classList.contains('active')) {
+      history.replaceState(null, '', '#' + slug);
+    }
+  }
+
+  function openAt(i) {
+    currentIndex = i;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    loadImage(i);
+    if (!hintsShown) { hintsShown = true; } else if (hints) { hints.style.display = 'none'; }
   }
 
   imageArr.forEach((img, i) => {
-    img.addEventListener('click', () => {
-      currentIndex = i; loadImage(i); modal.classList.add('active'); document.body.style.overflow = 'hidden';
-      if (!hintsShown) { hintsShown = true; } else { hints.style.display = 'none'; }
-    });
+    img.addEventListener('click', () => openAt(i));
   });
 
   function closeModal() {
     modal.classList.remove('active');
     document.body.style.overflow = '';
     track.scrollTop = 0;
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
   }
   closeBtn.addEventListener('click', closeModal);
-  const imageLayer = document.querySelector('.story-image-layer'); const spacer = document.querySelector('.story-spacer');
+
+  const imageLayer = document.querySelector('.story-image-layer');
+  const spacer = document.querySelector('.story-spacer');
   imageLayer.addEventListener('click', (e) => { if (e.target === imageLayer) closeModal(); });
-  spacer.addEventListener('click', () => { closeModal(); });
-  document.getElementById('storyImage').addEventListener('click', (e) => { e.stopPropagation(); });
+  spacer.addEventListener('click', () => closeModal());
+  storyImg.addEventListener('click', (e) => e.stopPropagation());
 
   function goNext() { currentIndex = (currentIndex + 1) % imageArr.length; loadImage(currentIndex); }
   function goPrev() { currentIndex = (currentIndex - 1 + imageArr.length) % imageArr.length; loadImage(currentIndex); }
-  nextBtn.addEventListener('click', goNext); prevBtn.addEventListener('click', goPrev);
+  nextBtn.addEventListener('click', goNext);
+  prevBtn.addEventListener('click', goPrev);
+
   document.addEventListener('keydown', (e) => {
     if (!modal.classList.contains('active')) return;
-    if (e.key === 'Escape') closeModal(); else if (e.key === 'ArrowRight') goNext(); else if (e.key === 'ArrowLeft') goPrev();
+    if (e.key === 'Escape') closeModal();
+    else if (e.key === 'ArrowRight') goNext();
+    else if (e.key === 'ArrowLeft') goPrev();
   });
+
   const scrollCue = document.getElementById('scrollCue');
   track.addEventListener('scroll', () => {
-    if (track.scrollTop > 20) scrollCue.classList.add('hidden');
+    if (track.scrollTop > 20 && scrollCue) scrollCue.classList.add('hidden');
   }, { passive: true });
 
+  /* Deep link support (#photo-title) */
+  if (window.location.hash) {
+    const targetSlug = window.location.hash.slice(1).toLowerCase();
+    const matchIdx = imageArr.findIndex(img => slugify(img.dataset.title) === targetSlug);
+    if (matchIdx !== -1) {
+      setTimeout(() => openAt(matchIdx), 150);
+    }
+  }
+
+  /* Mobile: drag image down to dismiss + swipe left/right to navigate */
   if (window.matchMedia('(max-width: 768px)').matches) {
-    let touchStartY = 0;
-    let touchStartScroll = 0;
+    let startX = 0;
+    let startY = 0;
+    let startScroll = 0;
+    let gestureMode = null; // 'vertical' | 'horizontal' | null
+
     track.addEventListener('touchstart', (e) => {
-      touchStartY = e.touches[0].clientY;
-      touchStartScroll = track.scrollTop;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      startScroll = track.scrollTop;
+      gestureMode = null;
     }, { passive: true });
+
+    track.addEventListener('touchmove', (e) => {
+      if (!modal.classList.contains('active')) return;
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+
+      if (!gestureMode) {
+        if (Math.abs(dx) > 15 && Math.abs(dx) > Math.abs(dy) * 1.3 && startScroll < 10) {
+          gestureMode = 'horizontal';
+        } else if (dy > 12 && Math.abs(dy) > Math.abs(dx) && startScroll < 10) {
+          gestureMode = 'vertical';
+          storyImg.style.animation = 'none';
+          storyImg.style.transition = 'none';
+          imageLayer.style.transition = 'none';
+        }
+      }
+
+      if (gestureMode === 'vertical' && dy > 0) {
+        storyImg.style.transform = 'translateY(' + dy + 'px) scale(' + Math.max(0.85, 1 - dy / 1000) + ')';
+        const bgOpacity = Math.max(0, 1 - dy / 400);
+        imageLayer.style.background = 'rgba(0,0,0,' + bgOpacity + ')';
+      }
+    }, { passive: true });
+
     track.addEventListener('touchend', (e) => {
       if (!modal.classList.contains('active')) return;
-      if (touchStartScroll < 10 && track.scrollTop <= 0) {
-        const deltaY = e.changedTouches[0].clientY - touchStartY;
-        if (deltaY > 80) {
-          closeModal();
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+
+      if (gestureMode === 'horizontal' && Math.abs(dx) > 50) {
+        if (dx < 0) goNext();
+        else goPrev();
+        gestureMode = null;
+        return;
+      }
+
+      if (gestureMode === 'vertical') {
+        gestureMode = null;
+        if (dy > 80) {
+          storyImg.style.transition = 'transform 0.25s ease, opacity 0.25s ease';
+          imageLayer.style.transition = 'background 0.25s ease';
+          storyImg.style.transform = 'translateY(' + (dy + 200) + 'px) scale(0.8)';
+          storyImg.style.opacity = '0';
+          imageLayer.style.background = 'rgba(0,0,0,0)';
+          setTimeout(() => {
+            closeModal();
+            storyImg.style.transform = '';
+            storyImg.style.opacity = '';
+            storyImg.style.transition = '';
+            storyImg.style.animation = '';
+            imageLayer.style.transition = '';
+            imageLayer.style.background = '';
+          }, 250);
+        } else {
+          storyImg.style.transition = 'transform 0.3s ease';
+          imageLayer.style.transition = 'background 0.3s ease';
+          storyImg.style.transform = 'scale(1)';
+          imageLayer.style.background = '';
+          setTimeout(() => {
+            storyImg.style.transition = '';
+            storyImg.style.animation = '';
+            imageLayer.style.transition = '';
+          }, 300);
         }
       }
     }, { passive: true });

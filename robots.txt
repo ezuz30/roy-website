@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /projects.html
+Disallow: /nyc project/
+Disallow: /venice project/
+
+Sitemap: https://royezuz.com/sitemap.xml
