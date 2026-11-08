@@ -245,10 +245,10 @@ customElements.define('site-footer', SiteFooter);
 })();
 
 // ==========================================
-// 3. GLOBAL CURSOR LOGIC (EXACT MATCH TO INDEX.HTML)
+// 3. GLOBAL CURSOR LOGIC (UNIFIED & LOW-LATENCY ACROSS ALL PAGES)
 // ==========================================
 (function initCursor() {
-  // בדיקה שאיננו במכשיר טאץ'
+  // Skip on touch devices
   if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
 
   const style = document.createElement('style');
@@ -257,19 +257,19 @@ customElements.define('site-footer', SiteFooter);
     .cursor-dot {
       position: fixed; top: 0; left: 0; width: 4px; height: 4px;
       background: #E32119; border-radius: 50%; pointer-events: none;
-      z-index: 99998; transform: translate(-50%, -50%);
-      transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                  height 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-                  background 0.4s ease;
+      z-index: 99998; transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+      transition: width 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+                  height 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+                  background 0.25s ease;
       will-change: transform;
     }
     .cursor-ring {
       position: fixed; top: 0; left: 0; width: 15px; height: 15px;
       border: 1px solid rgba(227, 33, 25, 0.35); border-radius: 50%;
-      pointer-events: none; z-index: 99997; transform: translate(-50%, -50%);
-      transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-                  height 0.5s cubic-bezier(0.25, 1, 0.5, 1),
-                  border-color 0.4s ease;
+      pointer-events: none; z-index: 99997; transform: translate3d(-100px, -100px, 0) translate(-50%, -50%);
+      transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                  height 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+                  border-color 0.25s ease;
       will-change: transform;
     }
     .cursor-dot.on-link { width: 3px; height: 3px; background: #f0f0f2; }
@@ -283,33 +283,51 @@ customElements.define('site-footer', SiteFooter);
   document.body.append(dot, ring);
 
   let mx = -100, my = -100, dx = -100, dy = -100, rx = -100, ry = -100;
-  window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  let initialized = false;
 
-  const lerp = (a, b, t) => a + (b - a) * t;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX;
+    my = e.clientY;
+    if (!initialized) {
+      dx = rx = mx;
+      dy = ry = my;
+      initialized = true;
+    }
+    // Instant zero-latency update for the center dot so pointer never feels delayed
+    dx = mx;
+    dy = my;
+    dot.style.transform = `translate3d(${dx}px, ${dy}px, 0) translate(-50%, -50%)`;
+  }, { passive: true });
 
-  function anim() {
-    // ערכי ה-LERP המדויקים מ-index.html: 0.45 לנקודה ו-0.25 לטבעת
-    dx = lerp(dx, mx, 0.45); dy = lerp(dy, my, 0.45);
-    rx = lerp(rx, mx, 0.25); ry = lerp(ry, my, 0.25);
-    
-    dot.style.transform = "translate(" + dx + "px," + dy + "px) translate(-50%,-50%)";
-    ring.style.transform = "translate(" + rx + "px," + ry + "px) translate(-50%,-50%)";
+  let lastTime = performance.now();
+  // Frame-rate independent exponential smoothing (identical pace at 60Hz, 120Hz, or under WebGL load)
+  const RING_SPEED = 32; // snappy, responsive follow (~95% catch-up in 90ms)
+
+  function anim(now) {
+    const dt = Math.min(0.05, Math.max(0.001, (now - lastTime) / 1000));
+    lastTime = now;
+
+    if (initialized) {
+      const alpha = 1 - Math.exp(-RING_SPEED * dt);
+      rx += (mx - rx) * alpha;
+      ry += (my - ry) * alpha;
+      ring.style.transform = `translate3d(${rx}px, ${ry}px, 0) translate(-50%, -50%)`;
+    }
     requestAnimationFrame(anim);
   }
-  anim();
+  requestAnimationFrame(anim);
 
-  // טיפול באינטראקציה עם לינקים (on-link)
-  const interactiveSelector = 'a, button, [role="button"], #openCollaborateCard, .rm-item, #webgl-canvas, [data-hoverable]';
+  const interactiveSelector = 'a, button, [role="button"], #openCollaborateCard, .rm-item, [data-hoverable]';
   document.addEventListener('mouseover', e => {
     if (e.target.closest(interactiveSelector)) {
       dot.classList.add('on-link');
       ring.classList.add('on-link');
     }
-  });
+  }, { passive: true });
   document.addEventListener('mouseout', e => {
     if (e.target.closest(interactiveSelector)) {
       dot.classList.remove('on-link');
       ring.classList.remove('on-link');
     }
-  });
+  }, { passive: true });
 })();
